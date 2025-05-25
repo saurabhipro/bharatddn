@@ -1,0 +1,254 @@
+<templates xml:space="preserve">
+    <t t-name="smkc.OwlCrmTemplate" owl="1">
+        <style>
+            .property-dashboard {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 24px;
+                margin: 12px 0;
+            }
+            .dashboard-card {
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+                padding: 18px 12px 12px 12px;
+                min-width: 160px;
+                min-height: 90px;
+                text-align: center;
+                background: #f8fafc;
+                border: 1px solid #e0e0e0;
+                font-family: 'Segoe UI', 'Arial', sans-serif;
+                transition: box-shadow 0.2s;
+            }
+            .dashboard-card.uploaded { background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%); color: #fff; }
+            .dashboard-card.pdf { background: linear-gradient(135deg, #e53935 0%, #ff7043 100%); color: #fff; }
+            .dashboard-card.plate { background: linear-gradient(135deg, #43a047 0%, #a5d6a7 100%); color: #fff; }
+            .dashboard-card.surveyed { background: linear-gradient(135deg, #fbc02d 0%, #fff176 100%); color: #fff; }
+            .dashboard-card.today { background: linear-gradient(135deg, #ffb300 0%, #ffe082 100%); color: #fff; }
+            .dashboard-card.unlocked { background: linear-gradient(135deg, #6d4c41 0%, #a1887f 100%); color: #fff; }
+            .dashboard-card.discovered { background: linear-gradient(135deg, #8e24aa 0%, #ce93d8 100%); color: #fff; }
+            .dashboard-card.zones { background: linear-gradient(135deg, #00bcd4 0%, #4dd0e1 100%); color: #fff; }
+            .dashboard-card.wards { background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%); color: #fff; }
+            .dashboard-card.users { background: linear-gradient(135deg, #607d8b 0%, #b0bec5 100%); color: #fff; }
+            .dashboard-card * {
+                color: #fff !important;
+            }
+            .dashboard-card .icon {
+                font-size: 2.2em;
+                margin-bottom: 8px;
+                color: #fff !important;
+            }
+            .dashboard-card .count {
+                font-size: 2.1em;
+                font-weight: 700;
+                margin-bottom: 6px;
+                color: #fff !important;
+            }
+            .dashboard-card .label {
+                font-size: 1.1em;
+                color: #fff !important;
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            .dashboard-card .status-link {
+                font-size: 1em;
+                margin-top: 4px;
+                color: #fff !important;
+                text-decoration: underline;
+                display: block;
+                font-weight: 500;
+            }
+            .dashboard-header {
+                background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+                border-radius: 8px;
+                margin: 0 0 12px 0;
+                padding: 7px 14px;
+                box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                border: none;
+            }
+            .dashboard-header-content {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+            .dashboard-header-icon {
+                font-size: 1.2em;
+                color: #fff;
+                background: rgba(255,255,255,0.15);
+                border-radius: 50%;
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .dashboard-header-title {
+                font-size: 1em;
+                font-weight: bold;
+                color: #fff;
+                letter-spacing: 1px;
+            }
+            .dashboard-header-count {
+                font-size: 0.6em;
+                color: #e3f2fd;
+                margin-left: 5px;
+            }
+            .dashboard-card .bg-icon {
+                position: absolute;
+                bottom: 4px;
+                right: 8px;
+                font-size: 2.4em;
+                color: rgba(255,255,255,0.25);
+                pointer-events: none;
+                z-index: 0;
+            }
+            .dashboard-card .icon, .dashboard-card .count, .dashboard-card .label, .dashboard-card .status-link {
+                position: relative;
+                z-index: 1;
+            }
+            .dashboard-card:hover, .dashboard-card:active, .dashboard-card:focus {
+                /* No hover effect */
+                transform: none;
+                box-shadow: 0 4px 16px rgba(25, 118, 210, 0.15);
+                border: 1px solid #e0e0e0 !important;
+                outline: none;
+            }
+            .property-map-header {
+                padding: 7px 14px !important;
+            }
+            .property-map-header .dashboard-header-icon {
+                font-size: 1.2em !important;
+                padding: 5px !important;
+            }
+            .property-map-header .dashboard-header-title {
+                font-size: 1em !important;
+            }
+        </style>
+        <div class="vh-100 overflow-auto bg-muted">
+            <div class="row m-3">
+                <div class="col">
+                    <div class="row">
+                        <div class="col m-0 p-0">
+                            <div class="dashboard-header">
+                                <div class="dashboard-header-content">
+                                    <span class="dashboard-header-icon"><i class="fa fa-home"></i></span>
+                                    <span class="dashboard-header-title">DDN Dashboard</span>
+                                    <span class="dashboard-header-count">- <t t-esc="this.state.property_info['total_count']"></t></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="property-dashboard">
+                        <a t-att-href="'/web#action=smkc.action_property_info&amp;model=smkc.property.info&amp;view_type=list&amp;menu_id=123&amp;domain=%5B%5B%22property_status%22%2C%22%3D%22%2C%22uploaded%22%5D%5D'" class="dashboard-card uploaded" target="_blank">
+                            <span class="icon"><i class="fa fa-upload"></i></span>
+                            <span class="bg-icon"><i class="fa fa-upload"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_uploaded']"/></div>
+                            <div class="label">Uploaded</div>
+                        </a>
+                        <a t-att-href="'/web#action=smkc.action_property_info&amp;model=smkc.property.info&amp;view_type=list&amp;menu_id=123&amp;domain=%5B%5B%22property_status%22%2C%22%3D%22%2C%22pdf_downloaded%22%5D%5D'" class="dashboard-card pdf" target="_blank">
+                            <span class="icon"><i class="fa fa-file-pdf-o"></i></span>
+                            <span class="bg-icon"><i class="fa fa-file-pdf-o"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_pdf_downloaded']"/></div>
+                            <div class="label">Pdf Downloaded</div>
+                        </a>
+                        <div class="dashboard-card plate">
+                            <span class="icon"><i class="bi bi-qr-code-scan"></i></span>
+                            <span class="bg-icon"><i class="bi bi-qr-code-scan"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['qr_scans_today'] || 0"/></div>
+                            <div class="label">Total QR Scans Today</div>
+                        </div>
+                        <a t-att-href="'/web#action=smkc.action_property_info&amp;model=smkc.property.info&amp;view_type=list&amp;menu_id=123&amp;domain=%5B%5B%22property_status%22%2C%22%3D%22%2C%22surveyed%22%5D%5D'" class="dashboard-card surveyed" target="_blank">
+                            <span class="icon"><i class="fa fa-check-square-o"></i></span>
+                            <span class="bg-icon"><i class="fa fa-check-square-o"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_surveyed']"/></div>
+                            <div class="label">Surveyed</div>
+                        </a>
+                        <div class="dashboard-card today">
+                            <span class="icon"><i class="fa fa-calendar-check-o"></i></span>
+                            <span class="bg-icon"><i class="fa fa-calendar-check-o"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['surveys_today'] || 0"/></div>
+                            <div class="label">Surveys Done Today</div>
+                        </div>
+                        <a t-att-href="'/web#action=smkc.action_property_info&amp;model=smkc.property.info&amp;view_type=list&amp;menu_id=123&amp;domain=%5B%5B%22property_status%22%2C%22%3D%22%2C%22unlocked%22%5D%5D'" class="dashboard-card unlocked" target="_blank">
+                            <span class="icon"><i class="fa fa-unlock-alt"></i></span>
+                            <span class="bg-icon"><i class="fa fa-unlock-alt"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_unlocked']"/></div>
+                            <div class="label">Unlocked</div>
+                        </a>
+                        <a t-att-href="'/web#action=smkc.action_property_info&amp;model=smkc.property.info&amp;view_type=list&amp;menu_id=123&amp;domain=%5B%5B%22property_status%22%2C%22%3D%22%2C%22discovered%22%5D%5D'" class="dashboard-card discovered" target="_blank">
+                            <span class="icon"><i class="fa fa-search"></i></span>
+                            <span class="bg-icon"><i class="fa fa-search"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_discovered']"/></div>
+                            <div class="label">Discovered</div>
+                        </a>
+                        <div class="dashboard-card zones">
+                            <span class="icon"><i class="fa fa-th-large"></i></span>
+                            <span class="bg-icon"><i class="fa fa-th-large"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_zones']"/></div>
+                            <div class="label">Zones</div>
+                        </div>
+                        <div class="dashboard-card wards">
+                            <span class="icon"><i class="fa fa-th-list"></i></span>
+                            <span class="bg-icon"><i class="fa fa-th-list"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_wards']"/></div>
+                            <div class="label">Wards</div>
+                        </div>
+                        <div class="dashboard-card users">
+                            <span class="icon"><i class="fa fa-users"></i></span>
+                            <span class="bg-icon"><i class="fa fa-users"></i></span>
+                            <div class="count"><t t-esc="this.state.property_info['total_users']"/></div>
+                            <div class="label">Users</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="property-map-header dashboard-header">
+                            <div class="dashboard-header-content">
+                                <span class="dashboard-header-icon"><i class="fa fa-map-marker"></i></span>
+                                <span class="dashboard-header-title">Property Map</span>
+                            </div>
+                        </div>
+                        <PropertyMapView/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-3">
+                <div t-if="state.error" class="alert alert-danger" role="alert">
+                    <t t-esc="state.error"/>
+                </div>
+                
+                <table class="property-ward-table">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Ward</th>
+
+                            <th>Total Count</th>
+                            <th>Uploaded</th>
+                            <th>PDF Downloaded</th>
+                            <th>Surveyed</th>
+                            <th>Unlocked</th>
+                            <th>Discovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr t-foreach="state.property_info.ward_data || []" t-as="ward" t-key="ward.ward">
+                            <td><t t-esc="ward.zone"/></td>
+                            <td><t t-esc="ward.ward"/></td>
+
+                            <td><t t-esc="ward.total_count"/></td>
+                            <td><t t-esc="ward.uploaded_count"/></td>
+                            <td><t t-esc="ward.pdf_downloaded_count"/></td>
+                            <!-- <td><t t-esc="ward.plate_installed_count"/></td> -->
+                            <td><t t-esc="ward.surveyed_count"/></td>
+                            <td><t t-esc="ward.unlocked_count"/></td>
+                            <td><t t-esc="ward.discovered_count"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+</templates>

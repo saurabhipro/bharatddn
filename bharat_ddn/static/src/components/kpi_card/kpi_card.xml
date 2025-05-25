@@ -1,0 +1,21 @@
+
+<templates>
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
+    <t t-name="ddn.KpiCardTemplate" owl="1">
+
+        <div class="col-lg-2 m-0 p-0">
+            <!-- <div t-att-class="'shadow-sm border m-2 p-4 bg-white text-center' + pros.bgClass"> -->
+            <!-- <div t-att-class="'shadow-sm border m-2 p-4 text-center ' + props.bgClass"> -->
+            <div t-att-class="'shadow-sm border m-2 p-4 text-center ' + (props.bgClass || '')">
+                <div class="h1 fw-bold text-dark">
+                <span t-esc="props.value"></span>
+
+                </div>
+                <div class="h3 text-muted"><span t-esc="props.name"/></div>
+                <i class="fa-solid fa-image"></i>
+                <div class="h3 mt-5">
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
