@@ -2,7 +2,6 @@
 <odoo>  
     <template id="property_details_template" name="UDAN Property Info">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
     body {
@@ -18,25 +17,19 @@
       background: white;
       color: #053071;
       border-radius: 1rem;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
     }
-    .cashback-banner .btn-pay {
+    .btn-pay {
       background: #ffc107;
       color: #053071;
       font-weight: 700;
-      padding: 0.4rem 1.6rem;
+      padding: 0.5rem 1.5rem;
       border-radius: 50px;
       border: none;
+      width: 100%;
+      max-width: 200px;
       white-space: nowrap;
-      flex-shrink: 0;
-      width: auto;
-      min-width: 140px;
       cursor: pointer;
     }
     .property-card {
@@ -50,74 +43,59 @@
       font-weight: 600;
       font-size: 0.9rem;
       opacity: 0.7;
+      margin-bottom: 0.15rem;
     }
     .property-value {
       font-weight: 700;
       font-size: 1.1rem;
       margin-bottom: 1rem;
     }
-    .property-images {
-      min-width: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-    }
-    .property-images a img {
+    .property-images img {
       width: 100%;
-      max-width: 100px;
+      max-height: 90px;
       border-radius: 0.8rem;
       object-fit: cover;
-      max-height: 90px;
       border: 2px solid #ccc;
       transition: border-color 0.3s ease;
       cursor: pointer;
     }
-    .property-images a img:hover {
+    .property-images img:hover {
       border-color: #ffc107;
     }
-    .property-images .brand {
+    .brand {
       text-align: right;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: #f03e3e;
       font-weight: 600;
       user-select: none;
-      width: 100%;
-      margin-top: 0.25rem;
-    }
-    .services-section, .emergency-section, .officer-section {
-      background: white;
-      color: #000;
-      border-radius: 1rem;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem;
+      margin-top: 0.5rem;
     }
     .section-title {
       font-weight: 700;
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
+      font-size: 1.3rem;
       color: #000;
+      margin-bottom: 1rem;
     }
-    .service-btn {
-      width: 100%;
+    .service-btn, .emergency-btn {
       border-radius: 1rem;
-      padding: 0.8rem;
+      padding: 1rem;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      color: #000;
+      background-color: #f8f9fa;
+      border: 2px solid transparent;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.4rem;
-      border: 2px solid transparent;
-      transition: all 0.3s ease;
       cursor: pointer;
-      background-color: #f8f9fa;
-      color: #000;
+      transition: all 0.3s ease;
     }
-    .service-btn i {
+    .service-btn i, .emergency-btn i {
       font-size: 1.8rem;
     }
-    /* Specific colors for services */
+    /* Service colors */
     .property-tax {
       border-color: #4a3dbf;
       color: #4a3dbf;
@@ -138,23 +116,7 @@
       border-color: #f15659;
       color: #f15659;
     }
-    /* Emergency buttons */
-    .emergency-btn {
-      border-radius: 1rem;
-      padding: 1rem;
-      width: 100%;
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-      color: #000;
-    }
-    .emergency-btn i {
-      font-size: 1.7rem;
-    }
+    /* Emergency colors */
     .emergency-sos { background: #f8d7da; color: #a71c1c; }
     .emergency-police { background: #d1e7f9; color: #0d4d6c; }
     .emergency-fire { background: #ffe4b8; color: #a86c05; }
@@ -163,50 +125,30 @@
     .emergency-forest { background: #cee8d5; color: #2f593b; }
     .emergency-municipal { background: #f4f1c3; color: #847c0e; }
     .emergency-power { background: #d5d9f5; color: #272e91; }
-
-    /* Ambulance icon standalone */
-    .ambulance-icon-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      color: #084a6c;
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-    .ambulance-icon-wrapper i {
-      font-size: 2rem;
-    }
-
-    /* Officer cards */
     .officer-card {
-      background: #fff;
+      background: white;
       border-radius: 1rem;
       padding: 1rem;
+      margin-bottom: 1rem;
+      color: #000;
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1rem;
-      color: #000;
     }
     .officer-icon {
       background: #1b2a56;
       border-radius: 50%;
-      padding: 0.6rem;
       width: 50px;
       height: 50px;
+      color: #ffc107;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #ffc107;
       font-size: 1.5rem;
-    }
-    .officer-info {
-      flex-grow: 1;
     }
     .officer-name {
       font-weight: 700;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.25rem;
     }
     .officer-role {
       font-weight: 600;
@@ -218,44 +160,32 @@
       font-size: 0.9rem;
       color: #1b2a56;
     }
-
-    /* Responsive tweaks */
-    @media (max-width: 576px) {
-      .cashback-banner {
-        flex-direction: column;
-        text-align: center;
-      }
-      .btn-pay {
-        width: 100%;
-      }
-      .property-card > .d-flex {
-        flex-direction: column;
-      }
-      .property-images {
-        margin-top: 1rem;
-        justify-content: center;
-      }
-      .property-images a img {
-        max-height: 70px;
-        max-width: 100px;
-        width: auto;
-        flex: 1 1 50%;
-      }
+    .ambulance-icon-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: #084a6c;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .ambulance-icon-wrapper i {
+      font-size: 2rem;
     }
   </style>
   <div class="container py-4">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
       <div>
-        <h4>Welcome to <span class="highlight-yellow">UDAN</span></h4>
+        <h4 class="mb-1">Welcome to <span class="highlight-yellow">UDAN</span></h4>
         <div>Sangli Miraj and Kupwad City</div>
       </div>
       <img src="/mnt/data/fd072a77-2671-4bae-b4be-649855a89535.png" alt="UDAN City Logo" style="height: 60px; border-radius: 50%;" />
     </div>
 
     <!-- Cashback Banner -->
-    <div class="cashback-banner">
-      <div>
+    <div class="cashback-banner d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+      <div class="text-center text-sm-start">
         <div style="font-size: 0.75rem; font-weight: 600;">GET UP TO</div>
         <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
           ₹<span style="color:#053071;">100</span> Cashback
@@ -268,34 +198,49 @@
 
     <!-- Property Card -->
     <div class="property-card shadow-sm">
-      <div class="d-flex justify-content-between flex-wrap">
-        <div class="flex-grow-1 pe-3">
-          <div class="property-label">Owner Name</div>
-          <div class="property-value">Lucas Nelson</div>
-
-          <div class="property-label">Property Identification Number</div>
-          <div class="property-value">0080</div>
-
-          <div class="property-label">Digital Door Number</div>
-          <div class="property-value">F7-06/D-0080</div>
-
-          <div class="property-label">Latitude &amp; Longitude</div>
-          <div class="property-value">Null &amp; Null</div>
-
-          <div class="property-label">Block</div>
-          <div class="property-value">06/D</div>
-
-          <div class="property-label">Address</div>
-          <div class="property-value">ZONE SEVEN BLOCK SIX</div>
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-8">
+          <div class="row g-2">
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Owner Name</div>
+              <div class="property-value">Lucas Nelson</div>
+            </div>
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Property ID</div>
+              <div class="property-value">0080</div>
+            </div>
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Digital Door Number</div>
+              <div class="property-value">F7-06/D-0080</div>
+            </div>
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Latitude &amp; Longitude</div>
+              <div class="property-value">Null &amp; Null</div>
+            </div>
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Block</div>
+              <div class="property-value">06/D</div>
+            </div>
+            <div class="col-6 col-sm-4">
+              <div class="property-label">Address</div>
+              <div class="property-value">ZONE SEVEN BLOCK SIX</div>
+            </div>
+          </div>
         </div>
-        <div class="property-images">
-          <a href="https://example.com/property1" target="_blank" rel="noopener">
-            <img src="/mnt/data/62a738c1-df2c-4c22-b6ff-e41ce65bc921.png" alt="Property 1" />
-          </a>
-          <a href="https://example.com/property2" target="_blank" rel="noopener">
-            <img src="/mnt/data/001d4969-026c-423d-a34a-23e980dabacc.png" alt="Property 2" />
-          </a>
-          <div class="brand">redmelon</div>
+        <div class="col-12 col-md-4">
+          <div class="property-images row g-2">
+            <div class="col-6">
+              <a href="https://example.com/property1" target="_blank" rel="noopener">
+                <img src="/mnt/data/62a738c1-df2c-4c22-b6ff-e41ce65bc921.png" alt="Property 1" class="img-fluid" />
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="https://example.com/property2" target="_blank" rel="noopener">
+                <img src="/mnt/data/001d4969-026c-423d-a34a-23e980dabacc.png" alt="Property 2" class="img-fluid" />
+              </a>
+            </div>
+          </div>
+          <div class="brand mt-2">redmelon</div>
         </div>
       </div>
     </div>
@@ -307,7 +252,7 @@
     </div>
 
     <!-- Services Section -->
-    <div class="services-section">
+    <section class="services-section">
       <div class="section-title">Services</div>
       <div class="row g-3">
         <div class="col-6 col-md-2">
@@ -341,10 +286,10 @@
           </button>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Emergency Services -->
-    <div class="emergency-section">
+    <section class="emergency-section">
       <div class="section-title">Emergency Services</div>
       <div class="row g-3">
         <div class="col-6 col-md-3">
@@ -366,12 +311,11 @@
           </button>
         </div>
         <div class="col-6 col-md-3">
-           <button class="emergency-btn emergency-fire">
-            <i class="bi bi-truck"></i>
+          <button class="emergency-btn emergency-ambulance">
+            <i class="bi bi-ambulance"></i>
             Ambulance
           </button>
         </div>
-
         <div class="col-6 col-md-3">
           <button class="emergency-btn emergency-women">
             <i class="bi bi-person-fill"></i>
@@ -397,10 +341,10 @@
           </button>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Your Officer Section -->
-    <div class="officer-section">
+    <section class="officer-section">
       <div class="section-title">Your Officer</div>
       <div class="row">
         <div class="col-12 col-md-6">
@@ -408,7 +352,7 @@
             <div class="officer-icon">
               <i class="bi bi-telephone-fill"></i>
             </div>
-            <div class="officer-info">
+            <div>
               <div class="officer-name">Mr. Ravi Singh</div>
               <div class="officer-role">Zone Officer</div>
               <div class="officer-phone">+91 998877665</div>
@@ -420,7 +364,7 @@
             <div class="officer-icon">
               <i class="bi bi-telephone-fill"></i>
             </div>
-            <div class="officer-info">
+            <div>
               <div class="officer-name">Mr. Ravi Singh</div>
               <div class="officer-role">Zone Officer</div>
               <div class="officer-phone">+91 998877665</div>
@@ -428,10 +372,9 @@
           </div>
         </div>
       </div>
-    </div>
-
+    </section>
   </div>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </template>
 </odoo>
