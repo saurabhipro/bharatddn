@@ -72,6 +72,7 @@ class JWTAuthController(http.Controller):
             ('mobile', '=', mobile),
             ('otp', '=', otp_input)
         ], limit=1)
+        print("OTP Record - ", otp_record)
         if not otp_record:
             return Response( json.dumps({'error': 'Invalid OTP'}), status=400, content_type='application/json' )
 
@@ -80,18 +81,19 @@ class JWTAuthController(http.Controller):
             otp_record.unlink()
             return Response(json.dumps({'error': 'OTP expired'}),status=400, content_type='application/json')
 
-        user = otp_record.user_id.id
+        user = otp_record.user_id
+        print("User - ", user)
         otp_record.unlink()
 
         payload = {
-            'user_id': user,
+            'user_id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-        request.env['jwt.token'].sudo().create({'user_id': user, 'token': token})
-
-        return Response( json.dumps({'user_id': user, 'company_ids': otp_record.user_id.company_id.id, 'token': token}), status=200, content_type='application/json' )
+        print("Token - ", token)
+        request.env['jwt.token'].sudo().create({'user_id': user.id, 'token': token})
+        print("------------------ ", {'user_id': user, 'company_ids': user.company_id.id, 'token': token})
+        return Response(json.dumps({'user_id': user.id, 'company_id': user.company_id.id, 'token': token}), status=200, content_type='application/json' )
 
     """ API CRUD """
     @http.route('/api/get_contacts', type='json', auth='none', methods=['POST'], csrf=False)
