@@ -1,295 +1,407 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>  
     <template id="property_details_template" name="UDAN Property Info">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-        <style>
-            body {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                background-color: #0A1628;
-                color: #ffffff;
-                line-height: 1.6;
-            }
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #1b2a56;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .highlight-yellow {
+      color: #ffc107;
+      font-weight: 600;
+    }
+    .cashback-banner {
+      background: white;
+      color: #053071;
+      border-radius: 1rem;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .cashback-banner .btn-pay {
+      background: #ffc107;
+      color: #053071;
+      font-weight: 700;
+      padding: 0.4rem 1.6rem;
+      border-radius: 50px;
+      border: none;
+      white-space: nowrap;
+    }
+    .property-card {
+      background: white;
+      color: #000;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .property-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    .property-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .property-images {
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .property-images a img {
+      width: 100%;
+      border-radius: 0.8rem;
+      object-fit: cover;
+      max-height: 90px;
+      border: 2px solid #ccc;
+      transition: border-color 0.3s ease;
+    }
+    .property-images a img:hover {
+      border-color: #ffc107;
+    }
+    .property-images .brand {
+      text-align: right;
+      font-size: 0.7rem;
+      color: #f03e3e;
+      font-weight: 600;
+      user-select: none;
+    }
+    .services-section, .emergency-section, .officer-section {
+      background: white;
+      color: #000;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+    .service-btn {
+      width: 100%;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: #f8f9fa;
+      color: #000;
+    }
+    .service-btn i {
+      font-size: 1.8rem;
+    }
+    /* Specific colors for services */
+    .property-tax {
+      border-color: #4a3dbf;
+      color: #4a3dbf;
+    }
+    .water-bill {
+      border-color: #3b5cc4;
+      color: #3b5cc4;
+    }
+    .grievance {
+      border-color: #e26923;
+      color: #e26923;
+    }
+    .birth-certificate {
+      border-color: #74b5e7;
+      color: #74b5e7;
+    }
+    .marriage-certificate {
+      border-color: #f15659;
+      color: #f15659;
+    }
+    /* Emergency buttons */
+    .emergency-btn {
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 100%;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      color: #000;
+    }
+    .emergency-btn i {
+      font-size: 1.7rem;
+    }
+    .emergency-sos { background: #f8d7da; color: #a71c1c; }
+    .emergency-police { background: #d1e7f9; color: #0d4d6c; }
+    .emergency-fire { background: #ffe4b8; color: #a86c05; }
+    .emergency-ambulance { background: #a8d0e6; color: #084a6c; }
+    .emergency-women { background: #e4d7f9; color: #6a2ea0; }
+    .emergency-forest { background: #cee8d5; color: #2f593b; }
+    .emergency-municipal { background: #f4f1c3; color: #847c0e; }
+    .emergency-power { background: #d5d9f5; color: #272e91; }
 
-            .custom-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
+    /* Officer cards */
+    .officer-card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+    .officer-icon {
+      background: #1b2a56;
+      border-radius: 50%;
+      padding: 0.6rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffc107;
+      font-size: 1.5rem;
+    }
+    .officer-info {
+      flex-grow: 1;
+    }
+    .officer-name {
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .officer-role {
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    .officer-phone {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1b2a56;
+    }
 
-            /* Header Section */
-            .header-section {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 0;
-                margin-bottom: 30px;
-            }
+    /* Responsive tweaks */
+    @media (max-width: 576px) {
+      .cashback-banner {
+        flex-direction: column;
+        text-align: center;
+      }
+      .property-card {
+        padding: 1rem;
+      }
+      .property-images {
+        min-width: auto;
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+      .property-images a img {
+        max-height: 70px;
+        width: auto;
+        flex: 1 1 50%;
+      }
+    }
+  </style>
 
-            .header-title h1 {
-                font-size: 2.5rem;
-                font-weight: 600;
-                margin-bottom: 5px;
-            }
+  <div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+      <div>
+        <h4>Welcome to <span class="highlight-yellow">UDAN</span></h4>
+        <div>Sangli Miraj and Kupwad City</div>
+      </div>
+      <img src="/mnt/data/fd072a77-2671-4bae-b4be-649855a89535.png" alt="UDAN City Logo" style="height: 60px; border-radius: 50%;" />
+    </div>
 
-            .header-title span {
-                color: #FFB800;
-            }
+    <!-- Cashback Banner -->
+    <div class="cashback-banner">
+      <div>
+        <div style="font-size: 0.75rem; font-weight: 600;">GET UP TO</div>
+        <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+          ₹<span style="color:#053071;">100</span> Cashback
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 600;">on Electricity Bill Payment</div>
+        <small style="font-size: 0.6rem; opacity: 0.6;">T&amp;C Apply | Offer only for you</small>
+      </div>
+      <button class="btn-pay">Pay Now</button>
+    </div>
 
-            .header-title p {
-                color: #B0B7C3;
-                font-size: 1.2rem;
-                margin: 0;
-            }
+    <!-- Property Card -->
+    <div class="property-card shadow-sm">
+      <div class="d-flex justify-content-between flex-wrap">
+        <div class="flex-grow-1 pe-3">
+          <div class="property-label">Owner Name</div>
+          <div class="property-value">Lucas Nelson</div>
 
-            .header-logo img {
-                width: 80px;
-                height: 80px;
-            }
+          <div class="property-label">Property Identification Number</div>
+          <div class="property-value">0080</div>
 
-            /* Cashback Banner */
-            .cashback-banner {
-                background-color: #F5F7FF;
-                border-radius: 20px;
-                padding: 30px;
-                margin-bottom: 30px;
-                position: relative;
-                overflow: hidden;
-                color: #0A1628;
-            }
+          <div class="property-label">Digital Door Number</div>
+          <div class="property-value">F7-06/D-0080</div>
 
-            .cashback-content {
-                max-width: 60%;
-            }
+          <div class="property-label">Latitude &amp; Longitude</div>
+          <div class="property-value">Null &amp; Null</div>
 
-            .cashback-label {
-                color: #4A5567;
-                font-size: 0.9rem;
-                margin-bottom: 10px;
-            }
+          <div class="property-label">Block</div>
+          <div class="property-value">06/D</div>
 
-            .cashback-amount {
-                font-size: 2rem;
-                font-weight: 600;
-                margin-bottom: 5px;
-            }
+          <div class="property-label">Address</div>
+          <div class="property-value">ZONE SEVEN BLOCK SIX</div>
+        </div>
+        <div class="property-images" style="min-width: 120px;">
+          <a href="https://example.com/property1" target="_blank" rel="noopener">
+            <img src="/mnt/data/62a738c1-df2c-4c22-b6ff-e41ce65bc921.png" alt="Property 1" />
+          </a>
+          <a href="https://example.com/property2" target="_blank" rel="noopener">
+            <img src="/mnt/data/001d4969-026c-423d-a34a-23e980dabacc.png" alt="Property 2" />
+          </a>
+          <div class="brand">redmelon</div>
+        </div>
+      </div>
+    </div>
 
-            .cashback-description {
-                color: #4A5567;
-                margin-bottom: 20px;
-            }
+    <!-- Services Section -->
+    <div class="services-section">
+      <div class="section-title">Services</div>
+      <div class="row g-3">
+        <div class="col-6 col-md-2">
+          <button class="service-btn property-tax">
+            <i class="bi bi-house-fill"></i>
+            Property Tax
+          </button>
+        </div>
+        <div class="col-6 col-md-2">
+          <button class="service-btn water-bill">
+            <i class="bi bi-droplet-fill"></i>
+            Water Bill
+          </button>
+        </div>
+        <div class="col-6 col-md-2">
+          <button class="service-btn grievance">
+            <i class="bi bi-question-circle-fill"></i>
+            Grievance
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="service-btn birth-certificate">
+            <i class="bi bi-key-fill"></i>
+            Birth Certificate
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="service-btn marriage-certificate">
+            <i class="bi bi-emoji-smile-fill"></i>
+            Marriage Certificate
+          </button>
+        </div>
+      </div>
+    </div>
 
-            .pay-now-btn {
-                background-color: #FFB800;
-                color: #0A1628;
-                padding: 10px 25px;
-                border-radius: 25px;
-                text-decoration: none;
-                font-weight: 600;
-                display: inline-block;
-                border: none;
-            }
-
-            .pay-now-btn:hover {
-                background-color: #FFA500;
-                color: #0A1628;
-            }
-
-            .cashback-image {
-                position: absolute;
-                right: 30px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 200px;
-            }
-
-            /* Property Card */
-            .property-card {
-                background-color: #1A2537;
-                border-radius: 20px;
-                padding: 30px;
-                margin-bottom: 30px;
-            }
-
-            .property-info {
-                margin-bottom: 20px;
-            }
-
-            .info-label {
-                color: #B0B7C3;
-                font-size: 0.9rem;
-                margin-bottom: 5px;
-            }
-
-            .info-value {
-                color: #ffffff;
-                font-size: 1.2rem;
-                font-weight: 500;
-                margin-bottom: 20px;
-            }
-
-            .coordinates-btn {
-                background-color: #2D3A4F;
-                border: none;
-                color: #ffffff;
-                padding: 8px 15px;
-                border-radius: 15px;
-                text-decoration: none;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .coordinates-btn i {
-                color: #4A90E2;
-            }
-
-            /* Property Images */
-            .property-images {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-                height: 100%;
-            }
-
-            .property-image-container {
-                position: relative;
-                width: 100%;
-                height: 160px;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            .property-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.3s ease;
-            }
-
-            .property-image:hover {
-                transform: scale(1.05);
-            }
-
-            .image-overlay {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                padding: 8px 12px;
-                background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-                color: white;
-                font-size: 0.85rem;
-            }
-
-            @media (max-width: 768px) {
-                .header-section {
-                    flex-direction: column;
-                    text-align: center;
-                }
-
-                .header-logo {
-                    margin-top: 20px;
-                }
-
-                .cashback-content {
-                    max-width: 100%;
-                }
-
-                .cashback-image {
-                    display: none;
-                }
-
-                .property-images {
-                    flex-direction: row;
-                    margin-top: 20px;
-                }
-                
-                .property-image-container {
-                    width: calc(50% - 8px);
-                    height: 140px;
-                }
-            }
-        </style>
-
-        <div class="custom-container" style="max-width: 420px; margin: 0 auto; padding: 0; background: linear-gradient(180deg, #fff 80%, #f5f7ff 100%); border-radius: 24px; box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10); overflow: hidden;">
-            <!-- Header Section -->
-            <div style="background: #0A1628; color: #fff; padding: 24px 20px 12px 20px; border-top-left-radius: 24px; border-top-right-radius: 24px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <div style="font-size: 1.3rem; font-weight: 600; letter-spacing: 0.5px;">Welcome to <span style="color: #FFB800;">DDN</span></div>
-                        <div style="font-size: 1rem; color: #B0B7C3;">Sangli Miraj and Kupwad City</div>
-                    </div>
-                    <!-- <img src="/ddn/static/src/img/logo.png" alt="UDAN Logo" style="width: 54px; height: 54px; border-radius: 50%; background: #fff; object-fit: contain;"/> -->
-                </div>
-            </div>
-
-            <!-- Cashback Banner -->
-            <div style="background: #f5f7ff; border-radius: 18px; margin: 18px 16px 0 16px; padding: 18px 16px 12px 16px; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07); display: flex; align-items: center; gap: 16px;">
-                <div style="flex: 1;">
-                    <div style="color: #4A5567; font-size: 0.9rem; margin-bottom: 4px;">GET UP TO</div>
-                    <div style="font-size: 1.3rem; font-weight: 700; color: #0A1628; margin-bottom: 2px;">₹100 Cashback</div>
-                    <div style="color: #4A5567; font-size: 0.95rem; margin-bottom: 8px;">on Electricity Bill Payment</div>
-                    <a href="#" style="background: #FFB800; color: #0A1628; padding: 7px 18px; border-radius: 18px; text-decoration: none; font-weight: 600; font-size: 1rem; display: inline-block;">Pay Now</a>
-                    <div style="font-size: 0.8rem; margin-top: 6px; color: #888;">*T&amp;C Apply</div>
-                </div>
-                <!-- <img src="/ddn/static/src/img/cashback-illustration.png" alt="Cashback Offer" style="width: 80px; height: 80px; object-fit: contain;"/> -->
-            </div>
-
-            <!-- Property Card -->
-            <t t-foreach="property" t-as="pr">
-                <div style="background: #fff; border-radius: 18px; margin: 18px 16px 0 16px; padding: 18px 16px 12px 16px; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);">
-                    <div style="display: flex; gap: 12px; align-items: flex-start;">
-                        <div style="flex: 1;">
-                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Owner Name</div>
-                            <div style="font-size: 1.05rem; font-weight: 500; margin-bottom: 10px; color: #222;"><t t-esc="pr.owner_name"/></div>
-
-                        
-                            <div style="font-size: 0.98rem; color: #888; margin-bottom: 2px;">Digital Door Number</div>
-                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: #0A1628;"><t t-esc="pr.upic_no"/></div>
-                        
-                            <div style="font-size: 0.98rem; color: #888; margin-bottom: 2px;">Latitude &amp; Longitude</div>
-                            <div style="font-size: 1.05rem; font-weight: 500; margin-bottom: 10px; color: #0A1628; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-location-dot" style="color: #4A90E2;"></i>
-                                <t t-if="pr.survey_line_ids and len(pr.survey_line_ids) > 0">
-                                    <t t-set="lat" t-value="pr.survey_line_ids[0].latitude"/>
-                                    <t t-set="lng" t-value="pr.survey_line_ids[0].longitude"/>
-                                    <t t-esc="lat"/>°N, <t t-esc="lng"/>°E
-                                    <a t-att-href="'https://wa.me/?text=Check%20out%20this%20property%20location:%20https://maps.google.com/?q=' + str(lat) + ',' + str(lng)"
-                                       target="_blank"
-                                       style="margin-left: 6px; display: inline-flex; align-items: center;"
-                                       title="Share location on WhatsApp">
-                                        <i class="fab fa-whatsapp" style="color: #25D366; font-size: 1.3em;"></i>
-                                    </a>
-                                </t>
-                            </div>
-
-                            <div style="font-size: 0.98rem; color: #888; margin-bottom: 2px;">Block</div>
-                            <div style="font-size: 1.05rem; font-weight: 500; margin-bottom: 10px; color: #0A1628;"><t t-esc="pr.zone_no.name"/></div>
-
-                            <div style="font-size: 0.98rem; color: #888; margin-bottom: 2px;">Address</div>
-                            <div style="font-size: 1.05rem; font-weight: 500; margin-bottom: 10px; color: #0A1628; text-transform: uppercase;"><t t-esc="pr.property_description"/></div>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-                            <t t-if="pr.survey_line_ids and len(pr.survey_line_ids) > 0">
-                                <img t-if="pr.survey_line_ids[0].property_image"
-                                     t-att-src="image_data_uri(pr.survey_line_ids[0].property_image)"
-                                     style="width: 110px; height: 80px; border-radius: 12px; object-fit: cover; margin-bottom: 8px; border: 2px solid #FFB800; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);"
-                                     alt="Property Front View"/>
-                                <img t-if="pr.survey_line_ids[0].property_image1"
-                                     t-att-src="image_data_uri(pr.survey_line_ids[0].property_image1)"
-                                     style="width: 110px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid #FFB800; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);"
-                                     alt="Additional View"/>
-                            </t>
-                        </div>
-                    </div>
-                </div>
-            </t>
+    <!-- Emergency Services -->
+    <div class="emergency-section">
+      <div class="section-title">Emergency Services</div>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-sos">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Emergency
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-police">
+            <i class="bi bi-car-front-fill"></i>
+            Police
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-fire">
+            <i class="bi bi-truck"></i>
+            Fire
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-ambulance">
+            <i class="bi bi-ambulance"></i>
+            Ambulance
+          </button>
         </div>
 
-        <!-- Add Bootstrap JS and Popper.js -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-women">
+            <i class="bi bi-person-fill"></i>
+            Women Help
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-forest">
+            <i class="bi bi-tree-fill"></i>
+            Forest Office
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-municipal">
+            <i class="bi bi-building"></i>
+            Municipal Help
+          </button>
+        </div>
+        <div class="col-6 col-md-3">
+          <button class="emergency-btn emergency-power">
+            <i class="bi bi-plug-fill"></i>
+            Power Dept.
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your Officer Section -->
+    <div class="officer-section">
+      <div class="section-title">Your Officer</div>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="officer-card">
+            <div class="officer-icon">
+              <i class="bi bi-telephone-fill"></i>
+            </div>
+            <div class="officer-info">
+              <div class="officer-name">Mr. Ravi Singh</div>
+              <div class="officer-role">Zone Officer</div>
+              <div class="officer-phone">+91 998877665</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="officer-card">
+            <div class="officer-icon">
+              <i class="bi bi-telephone-fill"></i>
+            </div>
+            <div class="officer-info">
+              <div class="officer-name">Mr. Ravi Singh</div>
+              <div class="officer-role">Zone Officer</div>
+              <div class="officer-phone">+91 998877665</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </template>
 </odoo>
