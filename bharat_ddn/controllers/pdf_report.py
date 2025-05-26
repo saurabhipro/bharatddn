@@ -188,7 +188,7 @@ class PdfGeneratorController(http.Controller):
                     )
                     # base_url = request.httprequest.host_url
                     base_url = property_rec.company_id.website
-                    full_url = f"{base_url}get/property-details/{uuid}"
+                    full_url = f"{base_url}/get/property-details/{uuid}"
                     qr.add_data(full_url)
                     qr.make(fit=True)
                     qr_img = qr.make_image(fill_color="black", back_color="white")
@@ -238,18 +238,21 @@ class PdfGeneratorController(http.Controller):
 
 
 
+
     @http.route('/get/property-details/<string:uuid>', auth='public', website=True)
     def get_property_details_by_uuid(self, uuid, **kw):
         print("UPIC No:", uuid)
-        
+
         property = request.env['ddn.property.info'].sudo().search([('uuid', '=', uuid)], limit=1)
+        print("property - ", property)
+
         if not property:
             return request.render('website.404')
-        for a in property:
-            print("a - ",)
-            if a.survey_line_ids:
-                print("Property:", a.survey_line_ids[0])
-            else:
-                print("Property: No survey lines found")
-        return request.render('ddn.property_details_template', {'property': property})
-        
+
+        # This loop is unnecessary because 'property' is a single record (limit=1)
+        if property.survey_line_ids:
+            print("Property Survey Line:", property.survey_line_ids[0])
+        else:
+            print("Property: No survey lines found")
+
+        return request.render('bharat_ddn.property_details_template', {'property': property})
