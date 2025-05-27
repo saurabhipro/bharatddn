@@ -4,119 +4,253 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap');
+
     body {
-      background-color: #1b2a56;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .highlight-yellow {
-      color: #ffc107;
-      font-weight: 600;
-    }
-    .cashback-banner {
-      background: white;
-      color: #053071;
-      border-radius: 1rem;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .btn-pay {
-      background: #ffc107;
-      color: #053071;
-      font-weight: 700;
-      padding: 0.5rem 1.5rem;
-      border-radius: 50px;
-      border: none;
-      width: 100%;
-      max-width: 200px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .property-card {
-      background: white;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #a85959;
       color: #000;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    .property-label {
+
+    /* Header */
+    .header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 1.2rem 2.5rem 1.2rem;
+      background: linear-gradient(135deg, #8a4f4f, #b86f6f);
+      border-radius: 0 0 2rem 2rem;
+      box-shadow: inset 0 2px 6px rgba(255 255 255 / 0.1);
+      flex-wrap: wrap;
+    }
+
+    .header-text {
+      max-width: 70%;
+      color: white;
+    }
+
+    .header-text h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin: 0;
+      line-height: 1.1;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .highlight-hindi {
+      font-weight: 900;
+      color: #ffd4a3;
+    }
+
+    .subtitle {
       font-weight: 600;
       font-size: 0.9rem;
-      opacity: 0.7;
-      margin-bottom: 0.15rem;
+      margin-top: 0.35rem;
+      opacity: 0.85;
+      letter-spacing: 0.08em;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
     }
-    .property-value {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
+
+    .header-logo-wrapper {
+      background: #fff;
+      border-radius: 1.5rem;
+      padding: 0.25rem 0.4rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      max-width: 90px;
     }
-    .property-images img {
-      width: 100%;
-      max-height: 90px;
-      border-radius: 0.8rem;
-      object-fit: cover;
-      border: 2px solid #ccc;
-      transition: border-color 0.3s ease;
-      cursor: pointer;
-    }
-    .property-images img:hover {
-      border-color: #ffc107;
-    }
-    .brand {
-      text-align: right;
-      font-size: 0.75rem;
-      color: #f03e3e;
-      font-weight: 600;
-      user-select: none;
-      margin-top: 0.5rem;
-    }
-    .section-title {
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: #000;
-      margin-bottom: 1rem;
-    }
-    .service-btn, .emergency-btn {
+
+    .header-logo-wrapper img {
+      max-height: 50px;
+      width: auto;
+      display: block;
       border-radius: 1rem;
-      padding: 1rem;
+    }
+
+    /* Property Card */
+    .property-card {
+      background: white;
+      border-radius: 1.5rem;
+      margin: 1rem;
+      padding: 1.5rem 2rem 2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 0.2);
+      flex-wrap: nowrap;
+      position: relative;
+    }
+
+    .property-details {
+      flex: 1 1 auto;
+      min-width: 60%;
+    }
+
+    .property-details .label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+      text-transform: capitalize;
+    }
+
+    .property-details .value {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-top: 0.15rem;
+      text-transform: uppercase;
+    }
+
+    .property-icons-wrapper {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      min-width: 130px;
+      justify-content: flex-start;
+    }
+
+    .property-icon-box {
+      width: 120px;
+      height: 90px;
+      background: #fff;
+      border-radius: 1.25rem;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-weight: 600;
       font-size: 1rem;
+      color: #444;
+      cursor: default;
+      text-align: center;
+      padding: 0.5rem;
+      user-select: none;
+      border: 2px solid #ddd;
+      transition: border-color 0.3s ease;
+    }
+    .property-icon-box:hover {
+      border-color: #f06a2e;
+      box-shadow: 0 6px 20px rgba(240, 106, 46, 0.35);
+    }
+
+    /* Section Titles */
+    h2.section-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 1.5rem 1rem 1rem;
       color: #000;
-      background-color: #f8f9fa;
+      text-align: center;
+    }
+
+    /* Services Container */
+    .services-section {
+      background: linear-gradient(135deg, #f06a2e, #b24924);
+      margin: 0 1rem 1.5rem;
+      border-radius: 1.5rem;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 4px 18px rgb(176 73 36 / 0.6);
+      color: white;
+    }
+
+    .service-buttons {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .service-button {
+      flex: 0 0 30%;
+      max-width: 110px;
+      background: rgba(255 255 255 / 0.2);
+      border-radius: 1rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 1rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgb(0 0 0 / 0.25);
+      user-select: none;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      white-space: nowrap;
       border: 2px solid transparent;
-      width: 100%;
+    }
+
+    .service-button:hover {
+      background: rgba(255 255 255 / 0.4);
+      box-shadow: 0 8px 22px rgba(255 255 255 / 0.6);
+      border-color: rgba(255 255 255 / 0.8);
+    }
+
+    .service-button i {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Emergency Services */
+    .emergency-section {
+      background: white;
+      margin: 0 1rem 1.5rem;
+      border-radius: 1.5rem;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 3px 12px rgb(0 0 0 / 0.15);
+    }
+
+    .emergency-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .emergency-button {
+      background-color: #f8f9fa;
+      border-radius: 1.5rem;
+      padding: 1rem 0.5rem;
+      font-weight: 600;
+      font-size: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.4rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      color: #000;
+      box-shadow: 0 1px 6px rgb(0 0 0 / 0.1);
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
     }
-    .service-btn i, .emergency-btn i {
-      font-size: 1.8rem;
+
+    .emergency-button:hover {
+      background-color: #e2e6ea;
+      border-color: #a8d0e6;
+      box-shadow: 0 4px 16px rgba(168, 208, 230, 0.6);
     }
-    /* Service colors */
-    .property-tax {
-      border-color: #4a3dbf;
-      color: #4a3dbf;
+
+    .emergency-button i {
+      font-size: 2rem;
     }
-    .water-bill {
-      border-color: #3b5cc4;
-      color: #3b5cc4;
-    }
-    .grievance {
-      border-color: #e26923;
-      color: #e26923;
-    }
-    .birth-certificate {
-      border-color: #74b5e7;
-      color: #74b5e7;
-    }
-    .marriage-certificate {
-      border-color: #f15659;
-      color: #f15659;
-    }
-    /* Emergency colors */
+
+    /* Color variants */
     .emergency-sos { background: #f8d7da; color: #a71c1c; }
     .emergency-police { background: #d1e7f9; color: #0d4d6c; }
     .emergency-fire { background: #ffe4b8; color: #a86c05; }
@@ -125,16 +259,36 @@
     .emergency-forest { background: #cee8d5; color: #2f593b; }
     .emergency-municipal { background: #f4f1c3; color: #847c0e; }
     .emergency-power { background: #d5d9f5; color: #272e91; }
+
+    /* Your Officer Section */
+    .officer-section {
+      background: white;
+      margin: 0 1rem 2rem;
+      border-radius: 1.5rem;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 3px 12px rgb(0 0 0 / 0.15);
+    }
+
+    .officer-cards {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .officer-card {
       background: white;
-      border-radius: 1rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      color: #000;
+      border-radius: 1.5rem;
+      padding: 1rem 1.2rem;
+      flex: 0 0 45%;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 0.15);
       display: flex;
       align-items: center;
       gap: 1rem;
+      color: #000;
+      cursor: default;
     }
+
     .officer-icon {
       background: #1b2a56;
       border-radius: 50%;
@@ -145,235 +299,231 @@
       justify-content: center;
       align-items: center;
       font-size: 1.5rem;
+      flex-shrink: 0;
     }
+
+    .officer-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .officer-name {
       font-weight: 700;
+      font-size: 1rem;
       margin-bottom: 0.25rem;
     }
+
     .officer-role {
       font-weight: 600;
       font-size: 0.9rem;
       opacity: 0.7;
     }
+
     .officer-phone {
       font-weight: 600;
       font-size: 0.9rem;
       color: #1b2a56;
     }
-    .ambulance-icon-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      color: #084a6c;
+
+    /* Footer */
+    footer {
+      background: linear-gradient(90deg, #ffb347, #ffcc33);
+      text-align: center;
+      padding: 1rem 0;
       font-weight: 700;
-      font-size: 1.25rem;
+      font-size: 1rem;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.8);
+      user-select: none;
     }
-    .ambulance-icon-wrapper i {
-      font-size: 2rem;
+    footer span {
+      color: #b24924;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+
+    /* Scrollbar styling for horizontal overflow */
+    .service-buttons::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .service-buttons::-webkit-scrollbar-thumb {
+      background: #b24924;
+      border-radius: 3px;
+    }
+
+    .service-buttons {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #b24924 transparent;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .property-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .property-details {
+        min-width: 100%;
+      }
+      .property-icons-wrapper {
+        min-width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .property-icon-box {
+        width: 90px;
+        height: 70px;
+      }
+      .service-button {
+        flex: 0 0 auto;
+        max-width: 100px;
+      }
+      .emergency-button {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+      .officer-card {
+        flex: 0 0 100%;
+      }
     }
   </style>
-  <div class="container py-4">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-      <div>
-        <h4 class="mb-1">Welcome to <span class="highlight-yellow">UDAN</span></h4>
-        <div>Sangli Miraj and Kupwad City</div>
-      </div>
-      <img src="/mnt/data/fd072a77-2671-4bae-b4be-649855a89535.png" alt="UDAN City Logo" style="height: 60px; border-radius: 50%;" />
+  <!-- Header -->
+  <header class="header-area">
+    <div class="header-text">
+      <h1>Welcome to <span class="highlight-hindi">डिजिटल पता</span></h1>
+      <div class="subtitle">INDORE MUNICIPAL CORPORATION</div>
     </div>
-
-    <!-- Cashback Banner -->
-    <div class="cashback-banner d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
-      <div class="text-center text-sm-start">
-        <div style="font-size: 0.75rem; font-weight: 600;">GET UP TO</div>
-        <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
-          ₹<span style="color:#053071;">100</span> Cashback
-        </div>
-        <div style="font-size: 0.85rem; font-weight: 600;">on Electricity Bill Payment</div>
-        <small style="font-size: 0.6rem; opacity: 0.6;">T&amp;C Apply | Offer only for you</small>
-      </div>
-      <button class="btn-pay">Pay Now</button>
+    <div class="header-logo-wrapper">
+      
     </div>
+  </header>
 
-    <!-- Property Card -->
-    <div class="property-card shadow-sm">
-      <div class="row g-3 align-items-center">
-        <div class="col-12 col-md-8">
-          <div class="row g-2">
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Owner Name</div>
-              <div class="property-value">Lucas Nelson</div>
-            </div>
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Property ID</div>
-              <div class="property-value">0080</div>
-            </div>
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Digital Door Number</div>
-              <div class="property-value">F7-06/D-0080</div>
-            </div>
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Latitude &amp; Longitude</div>
-              <div class="property-value">Null &amp; Null</div>
-            </div>
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Block</div>
-              <div class="property-value">06/D</div>
-            </div>
-            <div class="col-6 col-sm-4">
-              <div class="property-label">Address</div>
-              <div class="property-value">ZONE SEVEN BLOCK SIX</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="property-images row g-2">
-            <div class="col-6">
-              <a href="https://example.com/property1" target="_blank" rel="noopener">
-                <img src="/mnt/data/62a738c1-df2c-4c22-b6ff-e41ce65bc921.png" alt="Property 1" class="img-fluid" />
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="https://example.com/property2" target="_blank" rel="noopener">
-                <img src="/mnt/data/001d4969-026c-423d-a34a-23e980dabacc.png" alt="Property 2" class="img-fluid" />
-              </a>
-            </div>
-          </div>
-          <div class="brand mt-2">redmelon</div>
-        </div>
+  <!-- Property Card -->
+  <section class="property-card">
+    <div class="property-details">
+      <div class="label">Owner Name</div>
+      <div class="value">Lucas Nelson</div>
+
+      <div class="label">Property Identification Number</div>
+      <div class="value">0080</div>
+
+      <div class="label">Digital Door Number</div>
+      <div class="value">F7-06/D-0080</div>
+
+      <div class="label">Latitude &amp; Longitude</div>
+      <div class="value"></div>
+
+      <div class="label">Block</div>
+      <div class="value">06/D</div>
+
+      <div class="label">Address</div>
+      <div class="value">ZONE SEVEN BLOCK SIX</div>
+    </div>
+    <div class="property-icons-wrapper">
+      <div class="property-icon-box">Property 1</div>
+      <div class="property-icon-box">Property 2</div>
+    </div>
+  </section>
+
+  <!-- Government Payment Services -->
+  <section class="services-section">
+    <h2 class="section-title">Government Payment Services</h2>
+    <div class="service-buttons">
+      <div class="service-button">
+        <i class="bi bi-house-fill"></i>
+        Property Tax
+      </div>
+      <div class="service-button">
+        <i class="bi bi-droplet-fill"></i>
+        Water Tax
+      </div>
+      <div class="service-button">
+        <i class="bi bi-plug-fill"></i>
+        Electricity Bill
       </div>
     </div>
+  </section>
 
-    <!-- Ambulance Icon Standalone -->
-    <div class="ambulance-icon-wrapper">
-      <i class="bi bi-ambulance"></i>
-      Ambulance Service
+  <!-- Emergency Services -->
+  <section class="emergency-section">
+    <h2 class="section-title">Emergency Services</h2>
+    <div class="emergency-buttons">
+      <div class="emergency-button emergency-sos">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Emergency
+      </div>
+      <div class="emergency-button emergency-police">
+        <i class="bi bi-car-front-fill"></i>
+        Police
+      </div>
+      <div class="emergency-button emergency-fire">
+        <i class="bi bi-truck"></i>
+        Fire
+      </div>
+      <div class="emergency-button emergency-ambulance">
+        <i class="bi bi-ambulance"></i>
+        Ambulance
+      </div>
+      <div class="emergency-button emergency-women">
+        <i class="bi bi-person-fill"></i>
+        Women Help
+      </div>
+      <div class="emergency-button emergency-forest">
+        <i class="bi bi-tree-fill"></i>
+        Forest Office
+      </div>
+      <div class="emergency-button emergency-municipal">
+        <i class="bi bi-building"></i>
+        Municipal Help
+      </div>
+      <div class="emergency-button emergency-power">
+        <i class="bi bi-plug-fill"></i>
+        Power Dept.
+      </div>
     </div>
+  </section>
 
-    <!-- Services Section -->
-    <section class="services-section">
-      <div class="section-title">Services</div>
-      <div class="row g-3">
-        <div class="col-6 col-md-2">
-          <button class="service-btn property-tax">
-            <i class="bi bi-house-fill"></i>
-            Property Tax
-          </button>
+  <!-- Your Officer Section -->
+  <section class="officer-section">
+    <h2 class="section-title">Your Officer</h2>
+    <div class="officer-cards">
+      <div class="officer-card">
+        <div class="officer-icon">
+          <i class="bi bi-telephone-fill"></i>
         </div>
-        <div class="col-6 col-md-2">
-          <button class="service-btn water-bill">
-            <i class="bi bi-droplet-fill"></i>
-            Water Bill
-          </button>
-        </div>
-        <div class="col-6 col-md-2">
-          <button class="service-btn grievance">
-            <i class="bi bi-question-circle-fill"></i>
-            Grievance
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="service-btn birth-certificate">
-            <i class="bi bi-key-fill"></i>
-            Birth Certificate
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="service-btn marriage-certificate">
-            <i class="bi bi-emoji-smile-fill"></i>
-            Marriage Certificate
-          </button>
+        <div class="officer-info">
+          <div class="officer-name">Mr. Ravi Singh</div>
+          <div class="officer-role">Zone Officer</div>
+          <div class="officer-phone">+91 998877665</div>
         </div>
       </div>
-    </section>
-
-    <!-- Emergency Services -->
-    <section class="emergency-section">
-      <div class="section-title">Emergency Services</div>
-      <div class="row g-3">
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-sos">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            Emergency
-          </button>
+      <div class="officer-card">
+        <div class="officer-icon">
+          <i class="bi bi-telephone-fill"></i>
         </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-police">
-            <i class="bi bi-car-front-fill"></i>
-            Police
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-fire">
-            <i class="bi bi-truck"></i>
-            Fire
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-ambulance">
-            <i class="bi bi-ambulance"></i>
-            Ambulance
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-women">
-            <i class="bi bi-person-fill"></i>
-            Women Help
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-forest">
-            <i class="bi bi-tree-fill"></i>
-            Forest Office
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-municipal">
-            <i class="bi bi-building"></i>
-            Municipal Help
-          </button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="emergency-btn emergency-power">
-            <i class="bi bi-plug-fill"></i>
-            Power Dept.
-          </button>
+        <div class="officer-info">
+          <div class="officer-name">Mr. Ravi Singh</div>
+          <div class="officer-role">Zone Officer</div>
+          <div class="officer-phone">+91 998877665</div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Your Officer Section -->
-    <section class="officer-section">
-      <div class="section-title">Your Officer</div>
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <div class="officer-card">
-            <div class="officer-icon">
-              <i class="bi bi-telephone-fill"></i>
-            </div>
-            <div>
-              <div class="officer-name">Mr. Ravi Singh</div>
-              <div class="officer-role">Zone Officer</div>
-              <div class="officer-phone">+91 998877665</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="officer-card">
-            <div class="officer-icon">
-              <i class="bi bi-telephone-fill"></i>
-            </div>
-            <div>
-              <div class="officer-name">Mr. Ravi Singh</div>
-              <div class="officer-role">Zone Officer</div>
-              <div class="officer-phone">+91 998877665</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  <!-- Footer -->
+  <footer>
+    Powered by <span>Redmelon Pvt Ltd.</span>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </template>
