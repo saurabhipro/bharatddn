@@ -17,20 +17,16 @@ from odoo.http import request
 class PropertyInfo(models.Model):
     _name = 'ddn.property.info'
     _description = 'Property Information'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    
+    _inherit = ['mail.thread', 'mail.activity.mixin']    
     _rec_name = "upic_no"
 
     # Owner Information
     qr_code = fields.Binary("QR Code", compute="_compute_qr_code", store=True)
 
     property_status = fields.Selection([
-        # ('new', 'New'),
         ('uploaded','Uploaded'),
         ('pdf_downloaded','PDF Downloaded'),
-        # ('plate_installed', 'Plate Installed'),
         ('surveyed', 'Surveyed'),
-        # ('unlocked','Unlocked'),
         ('discovered', 'Discovered')
          ], string="Property Status", default="uploaded")
     
@@ -66,7 +62,6 @@ class PropertyInfo(models.Model):
                 img.save(buffer, format='PNG')
                 qr_image = base64.b64encode(buffer.getvalue())
                 buffer.close()
-
                 record.qr_code = qr_image
             else:
                 record.qr_code = False

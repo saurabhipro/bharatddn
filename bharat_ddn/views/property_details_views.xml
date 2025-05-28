@@ -10,6 +10,7 @@
                 <list>
                     <field name="uuid" optional="show"/>
                     <field name="upic_no" optional="show"/>
+                    <field name="mobile_no" optional="show"/>
                     <field name="zone_no" optional="show"/>
                     <field name="ward_no" optional="show"/>
                     <field name="property_no" optional="hide"/>
@@ -109,6 +110,7 @@
                                 <field name="uuid"/>
                                 <field name="microsite_url" widget="url" string="Open Microsite"/>
                                 <field name="upic_no"/>
+                                <field name="mobile_no"/>
                                 <field name="surveyer_id"/>
                                 <field name="zone_no"/>
                                 <field name="ward_no"/>
