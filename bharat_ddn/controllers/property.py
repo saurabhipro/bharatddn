@@ -274,3 +274,35 @@ class PropertyDetailsAPI(http.Controller):
             'ward_no': data.get('ward_id'),
             'property_status': 'discovered'
         }
+
+class PropertyIdDataAPI(http.Controller):
+    @http.route('/api/property_id_data/search', type='http', auth='public', methods=['POST'], csrf=False)
+    def search_property_id_data(self, **kwargs):
+        try:
+            data = json.loads(request.httprequest.data or '{}')
+            mobile_no = data.get('mobile_no')
+            owner_name = data.get('owner_name')
+            domain = []
+            if mobile_no:
+                domain.append(('mobile_no', '=', mobile_no))
+            if owner_name:
+                domain.append(('owner_name', 'ilike', owner_name))
+            if not domain:
+                return Response(json.dumps({'error': 'Please provide mobile_no or owner_name'}), status=400, content_type='application/json')
+            records = request.env['property.id.data'].sudo().search(domain)
+            result = [
+                {
+                    'property_id': rec.property_id,
+                    'owner_name': rec.owner_name,
+                    'address': rec.address,
+                    'mobile_no': rec.mobile_no,
+                    'currnet_tax': rec.currnet_tax,
+                    'total_amount': rec.total_amount,
+                }
+                for rec in records
+            ]
+            return Response(json.dumps({'results': result}), status=200, content_type='application/json')
+        except Exception as e:
+            return Response(json.dumps({'error': str(e)}), status=500, content_type='application/json')
+
+

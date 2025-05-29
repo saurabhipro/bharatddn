@@ -6,11 +6,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import qrcode
 from PyPDF2 import PdfMerger
-
 from odoo import http
 from odoo.http import request
-
-
 from odoo import http
 from odoo.http import request
 from reportlab.pdfgen import canvas
@@ -238,21 +235,3 @@ class PdfGeneratorController(http.Controller):
 
 
 
-
-    @http.route('/get/property-details/<string:uuid>', auth='public', website=True)
-    def get_property_details_by_uuid(self, uuid, **kw):
-        print("UPIC No:", uuid)
-
-        property = request.env['ddn.property.info'].sudo().search([('uuid', '=', uuid)], limit=1)
-        print("property - ", property)
-
-        if not property:
-            return request.render('website.404')
-
-        # This loop is unnecessary because 'property' is a single record (limit=1)
-        if property.survey_line_ids:
-            print("Property Survey Line:", property.survey_line_ids[0])
-        else:
-            print("Property: No survey lines found")
-
-        return request.render('bharat_ddn.property_details_template', {'property': property})

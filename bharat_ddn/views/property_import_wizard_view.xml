@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_property_import_wizard_form" model="ir.ui.view">
+        <field name="name">property.import.wizard.form</field>
+        <field name="model">property.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Property Data">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="data_file" filename="filename"/>
+                </group>
+                <footer>
+                    <button name="action_import" type="object" string="Import" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Property ID Data</field>
+        <field name="res_model">property.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_property_import_wizard_form"/>
+    </record>
+</odoo> 

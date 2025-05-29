@@ -1,0 +1,377 @@
+// Variables
+$primary-color: #a85959;
+$header-gradient-start: #8a4f4f;
+$header-gradient-end: #b86f6f;
+$highlight-color: #ffd4a3;
+$footer-gradient-start: #ffb347;
+$footer-gradient-end: #ffcc33;
+$footer-accent: #b24924;
+$officer-bg: #1b2a56;
+$officer-icon: #ffc107;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-shadow {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.10);
+}
+
+@mixin gradient-bg($start, $end) {
+  background: linear-gradient(135deg, $start, $end);
+}
+
+// Base styles
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: $primary-color;
+  color: #000;
+  min-height: 100vh;
+}
+
+// Header styles
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.8rem 1rem 2rem 1rem;
+  @include gradient-bg($header-gradient-start, $header-gradient-end);
+  border-radius: 0 0 2rem 2rem;
+  box-shadow: inset 0 2px 6px rgba(255 255 255 / 0.1);
+  flex-wrap: wrap;
+
+  .header-text {
+    max-width: 75%;
+    color: white;
+
+    h1 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .highlight-hindi {
+      font-weight: 900;
+      color: $highlight-color;
+    }
+
+    .subtitle {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+      opacity: 0.85;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  }
+
+  .header-logo-wrapper {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 0.25rem 0.4rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.22);
+    @include flex-center;
+    flex-shrink: 0;
+    max-width: 60px;
+
+    img {
+      max-height: 42px;
+      width: auto;
+      display: block;
+      border-radius: 1rem;
+    }
+  }
+}
+
+// Property Card styles
+.property-card {
+  background: white;
+  border-radius: 1.25rem;
+  margin: 1rem 0.6rem;
+  padding: 1.2rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  @include card-shadow;
+  flex-wrap: wrap;
+
+  .property-details {
+    flex: 1 1 140px;
+    min-width: 0;
+
+    .label {
+      font-weight: 600;
+      font-size: 0.82rem;
+      opacity: 0.6;
+      margin-top: 0.4rem;
+    }
+
+    .value {
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-top: 0.13rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .property-icons-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-end;
+
+    .property-icon-box {
+      width: 90px;
+      height: 60px;
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.13);
+      @include flex-center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #444;
+      border: 1.6px solid #eee;
+    }
+  }
+}
+
+// Section Title
+.section-title {
+  font-weight: 700;
+  font-size: 1.11rem;
+  margin: 1.1rem 0 1rem 0;
+  color: #000;
+  text-align: center;
+}
+
+// Services Section
+.services-section {
+  @include gradient-bg(#f06a2e, #b24924);
+  margin: 0 0.6rem 1.2rem;
+  border-radius: 1.2rem;
+  padding: 1.2rem 0.7rem;
+  box-shadow: 0 4px 18px rgb(176 73 36 / 0.16);
+  color: white;
+
+  .service-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
+
+  .service-button {
+    flex: 1 1 0px;
+    min-width: 90px;
+    max-width: 120px;
+    background: rgba(255,255,255,0.13);
+    border-radius: 0.9rem;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.93rem;
+    padding: 0.7rem 0.2rem 0.2rem 0.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.14);
+    user-select: none;
+    border: 2px solid rgba(255,255,255,0.24);
+    margin-bottom: 0.5rem;
+    transition: background 0.2s, border 0.2s;
+
+    i {
+      font-size: 1.8rem;
+      margin-bottom: 0.35rem;
+      color: #fff !important;
+    }
+
+    &:hover {
+      background: rgba(255,255,255,0.28);
+      border: 2px solid #fff;
+    }
+  }
+}
+
+// Emergency Section
+.emergency-section {
+  background: white;
+  margin: 0 0.6rem 1.2rem;
+  border-radius: 1.2rem;
+  padding: 1.2rem 0.7rem;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.10);
+
+  .emergency-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .emergency-button {
+    border-radius: 1rem;
+    padding: 1rem 0.2rem 0.6rem 0.2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+    border: 1.2px solid transparent;
+    color: #222;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+
+    i {
+      font-size: 1.7rem;
+      color: inherit;
+    }
+
+    // Emergency button variants
+    &.emergency-sos { background: #f8d7da; color: #a71c1c; }
+    &.emergency-police { background: #d1e7f9; color: #0d4d6c; }
+    &.emergency-fire { background: #ffe4b8; color: #a86c05; }
+    &.emergency-ambulance { background: #a8d0e6; color: #084a6c; }
+    &.emergency-women { background: #e4d7f9; color: #6a2ea0; }
+    &.emergency-forest { background: #cee8d5; color: #2f593b; }
+    &.emergency-municipal { background: #f4f1c3; color: #847c0e; }
+    &.emergency-power { background: #d5d9f5; color: #272e91; }
+  }
+}
+
+// Officer Section
+.officer-section {
+  background: white;
+  margin: 0 0.6rem 1.2rem;
+  border-radius: 1.2rem;
+  padding: 1.2rem 0.7rem;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.08);
+
+  .officer-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .officer-card {
+    background: white;
+    border-radius: 1.1rem;
+    padding: 0.7rem 0.9rem;
+    flex: 1 1 130px;
+    min-width: 130px;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 0.11);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: #000;
+
+    .officer-icon {
+      background: $officer-bg;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      color: $officer-icon;
+      @include flex-center;
+      font-size: 1.2rem;
+    }
+
+    .officer-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .officer-name {
+        font-weight: 700;
+        font-size: 0.96rem;
+        margin-bottom: 0.18rem;
+      }
+
+      .officer-role {
+        font-weight: 600;
+        font-size: 0.9rem;
+        opacity: 0.7;
+      }
+
+      .officer-phone {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: $officer-bg;
+      }
+    }
+  }
+}
+
+// Footer
+footer {
+  @include gradient-bg($footer-gradient-start, $footer-gradient-end);
+  text-align: center;
+  padding: 1rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.8);
+  user-select: none;
+
+  span {
+    color: $footer-accent;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+}
+
+// Media Queries
+@media (max-width: 700px) {
+  .officer-cards {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .property-card { 
+    flex-direction: column; 
+    align-items: flex-start;
+  }
+  .property-icons-wrapper { 
+    flex-direction: row; 
+    align-items: center; 
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-area { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+  }
+  .header-text { 
+    max-width: 100%; 
+    margin-bottom: 0.5rem;
+  }
+  .property-card { 
+    padding: 1rem 0.6rem;
+  }
+  .property-icons-wrapper {
+    margin-top: 0.7rem;
+  }
+  .services-section, 
+  .emergency-section, 
+  .officer-section { 
+    padding: 1rem 0.4rem;
+  }
+  .emergency-buttons { 
+    grid-template-columns: 1fr 1fr; 
+  }
+}

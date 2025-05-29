@@ -22,7 +22,6 @@
         'views/ward_views.xml',
         'views/property_type_views.xml',
         'views/property_details_views.xml',
-        'views/property_details_template.xml',
         'views/property_map_view.xml',
         'views/res_users_views.xml',
         'views/mobile_otp_views.xml',
@@ -33,6 +32,8 @@
         'views/menuitems.xml',  # Load menus last
         'views/res_company_views.xml',
         'security/ir_rule.xml',
+        'views/property_import_wizard_view.xml',
+        'views/property_id_data_views.xml',
         # 'views/assets.xml',
     ],
     'assets': {

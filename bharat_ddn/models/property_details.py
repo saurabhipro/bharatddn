@@ -271,4 +271,6 @@ class PropertyInfo(models.Model):
                     
         return res
 
+    currnet_tax = fields.Float('Current Tax')
+    total_amount = fields.Float('Total Amount')
     

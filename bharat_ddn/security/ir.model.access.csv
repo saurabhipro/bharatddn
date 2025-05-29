@@ -13,6 +13,9 @@ access_jwt_token,ddnjwt.token,model_jwt_token,base.group_user,1,1,1,1
 
 
 access_property_group,ddn.property.group,model_ddn_property_group,base.group_user,1,1,1,1
+access_property_import_wizard,access.property.import.wizard,model_property_import_wizard,base.group_user,1,1,1,1
+
+access_property_id_data,property.id.data,model_property_id_data,base.group_user,1,1,1,1
 
 
 
