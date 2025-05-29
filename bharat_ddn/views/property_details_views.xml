@@ -13,6 +13,7 @@
                     <field name="mobile_no" optional="show"/>
                     <field name="zone_no" optional="show"/>
                     <field name="ward_no" optional="show"/>
+                    <field name="colony_id" optional="show"/>
                     <field name="property_no" optional="hide"/>
                     <field name="plot_no" optional="hide"/>
                     <field name="bill_no" optional="hide"/>
@@ -114,6 +115,7 @@
                                 <field name="surveyer_id"/>
                                 <field name="zone_no"/>
                                 <field name="ward_no"/>
+                                <field name="colony_id"/>
                                 <field name="latitude"/>
                                 <field name="longitude"/>
                             </group>

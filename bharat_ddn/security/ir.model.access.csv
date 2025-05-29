@@ -16,7 +16,7 @@ access_property_group,ddn.property.group,model_ddn_property_group,base.group_use
 access_property_import_wizard,access.property.import.wizard,model_property_import_wizard,base.group_user,1,1,1,1
 
 access_property_id_data,property.id.data,model_property_id_data,base.group_user,1,1,1,1
-
+access_colony_id,ddn.colony,model_ddn_colony,base.group_user,1,1,1,1
 
 
 

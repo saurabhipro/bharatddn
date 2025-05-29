@@ -19,6 +19,7 @@
             <menuitem id="res_company_menu_item" name="Companies" action="base.action_res_company_form" sequence="8"/>
             <menuitem id="ddn_menu_property_import" name="Import Properties" action="action_property_import_wizard" sequence="9"/>
             <menuitem id="ddn_menu_property_id_data" name="Imported Property Data" action="action_property_id_data" sequence="10"/>
+            <menuitem id="ddn_menu_colony" name="Colonies" action="action_colony" sequence="11"/>
         </menuitem>
     </menuitem>
 </odoo>

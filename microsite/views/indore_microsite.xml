@@ -1,211 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="id_indore_microsite_template" name="UDAN Property Info">
-  <t t-call="website.layout">
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <div class="property_details_template">
-        <header class="header-area">
-          <div class="header-text">
-            <h1>Welcome to <span class="highlight-hindi">डिजिटल पता</span></h1>
-            <div class="subtitle">INDORE MUNICIPAL CORPORATION</div>
-          </div>
-          <div class="header-logo-wrapper">
-            <img src="https://i.ibb.co/BwJ49yJ/indore-logo.png" alt="Indore Municipal Corporation Logo" />
-          </div>
-        </header>
-          <!-- section-1 -->
-<!-- section-1 -->
-<section class="p-3">
-  <div class="bg-danger-subtle rounded p-3">
+    <t t-call="website.layout">
+      <!-- External CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+      <section class="id_indore_microsite_template">
+      
+        <!-- Main Container -->
+        <div class="container-fluid px-0">
+                <!-- Header Section -->
+          <header class="header-gradient text-white py-4 mb-0">
+            <div class="container">
+              <div class="row align-items-center flex-column flex-md-row">
+                <div class="col-12 col-md-2 d-flex justify-content-center justify-content-md-start mb-3 mb-md-0">
+                  <!-- Logo: Use SVG placeholder if image fails -->
+                  <img
+                    src="https://i.ibb.co/BwJ49yJ/indore-logo.png"
+                    alt="Indore Municipal Corporation Logo"
+                    class="img-fluid rounded shadow-sm bg-white p-2"
+                    style="max-height: 70px; min-width: 70px; background: #fff;"
+                    onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;70&quot; height=&quot;70&quot;&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;#eee&quot;/&gt;&lt;text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;12&quot; text-anchor=&quot;middle&quot; fill=&quot;#888&quot; dy=&quot;.3em&quot;&gt;Logo&lt;/text&gt;&lt;/svg&gt;';" />
+                </div>
+                <div class="col-12 col-md-10 text-center text-md-start">
+                  <h1 class="display-6 fw-bold mb-1" style="letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    Welcome to <span class="highlight-hindi">डिजिटल पता</span>
+                  </h1>
+                  <div class="h5 fw-light mb-0" style="letter-spacing: 1px;">INDORE MUNICIPAL CORPORATION</div>
+                </div>
+              </div>
+            </div>
+          </header>
+    
+          <!-- Property Details Section -->
+          <section class="py-4">
+            <div class="container">
+              <div class="card shadow rounded-4 border-0 p-4">
+                <div class="row g-4">
 
- 
-    <!-- Property Card -->
-    <div class="bg-white rounded p-4 shadow-sm">
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Owner Name</div>
-        <div class="fw-bold text-uppercase">Lucas Nelson</div>
-      </div>
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Property Identification Number</div>
-        <div class="fw-bold">0080</div>
-      </div>
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Digital Door Number</div>
-        <div class="fw-bold">F7-06/D-0080</div>
-      </div>
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Latitude &amp; Longitude</div>
-        <div class="fw-bold">NULL &amp; NULL</div>
-      </div>
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Block</div>
-        <div class="fw-bold">06/D</div>
-      </div>
-
-      <div class="mb-3">
-        <div class="text-secondary small fw-semibold">Address</div>
-        <div class="fw-bold text-uppercase">Zone Seven Block Six</div>
-      </div>
-
-      <!-- Property Buttons -->
-      <div class="d-flex justify-content-between gap-2 mt-4">
-        <div class="bg-light rounded shadow-sm px-3 py-2 w-50 text-center fw-medium">Property 1</div>
-        <div class="bg-light rounded shadow-sm px-3 py-2 w-50 text-center fw-medium">Property 2</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-              <!-- Government Payment Services -->
-                <section class="services-section">
-                  <h2 class="fw-bold fs-5 text-center text-dark">Government Payment Services</h2>
-                  <div class="row g-3 text-center p-4">
-
-                    <div class="col-12 col-sm-6 col-md-4">
-                      <div class="p-3 border border-light rounded bg-white text-dark h-100">
-                        <i class="bi bi-house-fill fs-2 d-block mb-3"></i>
-                        <span class="fs-5 fw-semibold">Property Tax</span>
-                      </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Owner Name</div>
+                      <div class="fw-bold text-uppercase h5 mb-0"><t t-out="property.owner_name"/></div>
                     </div>
-
-                    <div class="col-12 col-sm-6 col-md-4">
-                      <div class="p-3 border border-light rounded bg-white text-dark h-100">
-                        <i class="bi bi-droplet-fill fs-2 d-block mb-3"></i>
-                        <span class="fs-5 fw-semibold">Water Tax</span>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-md-4">
-                      <div class="p-3 border border-light rounded bg-white text-dark h-100">
-                        <i class="bi bi-plug-fill fs-2 d-block mb-3"></i>
-                        <span class="fs-5 fw-semibold">Electricity Bill</span>
-                      </div>
-                    </div>
-
                   </div>
-                </section>
+                 
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Digital Door Number</div>
+                      <div class="fw-bold h5 mb-0"><t t-out="property.upic_no"/></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Zone</div>
+                      <div class="fw-bold h5 mb-0"><t t-out="property.zone_no.name"/></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Ward</div>
+                      <div class="fw-bold h5 mb-0"><t t-out="property.ward_no.name"/></div>
+                    </div>
+                  </div>
 
 
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Colony</div>
+                      <div class="fw-bold h5 mb-0">
+                      <t t-if="property.colony_id.name">
+                        <t t-out="property.colony_id.name"/>
+                      </t>
+                      </div>
+                    </div>
+                  </div>
 
-<!-- Emergency Services -->
-<section class="p-4">
-  <div class="bg-white rounded p-4 text-center shadow-sm">
-    <h2 class="fw-bold fs-5 mb-4">Emergency Services</h2>
-    <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Latitude &amp; Longitude</div>
+                      <div class="fw-bold h5 mb-0"><t t-out="property.survey_line_ids[0].latitude"/> &amp; <t t-out="property.survey_line_ids[0].longitude"/></div>
+                    </div>
+                  </div>
 
-      <!-- Emergency Boxes -->
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded text-danger fw-semibold d-flex flex-column align-items-center" style="background: #f8d7da;">
-          <i class="bi bi-exclamation-triangle-fill fs-2 mb-2"></i>
-          Emergency
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Block</div>
+                      <div class="fw-bold h5 mb-0">06/D</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <div class="text-secondary small fw-semibold">Address</div>
+                      <div class="fw-bold h5 mb-0 text-uppercase">
+                      <t t-if="property.survey_line_ids[0].address_line_1">
+                        <t t-out="property.survey_line_ids[0].address_line_1"/>,
+                      </t>
+                      <t t-if="property.survey_line_ids[0].address_line_2">
+                        <t t-out="property.survey_line_ids[0].address_line_2"/>,
+                      </t>
+                      <!-- <t t-if="property.survey_line_ids[0].colony_name">
+                        <t t-out="property.survey_line_ids[0].colony_name"/>,
+                      </t> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                                <!-- Property Buttons -->
+                <div class="d-flex justify-content-between gap-3 mt-4">
+                  <div class="flex-grow-1">
+                    <img t-if="property.survey_line_ids[0].property_image" 
+                         t-att-src="image_data_uri(property.survey_line_ids[0].property_image)" 
+                         class="img-fluid rounded shadow-sm" 
+                         alt="Property 1"
+                         style="width: 100%; height: 200px; object-fit: cover;"/>
+                  </div>
+                  <div class="flex-grow-1">
+                    <img t-if="property.survey_line_ids[0].property_image1" 
+                         t-att-src="image_data_uri(property.survey_line_ids[0].property_image1)" 
+                         class="img-fluid rounded shadow-sm" 
+                         alt="Property 2"
+                         style="width: 100%; height: 200px; object-fit: cover;"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Government Payment Services -->
+          <section class="py-5 bg-light">
+            <div class="container">
+              <h2 class="text-center fw-bold mb-4">Government Payment Services</h2>
+              <div class="row g-4">
+                <div class="col-4">
+                  <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                      <i class="bi bi-house-fill text-primary display-4 mb-3"></i>
+                      <h5 class="card-title fw-semibold">Property Tax</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                      <i class="bi bi-droplet-fill text-primary display-4 mb-3"></i>
+                      <h5 class="card-title fw-semibold">Water Tax</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                      <i class="bi bi-plug-fill text-primary display-4 mb-3"></i>
+                      <h5 class="card-title fw-semibold">Electricity Bill</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Emergency Services -->
+          <section class="py-5">
+            <div class="container">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <h2 class="text-center fw-bold mb-4">Emergency Services</h2>
+                  <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 text-danger fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #f8d7da;">
+                        <i class="bi bi-exclamation-triangle-fill display-6 mb-2"></i>
+                        Emergency
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 text-dark fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #cce5ff;">
+                        <i class="bi bi-car-front-fill display-6 mb-2"></i>
+                        Police
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 text-warning fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #ffe4b8;">
+                        <i class="bi bi-truck display-6 mb-2"></i>
+                        Fire
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 text-info fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #a8d0e6;">
+                        <i class="bi bi-ambulance display-6 mb-2"></i>
+                        Ambulance
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #e4d7f9; color: #6a2ea0;">
+                        <i class="bi bi-person-fill display-6 mb-2"></i>
+                        Women Help
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #cee8d5; color: #2f593b;">
+                        <i class="bi bi-tree-fill display-6 mb-2"></i>
+                        Forest Office
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #f4f1c3; color: #847c0e;">
+                        <i class="bi bi-building display-6 mb-2"></i>
+                        Municipal Help
+                      </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #d5d9f5; color: #272e91;">
+                        <i class="bi bi-plug-fill display-6 mb-2"></i>
+                        Power Dept.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Your Officer Section -->
+          <section class="py-5 bg-light">
+            <div class="container">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <h2 class="text-center fw-bold mb-4">Your Officer</h2>
+                  <div class="row g-4 justify-content-center">
+                    <div class="col-12 col-md-5">
+                      <div class="card border-0 shadow-sm hover-shadow">
+                        <div class="card-body p-4">
+                          <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                              <i class="bi bi-telephone-fill fs-4"></i>
+                            </div>
+                            <div>
+                              <h5 class="card-title mb-1">Mr. Ravi Singh</h5>
+                              <p class="text-muted mb-1">Zone Officer</p>
+                              <a href="tel:+919988776655" class="text-primary text-decoration-none fw-medium">+91 998877665</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                      <div class="card border-0 shadow-sm hover-shadow">
+                        <div class="card-body p-4">
+                          <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                              <i class="bi bi-telephone-fill fs-4"></i>
+                            </div>
+                            <div>
+                              <h5 class="card-title mb-1">Mr. Ravi Singh</h5>
+                              <p class="text-muted mb-1">Zone Officer</p>
+                              <a href="tel:+919988776655" class="text-primary text-decoration-none fw-medium">+91 998877665</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer class="bg-dark text-white py-4">
+            <div class="container text-center">
+              <p class="mb-0">Powered by <span class="text-primary">Redmelon Pvt Ltd.</span></p>
+            </div>
+          </footer>
         </div>
-      </div>
 
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded text-dark fw-semibold d-flex flex-column align-items-center" style="background: #cce5ff;">
-          <i class="bi bi-car-front-fill fs-2 mb-2"></i>
-          Police
-        </div>
-      </div>
 
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded text-warning fw-semibold d-flex flex-column align-items-center" style="background: #ffe4b8;">
-          <i class="bi bi-truck fs-2 mb-2"></i>
-          Fire
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded text-info fw-semibold d-flex flex-column align-items-center" style="background: #a8d0e6;">
-          <i class="bi bi-ambulance fs-2 mb-2"></i>
-          Ambulance
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded fw-semibold d-flex flex-column align-items-center" style="background: #e4d7f9; color: #6a2ea0;">
-          <i class="bi bi-person-fill fs-2 mb-2"></i>
-          Women Help
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded fw-semibold d-flex flex-column align-items-center" style="background: #cee8d5; color: #2f593b;">
-          <i class="bi bi-tree-fill fs-2 mb-2"></i>
-          Forest Office
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded fw-semibold d-flex flex-column align-items-center" style="background: #f4f1c3; color: #847c0e;">
-          <i class="bi bi-building fs-2 mb-2"></i>
-          Municipal Help
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6">
-        <div class="p-3 rounded fw-semibold d-flex flex-column align-items-center" style="background: #d5d9f5; color: #272e91;">
-          <i class="bi bi-plug-fill fs-2 mb-2"></i>
-          Power Dept.
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- Your Officer Section -->
-<section class="p-4">
-  <div class="bg-white rounded p-4 shadow-sm text-center">
-    <h2 class="fw-bold fs-5 mb-4">Your Officer</h2>
-    <div class="row g-3 justify-content-center">
-
-      <!-- Officer Card 1 -->
-      <div class="col-12 col-md-5">
-        <div class="d-flex align-items-center gap-3 p-3 rounded shadow-sm bg-light">
-          <div class="text-white bg-dark rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-            <i class="bi bi-telephone-fill fs-4"></i>
-          </div>
-          <div class="text-start">
-            <div class="fw-bold">Mr. Ravi Singh</div>
-            <div class="text-muted">Zone Officer</div>
-            <div class="text-primary fw-medium">+91 998877665</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Officer Card 2 -->
-      <div class="col-12 col-md-5">
-        <div class="d-flex align-items-center gap-3 p-3 rounded shadow-sm bg-light">
-          <div class="text-white bg-dark rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-            <i class="bi bi-telephone-fill fs-4"></i>
-          </div>
-          <div class="text-start">
-            <div class="fw-bold">Mr. Ravi Singh</div>
-            <div class="text-muted">Zone Officer</div>
-            <div class="text-primary fw-medium">+91 998877665</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-  <footer>
-    Powered by <span>Redmelon Pvt Ltd.</span>
-  </footer>
-
-    </div>
+      
+      </section>
     </t>
   </template>
 </odoo>

@@ -14,7 +14,7 @@ from . import property_group
 from . import res_company
 from . import dashboard
 from . import property_id_data
-
+from . import colony
 
 # from . import kml
 

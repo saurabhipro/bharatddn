@@ -22,7 +22,7 @@ class PropertyInfo(models.Model):
 
     # Owner Information
     qr_code = fields.Binary("QR Code", compute="_compute_qr_code", store=True)
-
+    colony_id = fields.Many2one('ddn.colony', string='Colony')
     property_status = fields.Selection([
         ('uploaded','Uploaded'),
         ('pdf_downloaded','PDF Downloaded'),

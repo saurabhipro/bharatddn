@@ -20,6 +20,7 @@
         # Views
         'views/zone_views.xml',
         'views/ward_views.xml',
+        'views/colony_views.xml',
         'views/property_type_views.xml',
         'views/property_details_views.xml',
         'views/property_map_view.xml',
@@ -29,11 +30,11 @@
         'views/property_survey.xml',
         'views/property_group_views.xml',
         'views/dashboard.xml',
-        'views/menuitems.xml',  # Load menus last
         'views/res_company_views.xml',
-        'security/ir_rule.xml',
         'views/property_import_wizard_view.xml',
         'views/property_id_data_views.xml',
+        'security/ir_rule.xml',
+        'views/menuitems.xml',  # Load menus last
         # 'views/assets.xml',
     ],
     'assets': {

@@ -185,7 +185,8 @@ class PdfGeneratorController(http.Controller):
                     )
                     # base_url = request.httprequest.host_url
                     base_url = property_rec.company_id.website
-                    full_url = f"{base_url}/get/property-details/{uuid}"
+                    full_url = f"{base_url}/get/{uuid}"
+                    
                     qr.add_data(full_url)
                     qr.make(fit=True)
                     qr_img = qr.make_image(fill_color="black", back_color="white")

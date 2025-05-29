@@ -12,16 +12,17 @@ class CustomWebsite(http.Controller):
     def get_property_details_by_uuid(self, uuid, **kw):
         # print("UPIC No:", uuid)
 
-        # property = request.env['ddn.property.info'].sudo().search([('uuid', '=', uuid)], limit=1)
-        # print("property - ", property)
+        property = request.env['ddn.property.info'].sudo().search([('uuid', '=', uuid)], limit=1)
+        print("property - ", property.colony_id.name)
 
-        # if not property:
-        #     return request.render('website.404')
+        if not property:
+            # return request.render('web.404')
+            return "No property found"
 
         # This loop is unnecessary because 'property' is a single record (limit=1)
-        # if property.survey_line_ids:
-        #     print("Property Survey Line:", property.survey_line_ids[0])
-        # else:
-        #     print("Property: No survey lines found")
+        if property.survey_line_ids:
+            print("Property Survey Line:", property.survey_line_ids[0])
+        else:
+            print("Property: No survey lines found")
 
-        return request.render('microsite.id_indore_microsite_template')
+        return request.render('microsite.id_indore_microsite_template', {'property':property})
