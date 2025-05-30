@@ -1,5 +1,5 @@
 {
-    'name':'Mictosite Web',
+    'name':'Bharat DDN Microsite Web',
     'summary':'',
     'description':'',
     'auther':"anjli",
