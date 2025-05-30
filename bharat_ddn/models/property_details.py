@@ -252,7 +252,7 @@ class PropertyInfo(models.Model):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for rec in self:
             if rec.uuid:
-                rec.microsite_url = f"{base_url}/get/property-details/{rec.uuid}"
+                rec.microsite_url = f"{base_url}/get/{rec.uuid}"
             else:
                 rec.microsite_url = ''
 
