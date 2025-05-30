@@ -2,6 +2,7 @@ from odoo import models, fields, api, _
 
 class Colony(models.Model):
     _name = 'ddn.colony'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Colony'
 
     name = fields.Char(string='Name')
