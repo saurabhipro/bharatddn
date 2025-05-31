@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 class CustomWebsite(http.Controller):
     
-    @http.route('/get/<string:uuid>', auth='public', website=True)
+    @http.route('/get/<string:uuid>', auth='none', website=True)
     def get_property_details_by_uuid(self, uuid, **kw):
         # print("UPIC No:", uuid)
 
