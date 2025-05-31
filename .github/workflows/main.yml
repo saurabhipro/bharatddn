@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Email: Deployment Started
+      - name: "Send Email: Deployment Started"
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.mail.us-west-2.awsapps.com
@@ -37,7 +37,7 @@ jobs:
             git pull origin main
             sudo service odoo restart
 
-      - name: Send Email: Deployment Completed
+      - name: "Send Email: Deployment Completed"
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.mail.us-west-2.awsapps.com
