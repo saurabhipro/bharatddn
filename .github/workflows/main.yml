@@ -18,7 +18,7 @@ jobs:
         username: ${{ secrets.SMTP_USER }}
         password: ${{ secrets.SMTP_PASSWORD }}
         subject: "🚀 BharatDDN Deployment Started"
-        to: saurabh@iprosonic.com, hem587ant@gmail.com, anjali@iprosonic.com
+        to: "saurabh@iprosonic.com,hem587ant@gmail.com,anjali@iprosonic.com"
         from: anjali@iprosonic.com
         body: |
           The CI/CD process has started for the latest PR merge on the main branch.
@@ -45,7 +45,7 @@ jobs:
         username: ${{ secrets.SMTP_USER }}
         password: ${{ secrets.SMTP_PASSWORD }}
         subject: "✅ BharatDDN Deployment Complete"
-        to: saurabh@iprosonic.com, hem587ant@gmail.com, anjali@iprosonic.com
+        to: "saurabh@iprosonic.com,hem587ant@gmail.com,anjali@iprosonic.com"
         from: anjali@iprosonic.com
         body: |
           The CI/CD process has completed and the service has been restarted on EC2.
