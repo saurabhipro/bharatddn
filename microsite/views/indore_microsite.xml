@@ -59,7 +59,7 @@
                     <div class="mb-3">
                       <div class="text-secondary small fw-semibold">Zone</div>
                       <div class="fw-bold h5 mb-0">
-                        <t t-if="property.zone_no and property.zone_no.name"><t t-out="property.zone_no.name"/></t>
+                        <t t-if="property.zone_id and property.zone_id.name"><t t-out="property.zone_id.name"/></t>
                       </div>
                     </div>
                   </div>
@@ -68,7 +68,7 @@
                     <div class="mb-3">
                       <div class="text-secondary small fw-semibold">Ward</div>
                       <div class="fw-bold h5 mb-0">
-                        <t t-if="property.ward_no and property.ward_no.name"><t t-out="property.ward_no.name"/></t>
+                        <t t-if="property.ward_id and property.ward_id.name"><t t-out="property.ward_id.name"/></t>
                       </div>
                     </div>
                   </div>

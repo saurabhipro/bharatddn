@@ -12,8 +12,8 @@
                 </xpath>
                 <xpath expr="//field[@name='mobile']" position="after">
                     <field name="company_id" option="{'no_create':True, 'no_open':True}"/>
-                    <field name="zone_no" option="{'no_create':True, 'no_open':True}"/>
-                    <field name="ward_no" option="{'no_create':True, 'no_open':True}" widget="many2many_tags"/>
+                    <field name="zone_id" option="{'no_create':True, 'no_open':True}"/>
+                    <field name="ward_id" option="{'no_create':True, 'no_open':True}" widget="many2many_tags"/>
                     <field name="is_surveyor"/>
                 </xpath>
             </field>

@@ -1,5 +1,23 @@
 <odoo>
+    <!-- Create Group HOD Admin -->
+    <!-- <record id="group_category_bharat_ddn" model="ir.module.category">
+        <field name="name">Bharat Ddn</field>
+        <field name="description">Access rights for HOD related roles.</field>
+        <field name="sequence">45</field>
+    </record> -->
+
+
+
+
     <data noupdate="0">
+
+        <!-- <record id="group_hod_admin" model="res.groups">
+            <field name="name">HOD Admin</field>
+            <field name="category_id" ref="group_category_bharat_ddn"/>
+            <field name="comment">the user will be able to see and update salary and contract details.</field>
+        </record> -->
+
+
         <record id="record_ddn_bharat_property_rule" model="ir.rule">
             <field name="name">Company: User can see own company data</field>
             <field name="model_id" ref="model_ddn_property_info"/>
@@ -47,6 +65,9 @@
             <field name="model_id" ref="model_jwt_token"/>
             <field name="domain_force">['|', ('company_id', 'in', company_ids), ('company_id', '=', False)]</field>
         </record>
+
+
+        
 
     </data>
 </odoo>

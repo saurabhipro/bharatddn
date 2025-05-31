@@ -13,7 +13,7 @@
             <menuitem id="ddn_menu_ward" name="Wards" action="action_ward" sequence="2"/>
             <menuitem id="ddn_menu_property_type" name="Property Types" action="action_property_type" sequence="3"/>
             <menuitem id="ddn_menu_property_group" name="Property Groups" action="action_property_group" sequence="4"/>
-            <menuitem id="ddn_menu_Users" name="Users" action="ddn_users_custom_action" sequence="5"/>
+            <menuitem id="ddn_menu_Users" name="Surveyors" action="ddn_users_custom_action" sequence="5"/>
             <menuitem id="jwt_token_menu_item" name="Access Token" action="jwt_token_action" sequence="6"/>
             <menuitem id="mobile_otp_menu_item" name="OTP" action="mobile_otp_action" sequence="7"/>
             <menuitem id="res_company_menu_item" name="Companies" action="base.action_res_company_form" sequence="8"/>

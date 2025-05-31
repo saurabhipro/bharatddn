@@ -20,7 +20,7 @@ class Ward(models.Model):
 
     
     def _action_property_count(self):
-        property_count = self.env['ddn.property.info'].search_count([('company_id','=',self.company_id.id),('ward_no','=',self.id)])
+        property_count = self.env['ddn.property.info'].search_count([('company_id','=',self.company_id.id),('ward_id','=',self.id)])
         self.property_count = property_count
             
 
@@ -31,7 +31,7 @@ class Ward(models.Model):
 
         new_pdf_url = f"{base_url}/download/ward_properties_pdf?ward_id={(self.id)}" 
         self.write({'pdf_url': new_pdf_url})
-        property = self.env['ddn.property.info'].search([('ward_no','=',self.id)])
+        property = self.env['ddn.property.info'].search([('ward_id','=',self.id)])
         property.write({'property_status' : 'pdf_downloaded'})
 
         return {

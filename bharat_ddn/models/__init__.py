@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from . import property_details
+from . import property
 from . import property_survey
 from . import zone
 from . import ward

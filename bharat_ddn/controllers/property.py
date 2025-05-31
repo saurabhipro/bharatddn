@@ -62,10 +62,9 @@ class PropertyDetailsAPI(http.Controller):
         """Format property data for response."""
         return {
             "status": property.property_status,
-            "owner_id": property.owner_id,
             "upic_no": property.upic_no,
-            "zone_no": property.zone_no.name,
-            "ward_no": property.ward_no.name,
+            "zone_id": property.zone_id.name,
+            "ward_id": property.ward_id.name,
             "latitude": property.latitude,
             "longitude": property.longitude,
             "mobile_no": property.mobile_no,
@@ -82,8 +81,6 @@ class PropertyDetailsAPI(http.Controller):
         return {
             "address_line_1": survey.address_line_1,
             "address_line_2": survey.address_line_2,
-            "colony_name": survey.colony_name,
-            "street": survey.street,
             "mobile_no": survey.mobile_no,
             "house_number": survey.house_number,
             "unit": survey.unit,
@@ -118,10 +115,22 @@ class PropertyDetailsAPI(http.Controller):
             if not property_record:
                 return Response(json.dumps({'error': 'Property not found for the provided upic_no'}), status=404, content_type='application/json')
             
+            # Check if property status is pdf_downloaded
+            if property_record.property_status != 'pdf_downloaded':
+                return Response(
+                    json.dumps({
+                        'error': 'Survey can only be created for properties with status "pdf_downloaded"'
+                    }), 
+                    status=400, 
+                    content_type='application/json'
+                )
+            
             survey_line_vals = self._prepare_survey_line_vals(data)
 
+            # Update both survey line and property status
             property_record.write({
-                'survey_line_ids': [(0, 0, survey_line_vals)]
+                'survey_line_ids': [(0, 0, survey_line_vals)],
+                'property_status': 'surveyed'  # Update property status to surveyed
             })
 
             _logger.info(f"Successfully created a new survey for property {upic_no}")
@@ -142,7 +151,6 @@ class PropertyDetailsAPI(http.Controller):
         return {
             'address_line_1': data.get("address_line_1", ''),
             'address_line_2': data.get("address_line_2", ''),
-            'colony_name': data.get("colony_name", ''),
             'street': data.get("street", ''),
             'house_number': data.get("house_number", ''),
             'unit': data.get("unit", ''),
@@ -170,7 +178,8 @@ class PropertyDetailsAPI(http.Controller):
             data = json.loads(request.httprequest.data or "{}")
             vals = self._prepare_property_vals(data)
             property_record = request.env['ddn.property.info'].sudo().create(vals)
-
+            property_record.property_status = 'discovered'  # Update property status to surveyed
+            
             return Response(
                 json.dumps({
                     'status': 'success',
@@ -261,17 +270,17 @@ class PropertyDetailsAPI(http.Controller):
     def _prepare_property_vals(self, data):
         """Prepare property values from data."""
         return {
+            'company_id': data.get('company_id'),
             'address_line_1': data.get('address_line_1'),
             'address_line_2': data.get('address_line_2'),
             'mobile_no': data.get('mobile'),
-            'colony_name': data.get('colony_name'),
             'house_number': data.get('house_number'),
             'owner_name': data.get('owner_name'),
             'longitude': data.get('longitude'),
             'latitude': data.get('latitude'),
             'surveyer_id': data.get('surveyer_id'),
-            'zone_no': data.get('zone_id'),
-            'ward_no': data.get('ward_id'),
+            'zone_id': data.get('zone_id'),
+            'ward_id': data.get('ward_id'),
             'property_status': 'discovered'
         }
 

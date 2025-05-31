@@ -3,164 +3,53 @@ from odoo.exceptions import ValidationError
 import base64
 import re
 from io import BytesIO
-try:
-    import qrcode
-except ImportError:
-    qrcode = None  # If not installed, you'll need to pip install qrcode[pil]
-
+import qrcode
 import uuid
 import qrcode
 from io import BytesIO
 import base64
 from odoo.http import request
 
-class PropertyInfo(models.Model):
+class Property(models.Model):
     _name = 'ddn.property.info'
     _description = 'Property Information'
     _inherit = ['mail.thread', 'mail.activity.mixin']    
     _rec_name = "upic_no"
 
     # Owner Information
-    qr_code = fields.Binary("QR Code", compute="_compute_qr_code", store=True)
-    colony_id = fields.Many2one('ddn.colony', string='Colony')
-    property_status = fields.Selection([
-        ('uploaded','Uploaded'),
-        ('pdf_downloaded','PDF Downloaded'),
-        ('surveyed', 'Surveyed'),
-        ('discovered', 'Discovered')
-         ], string="Property Status", default="uploaded")
-    
-    owner_id = fields.Char('Owner ID')
-    upic_no = fields.Char('UPIC NO')
-    # zone_id = fields.Many2one('ddn.zone', string='Zone', tracking=True)
     company_id = fields.Many2one('res.company', string="Company", default=lambda self : self.env.company.id, readonly=True)
-    _sql_constraints = [
-        ('unique_upic_no', 'UNIQUE(upic_no)', 'The UPICNO must be unique.')
-    ]
-
+    unit_no = fields.Char('Unit No.')
     uuid = fields.Char(string='UUID', readonly=True, copy=False, default=lambda self: str(uuid.uuid4()))
-
-    @api.depends('uuid')
-    def _compute_qr_code(self):
-        for record in self:
-            if record.uuid:
-                qr = qrcode.QRCode(
-                    version=1,
-                    error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=10,
-                    border=4,
-                )
-                base_url = request.httprequest.host_url
-                full_url = f"{base_url}get/property-details/{record.uuid}"
-                qr.add_data(full_url)
-
-               
-                qr.make(fit=True)
-                img = qr.make_image(fill='black', back_color='white')
-
-                buffer = BytesIO()
-                img.save(buffer, format='PNG')
-                qr_image = base64.b64encode(buffer.getvalue())
-                buffer.close()
-                record.qr_code = qr_image
-            else:
-                record.qr_code = False
-
-    survey_line_ids = fields.One2many('ddn.property.survey', 'property_id', string="Survey Line")
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """Override create to validate coordinates before saving."""
-        for vals in vals_list:
-            try:
-                if vals.get('latitude'):
-                    lat = vals['latitude']
-                    if not re.match(r'^\d{1,2}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[NS]$', lat):
-                        vals['latitude'] = None
-                if vals.get('longitude'):
-                    lng = vals['longitude']
-                    if not re.match(r'^\d{1,3}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[EW]$', lng):
-                        vals['longitude'] = None
-            except (ValueError, TypeError):
-                vals['latitude'] = None
-                vals['longitude'] = None
-        return super().create(vals_list)
-    
+    zone_id = fields.Many2one('ddn.zone', string='Zone')
+    ward_id = fields.Many2one('ddn.ward',string='Ward')
+    colony_id = fields.Many2one('ddn.colony', string='Colony')
+    property_no = fields.Char('Property No')
+    upic_no = fields.Char('UPIC NO')
+    qr_code = fields.Binary("QR Code", compute="_compute_qr_code", store=True)
+    mobile_no = fields.Char('Mobile No')
+    survey_line_ids = fields.One2many('ddn.property.survey', 'property_id', string="Survey Line", tracking=True)
     address_line_1 = fields.Char(string="Address 1")
     address_line_2 = fields.Char(string="Address 2")
-    colony_name = fields.Char(string="Colony Name")
     house_number = fields.Char(string="H.No")
     surveyer_id = fields.Many2one('res.users', string="Surveyor")
-    
-    # Zone and Ward Information
-    # zone = fields.Char('Zone')
-    zone_no = fields.Many2one('ddn.zone', string='Zone No')
-    ward_no = fields.Many2one('ddn.ward',string='Ward No')
-    property_no = fields.Char('Property No')
-    partition_no = fields.Char('Partition No')
-    city_survey_no = fields.Char('CityServey No')
-    plot_no = fields.Char('Plot No')
-    old_zone_no = fields.Char('Old Zone No')
-    old_ward_no = fields.Char('Old Ward No')
-    old_property_no = fields.Char('Old Property No')
-    unit_no = fields.Char('Unit No.')
-    
-    # Billing Information
-    bill_no = fields.Char('Bill No')
-    property_description = fields.Text('Property Description')
-    
-    # Plot Information
-    plot_area = fields.Float('Plot Area')  # In Sq. Ft. or desired unit
-    mobile_no = fields.Char('Mobile No')
-    
-    # Old Rent Information
-    old_rental_value = fields.Float('Old Rental Value')
-    old_rv = fields.Float('Old RV')
-    old_property_tax = fields.Float('Old Property Tax')
-    old_total_tax = fields.Float('Old Total Tax')
-    
-    # New Property Information
-    toilet_no = fields.Char('New Toilet No')
-    plot_taxable_area_sqft = fields.Char('Plot Taxable Area SqFt')
-    
-    owner_name = fields.Char('Owner Name')
-    renter_name = fields.Char('Renter Name')
-    occupier_name = fields.Char('Occupier Name')
-    owner_patta = fields.Char('Owner Patta')
-    owner_dukan_imarate_nav = fields.Char('Owner Dukan Imarate Nav')
-    owner_dukan_flat_no = fields.Char('Owner Dukan Flat No')
-    
-    # Remarks
-    comb_prop_remark = fields.Text('Comb Prop Remark')
-    
-    # Location Information
+    microsite_url = fields.Char(string='Microsite URL', compute='_compute_microsite_url', store=False)
+    is_solar = fields.Char('Is Solar')
+
     latitude = fields.Char(
         string='Latitude',
-        help='Format: DD° MM\' SS.SSS" N/S (e.g., 16° 51\' 50.003" N)'
+        help='Latitude in decimal degrees (e.g., 16.863889)'
     )
     longitude = fields.Char(
         string='Longitude',
-        help='Format: DD° MM\' SS.SSS" E/W (e.g., 74° 37\' 20.926" E)'
+        help='Longitude in decimal degrees (e.g., 74.622479)'
     )
-    
-    @api.constrains('latitude', 'longitude')
-    def _check_coordinates(self):
-        print("self.env ---- ", self.env.company.name)
-        """Validate DMS coordinate format"""
-        for record in self:
-            if record.latitude:
-                if not re.match(r'^\d{1,2}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[NS]$', record.latitude):
-                    raise ValidationError('Invalid latitude format. Use format: DD° MM\' SS.SSS" N/S')
-            if record.longitude:
-                if not re.match(r'^\d{1,3}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[EW]$', record.longitude):
-                    raise ValidationError('Invalid longitude format. Use format: DD° MM\' SS.SSS" E/W')
-    
+   
+
     # Property Infrastructure Information
     road_width = fields.Char('Road Width')
     no_of_trees = fields.Char('No Of Trees')
     
     # Solar, Bore, Water, and Rainwater Information
-    is_solar = fields.Char('Is Solar')
     no_of_solar = fields.Char('No Of Solar')
     is_bore = fields.Char('Is Boar')
     no_of_bore = fields.Char('No Of Boar')
@@ -202,7 +91,7 @@ class PropertyInfo(models.Model):
     building_year = fields.Char('Building Year')
     build_completion_date = fields.Date('Build Completion Date')
 
-    oid = fields.Date('Oid')
+    # oid = fields.Date('Oid')
     
     # Fire, Water Meter, ETP, and Waste Information
     is_fire = fields.Char('Is Fire')
@@ -245,8 +134,100 @@ class PropertyInfo(models.Model):
     is_gotha = fields.Char('Is Gotha')
     oc_number = fields.Char('OC Number')
 
-    microsite_url = fields.Char(string='Microsite URL', compute='_compute_microsite_url', store=False)
+    currnet_tax = fields.Float('Current Tax')
+    total_amount = fields.Float('Total Amount')
+  
+    partition_no = fields.Char('Partition No')
+    city_survey_no = fields.Char('CityServey No')
+    plot_no = fields.Char('Plot No')
+    
+    
+    # Billing Information
+    bill_no = fields.Char('Bill No')
+    property_description = fields.Text('Property Description')
+    
+    # Plot Information
+    plot_area = fields.Float('Plot Area')  # In Sq. Ft. or desired unit
+    
+    # Old Rent Information
+    
+    # New Property Information
+    toilet_no = fields.Char('New Toilet No')
+    plot_taxable_area_sqft = fields.Char('Plot Taxable Area SqFt')
+    
+    owner_name = fields.Char('Owner Name')
+    renter_name = fields.Char('Renter Name')
+    occupier_name = fields.Char('Occupier Name')
+    owner_patta = fields.Char('Owner Patta')
+    # Remarks
+    comb_prop_remark = fields.Text('Comb Prop Remark')
+    
+    # Location Information
+    
 
+
+    property_status = fields.Selection([
+        ('uploaded','Uploaded'),
+        ('pdf_downloaded','PDF Downloaded'),
+        ('surveyed', 'Surveyed'),
+        ('discovered', 'Discovered')
+         ], string="Property Status", default="uploaded")
+    
+    
+    _sql_constraints = [
+        ('unique_upic_no', 'UNIQUE(upic_no)', 'The UPICNO must be unique.')
+    ]
+
+   
+    @api.depends('uuid')
+    def _compute_qr_code(self):
+        for record in self:
+            if record.uuid:
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    box_size=10,
+                    border=4,
+                )
+                base_url = request.httprequest.host_url
+                full_url = f"{base_url}get/property-details/{record.uuid}"
+                qr.add_data(full_url)
+
+               
+                qr.make(fit=True)
+                img = qr.make_image(fill='black', back_color='white')
+
+                buffer = BytesIO()
+                img.save(buffer, format='PNG')
+                qr_image = base64.b64encode(buffer.getvalue())
+                buffer.close()
+                record.qr_code = qr_image
+            else:
+                record.qr_code = False
+
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Override create to validate coordinates before saving."""
+        for vals in vals_list:
+            try:
+                if vals.get('latitude'):
+                    lat = vals['latitude']
+                    if not re.match(r'^\d{1,2}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[NS]$', lat):
+                        vals['latitude'] = None
+                if vals.get('longitude'):
+                    lng = vals['longitude']
+                    if not re.match(r'^\d{1,3}°\s*\d{1,2}\'\s*\d{1,2}(\.\d+)?"\s*[EW]$', lng):
+                        vals['longitude'] = None
+            except (ValueError, TypeError):
+                vals['latitude'] = None
+                vals['longitude'] = None
+        return super().create(vals_list)
+    
+    
+    
+    
+  
     @api.depends('uuid')
     def _compute_microsite_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
@@ -271,6 +252,4 @@ class PropertyInfo(models.Model):
                     
         return res
 
-    currnet_tax = fields.Float('Current Tax')
-    total_amount = fields.Float('Total Amount')
     

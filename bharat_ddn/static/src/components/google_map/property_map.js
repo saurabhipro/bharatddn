@@ -177,10 +177,10 @@ export class PropertyMapView extends Component {
             this.clearMarkers();
             const domain = [];
             if (this.state.selectedZone) {
-                domain.push(['zone_no', '=', parseInt(this.state.selectedZone)]);
+                domain.push(['zone_id', '=', parseInt(this.state.selectedZone)]);
             }
             if (this.state.selectedWard) {
-                domain.push(['ward_no', '=', parseInt(this.state.selectedWard)]);
+                domain.push(['ward_id', '=', parseInt(this.state.selectedWard)]);
             }
             if (this.state.selectedStatus) {
                 domain.push(['property_status', '=', this.state.selectedStatus]);
@@ -208,7 +208,7 @@ export class PropertyMapView extends Component {
             });
             const properties = await this.orm.call('ddn.property.info', 'search_read', [domain], {
                 fields: [
-                    'id', 'upic_no', 'zone_no', 'ward_no', 'property_status', 'latitude', 'longitude', 'owner_id', 'property_description'
+                    'id', 'upic_no', 'zone_id', 'ward_id', 'property_status', 'latitude', 'longitude', 'property_description'
                 ]
             });
             console.log('Properties returned:', properties.length, properties);
@@ -246,7 +246,7 @@ export class PropertyMapView extends Component {
                         // Only create InfoWindow on click
                         marker.addListener('click', () => {
                             const shareText = encodeURIComponent(
-                                `UPIC: ${prop.upic_no}\nZone: ${prop.zone_no ? prop.zone_no[1] : ''}\nWard: ${prop.ward_no ? prop.ward_no[1] : ''}\nStatus: ${prop.property_status || ''}\nOwner: ${prop.owner_id || ''}\nDescription: ${prop.property_description || ''}`
+                                `UPIC: ${prop.upic_no}\nZone: ${prop.zone_id ? prop.zone_id[1] : ''}\nWard: ${prop.ward_id ? prop.ward_id[1] : ''}\nStatus: ${prop.property_status || ''}\nDescription: ${prop.property_description || ''}`
                             );
                             const whatsappLink = `https://wa.me/?text=${shareText}`;
                             const emailLink = `mailto:?subject=Property%20Details%20-%20${prop.upic_no}&body=${shareText}`;
@@ -268,11 +268,10 @@ export class PropertyMapView extends Component {
                                             </span>
                                         </div>
                                         <div style="padding:16px 18px 10px 18px;">
-                                            <div style="margin-bottom:6px;"><b>Zone:</b> ${prop.zone_no ? prop.zone_no[1] : ''}</div>
-                                            <div style="margin-bottom:6px;"><b>Ward:</b> ${prop.ward_no ? prop.ward_no[1] : ''}</div>
+                                            <div style="margin-bottom:6px;"><b>Zone:</b> ${prop.zone_id ? prop.zone_id[1] : ''}</div>
+                                            <div style="margin-bottom:6px;"><b>Ward:</b> ${prop.ward_id ? prop.ward_id[1] : ''}</div>
                                             <div style="margin-bottom:6px;"><b>Status:</b> ${prop.property_status || ''}</div>
                                             <div style="margin-bottom:6px;"><b>Coordinates:</b> ${prop.latitude}, ${prop.longitude}</div>
-                                            <div style="margin-bottom:6px;"><b>Owner:</b> ${prop.owner_id || ''}</div>
                                             <div style="margin-bottom:10px;"><b>Description:</b> ${prop.property_description || ''}</div>
                                             <div style="display:flex;gap:10px;margin-bottom:10px;">
                                                 <a href="${gmapsLink}" target="_blank" style="flex:1;text-align:center;background:#4285F4;color:#fff;padding:8px 0;border-radius:6px;font-weight:500;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:background 0.2s;">

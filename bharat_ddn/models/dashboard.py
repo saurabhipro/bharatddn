@@ -2,15 +2,15 @@ from odoo import models, fields, api
 import itertools
 
 
-class PropertyInfo(models.Model):
+class Dashboard(models.Model):
     _inherit = 'ddn.property.info'
 
 
     @api.model
     def get_dashboard_data(self):
         PropertyInfo = self.env['ddn.property.info'].search([])
-        sorted_records = sorted(PropertyInfo, key=lambda rec: rec.ward_no.name if rec.ward_no else '')
-        grouped_records = itertools.groupby(sorted_records, key=lambda rec: rec.ward_no.name if rec.ward_no else '') 
+        sorted_records = sorted(PropertyInfo, key=lambda rec: rec.ward_id.name if rec.ward_id else '')
+        grouped_records = itertools.groupby(sorted_records, key=lambda rec: rec.ward_id.name if rec.ward_id else '') 
         result = {}
 
         for group_key, grp in grouped_records:
@@ -38,8 +38,8 @@ class PropertyInfo(models.Model):
                 if rec.property_status == 'discovered':
                     discovered += 1
 
-                if not ward_zone_name and rec.ward_no and rec.ward_no.zone_id:
-                    ward_zone_name = rec.ward_no.zone_id.name
+                if not ward_zone_name and rec.ward_id and rec.ward_id.zone_id:
+                    ward_zone_name = rec.ward_id.zone_id.name
 
             result[group_key] = {
                 'count': count,

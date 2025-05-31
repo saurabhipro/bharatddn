@@ -22,7 +22,7 @@
         'views/ward_views.xml',
         'views/colony_views.xml',
         'views/property_type_views.xml',
-        'views/property_details_views.xml',
+        'views/property_views.xml',
         'views/property_map_view.xml',
         'views/res_users_views.xml',
         'views/mobile_otp_views.xml',

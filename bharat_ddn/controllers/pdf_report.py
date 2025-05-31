@@ -34,7 +34,7 @@ class PdfGeneratorController(http.Controller):
     #         ward_id = int(ward_id)
     #     except ValueError:
     #         return request.not_found("Invalid Ward ID.")
-    #     domain = [('ward_no', '=', ward_id)]
+    #     domain = [('ward_id', '=', ward_id)]
     #     properties = request.env['ddn.property.info'].sudo().search(domain)
     #     if not properties:
     #         return request.not_found("No properties found for this ward.")
@@ -63,8 +63,8 @@ class PdfGeneratorController(http.Controller):
     #         for property_rec in batch_records:
     #             c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
                 
-    #             zone = property_rec.zone_no.name or "-"
-    #             block = property_rec.ward_no.name or "-"
+    #             zone = property_rec.zone_id.name or "-"
+    #             block = property_rec.ward_id.name or "-"
     #             unit_no = property_rec.unit_no or "-"
     #             uuid = property_rec.uuid or "-"
                 
@@ -131,7 +131,7 @@ class PdfGeneratorController(http.Controller):
         except ValueError:
             return request.not_found("Invalid Ward ID.")
         
-        domain = [('ward_no', '=', ward_id)]
+        domain = [('ward_id', '=', ward_id)]
         properties = request.env['ddn.property.info'].sudo().search(domain)
         if not properties:
             return request.not_found("No properties found for this ward.")
@@ -167,8 +167,8 @@ class PdfGeneratorController(http.Controller):
                 for property_rec in batch_records:
                     c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
 
-                    zone = property_rec.zone_no.name or "-"
-                    block = property_rec.ward_no.name or "-"
+                    zone = property_rec.zone_id.name or "-"
+                    block = property_rec.ward_id.name or "-"
                     unit_no = property_rec.unit_no or "-"
                     uuid = property_rec.uuid or "-"
 

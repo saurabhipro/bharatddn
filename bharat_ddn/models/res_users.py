@@ -5,8 +5,8 @@ from odoo.exceptions import ValidationError
 class ResUsers(models.Model):
     _inherit = "res.users"
 
-    zone_no = fields.Many2one('ddn.zone', string='Zone No')
-    ward_no = fields.Many2many('ddn.ward',string='Ward No')
+    zone_id = fields.Many2one('ddn.zone', string='Zone No')
+    ward_id = fields.Many2many('ddn.ward',string='Ward No')
     is_surveyor = fields.Boolean(string='Is Surveyor')
     mobile = fields.Char(string="Mobile")
 

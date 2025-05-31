@@ -11,8 +11,8 @@
                     <field name="uuid" optional="show"/>
                     <field name="upic_no" optional="show"/>
                     <field name="mobile_no" optional="show"/>
-                    <field name="zone_no" optional="show"/>
-                    <field name="ward_no" optional="show"/>
+                    <field name="zone_id" optional="show"/>
+                    <field name="ward_id" optional="show"/>
                     <field name="colony_id" optional="show"/>
                     <field name="property_no" optional="hide"/>
                     <field name="plot_no" optional="hide"/>
@@ -25,7 +25,6 @@
                     <field name="owner_name" optional="show"/>
                     <field name="renter_name" optional="hide"/>
                     <field name="occupier_name" optional="hide"/>
-                    <field name="owner_dukan_imarate_nav" optional="hide"/>
 
                     <field name="latitude" optional="show"/>
                     <field name="longitude" optional="show"/>
@@ -60,7 +59,6 @@
                     <field name="building_age" optional="hide"/>
                     <field name="building_year" optional="hide"/>
                     <field name="build_completion_date" optional="hide"/>
-                    <field name="oid" optional="hide"/>
                     <field name="is_fire" optional="hide"/>
                     <field name="no_of_fire" optional="hide"/>
                     <field name="water_meter_condition" optional="hide"/>
@@ -104,7 +102,7 @@
                         <field name="property_status" widget="statusbar"  options="{'clickable': '1'}"/>
                     </header>
                     <sheet>
-                    <field name="qr_code" widget="image" class="oe_avatar img1" options="{'preview_image': 'qr_code'}" />
+                    <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 230px !important; height: 130px !important;" options="{'preview_image': 'qr_code'}"/>
 
                         <group>
                             <group>
@@ -113,8 +111,8 @@
                                 <field name="upic_no"/>
                                 <field name="mobile_no"/>
                                 <field name="surveyer_id"/>
-                                <field name="zone_no"/>
-                                <field name="ward_no"/>
+                                <field name="zone_id"/>
+                                <field name="ward_id"/>
                                 <field name="colony_id"/>
                                 <field name="latitude"/>
                                 <field name="longitude"/>
@@ -122,12 +120,12 @@
                             <group>
                                 <field name="owner_name"/>
                                 <field name="occupier_name"/>
-                                <field name="owner_dukan_imarate_nav"/>
                                 <field name="plot_area"/>
                                 <field name="renter_name"/>
-                                <field name="colony_name"/>
                                 <field name="unit_no"/>
                                 <field name="company_id"/>
+                                <field name="address_line_1"/>
+                                <field name="address_line_2"/>
                             </group>
                         </group>
                         <group>
@@ -143,8 +141,6 @@
                                                 <group>
                                                     <field name="address_line_1"/>
                                                     <field name="address_line_2"/>
-                                                    <field name="colony_name"/>
-                                                    <field name="street"/>
                                                     <field name="house_number"/>
                                                     <field name="unit"/>
                                                     <field name="mobile_no"/>
@@ -231,18 +227,10 @@
                                         <field name="partition_no"/>
                                         <field name="city_survey_no"/>
                                         <field name="plot_no"/>
-                                        <field name="old_zone_no"/>
-                                        <field name="old_ward_no"/>
-                                        <field name="old_property_no"/>
                                         <field name="bill_no"/>
-                                        <field name="old_rental_value"/>
-                                        <field name="old_rv"/>
-                                        <field name="old_property_tax"/>
-                                        <field name="old_total_tax"/>
                                         <field name="toilet_no"/>
                                         <field name="plot_taxable_area_sqft"/>
                                         <field name="owner_patta"/>
-                                        <field name="owner_dukan_flat_no"/>
                                         <field name="comb_prop_remark"/>
                                         <field name="road_width"/>
                                         <field name="no_of_trees"/>
@@ -305,8 +293,8 @@
             <field name="arch" type="xml">
                 <search string="Property Information">
                     <field name="upic_no"/>
-                    <field name="zone_no"/>
-                    <field name="ward_no"/>
+                    <field name="zone_id"/>
+                    <field name="ward_id"/>
                     <field name="property_status"/>
                     <field name="owner_name"/>
                     <field name="property_description"/>

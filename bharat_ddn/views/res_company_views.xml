@@ -8,6 +8,7 @@
                 <field name="arch" type="xml">
                     <xpath expr="//field[@name='phone']" position="after">
                         <field name="plate_background_image"  widget="image" class="oe_avatar"/>
+                        <field name="s3_bucket_base_url" string="S3 Bucket Base URL" help="Base URL for the S3 bucket (e.g., https://your-bucket.s3.amazonaws.com/)"/>
                     </xpath>
                 </field>
             </record>

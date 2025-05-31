@@ -9,8 +9,6 @@
                 <list string="Property Types">
                     <field name="house_number"/>
                     <field name="unit"/>
-                    <field name="colony_name"/>
-                    <field name="street"/>
                     <field name="total_floors"/>
                     <field name="floor_number"/>
                     <field name="owner_name"/>
@@ -35,8 +33,6 @@
                             <group>
                                 <field name="address_line_1"/>
                                 <field name="address_line_2"/>
-                                <field name="colony_name"/>
-                                <field name="street"/>
                                 <field name="house_number"/>
                                 <field name="unit"/>
                                 <field name="total_floors"/>
