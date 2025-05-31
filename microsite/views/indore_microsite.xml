@@ -39,9 +39,9 @@
 
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Owner Name</div>
+                      <div class="text-secondary small fw-semibold">Unit No.</div>
                       <div class="fw-bold text-uppercase h5 mb-0">
-                        <t t-if="property.owner_name"><t t-out="property.owner_name"/></t>
+                        <t t-if="property.unit_no"><t t-out="property.unit_no"/></t>
                       </div>
                     </div>
                   </div>
