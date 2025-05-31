@@ -21,7 +21,14 @@ jobs:
           to: "saurabh@iprosonic.com,hem587ant@gmail.com,anjali@iprosonic.com"
           from: anjali@iprosonic.com
           body: |
-            The CI/CD process has started for the latest PR merge on the main branch.
+            🚀 CI/CD process has started for a new deployment.
+
+            🔀 **Commit**: ${{ github.sha }}
+            ✍️ **Author**: ${{ github.actor }}
+            📝 **Message**: ${{ github.event.head_commit.message }}
+            🔗 **Commit URL**: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+
+            Branch: ${{ github.ref_name }}            
 
       - name: Checkout Code
         uses: actions/checkout@v3
