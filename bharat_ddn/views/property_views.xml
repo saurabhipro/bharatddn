@@ -126,6 +126,7 @@
                                 <field name="company_id"/>
                                 <field name="address_line_1"/>
                                 <field name="address_line_2"/>
+                                <field name="property_no"/>                                
                             </group>
                         </group>
                         <group>

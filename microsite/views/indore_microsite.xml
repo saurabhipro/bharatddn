@@ -99,8 +99,12 @@
 
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Block</div>
-                      <div class="fw-bold h5 mb-0">06/D</div>
+                      <div class="text-secondary small fw-semibold">Property Id</div>
+                      <div class="fw-bold h5 mb-0">
+                        <t t-if="property.property_no and property.property_no">
+                          <t t-out="property.property_no"/>
+                        </t>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-6">
