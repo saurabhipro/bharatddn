@@ -5,6 +5,89 @@
       <!-- External CSS -->
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+      <style>
+        .govt-services-section {
+          background: linear-gradient(135deg, #7b223c 0%, #b85b2c 100%);
+          padding: 2.5rem 0 2rem 0;
+        }
+        .govt-services-box {
+          background: #fff;
+          border-radius: 22px;
+          box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+          padding: 2rem 1rem 1.5rem 1rem;
+          max-width: 700px;
+          margin: 0 auto;
+        }
+        .govt-service-icon-box {
+          width: 64px;
+          height: 64px;
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 0.5rem auto;
+          background: rgba(255, 255, 255, 0.7);
+          border: 2.5px solid;
+          border-image: linear-gradient(135deg, #ff9800 0%, #e91e63 100%);
+          border-image-slice: 1;
+        }
+        .govt-service-icon-box i {
+          font-size: 2rem;
+          color: #e65100;
+        }
+        .govt-service-label {
+          font-weight: 600;
+          font-size: 1.08rem;
+          color: #222;
+          margin-top: 0.5rem;
+        }
+        .govt-services-row {
+          overflow-x: auto;
+          flex-wrap: nowrap;
+        }
+        .header-gradient {
+          background: linear-gradient(135deg, #7b223c 0%, #b85b2c 100%) !important;
+        }
+        .emergency-card {
+          border: none;
+          border-radius: 18px;
+          color: #fff;
+          font-weight: 600;
+          font-size: 1.08rem;
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 90px;
+          transition: transform 0.12s, box-shadow 0.12s;
+          cursor: pointer;
+        }
+        .emergency-card:hover {
+          transform: translateY(-4px) scale(1.03);
+          box-shadow: 0 6px 24px 0 rgba(0,0,0,0.13);
+          opacity: 0.95;
+        }
+        .emergency-icon {
+          font-size: 2rem;
+          margin-bottom: 0.3rem;
+          display: block;
+        }
+        .emergency-bg-red { background: linear-gradient(135deg, #ff5858 0%, #f857a6 100%); }
+        .emergency-bg-blue { background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); }
+        .emergency-bg-yellow { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); color: #7a4a00; }
+        .emergency-bg-cyan { background: linear-gradient(135deg, #36d1c4 0%, #5b86e5 100%); }
+        .emergency-bg-purple { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #4b2e83; }
+        .emergency-bg-green { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); color: #1b4d1b; }
+        .emergency-bg-gold { background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); color: #7a4a00; }
+        .emergency-bg-indigo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .emergency-label {
+          font-size: 1.08rem;
+          font-weight: 600;
+          margin-top: 0.2rem;
+          letter-spacing: 0.2px;
+        }
+        .container { max-width: 100% !important; }
+      </style>
       <section class="id_indore_microsite_template">
       
         <!-- Main Container -->
@@ -32,112 +115,84 @@
           </header>
     
           <!-- Property Details Section -->
-          <section class="py-4">
+          <section class="py-3">
             <div class="container">
-              <div class="card shadow rounded-4 border-0 p-4">
-                <div class="row g-4">
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Unit No.</div>
-                      <div class="fw-bold text-uppercase h5 mb-0">
-                        <t t-if="property.unit_no"><t t-out="property.unit_no"/></t>
-                      </div>
-                    </div>
-                  </div>
-                 
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Digital Door Number</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.upic_no"><t t-out="property.upic_no"/></t>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Zone</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.zone_id and property.zone_id.name"><t t-out="property.zone_id.name"/></t>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Ward</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.ward_id and property.ward_id.name"><t t-out="property.ward_id.name"/></t>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Colony</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.colony_id and property.colony_id.name">
-                          <t t-out="property.colony_id.name"/>
-                        </t>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Latitude &amp; Longitude</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
-                          <t t-if="property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude">
-                            <t t-out="property.survey_line_ids[0].latitude"/> &amp; <t t-out="property.survey_line_ids[0].longitude"/>
-                          </t>
-                        </t>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Property Id</div>
-                      <div class="fw-bold h5 mb-0">
-                        <t t-if="property.property_no and property.property_no">
-                          <t t-out="property.property_no"/>
-                        </t>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <div class="text-secondary small fw-semibold">Address</div>
-                      <div class="fw-bold h5 mb-0 text-uppercase">
-                        <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
-                          <t t-if="property.survey_line_ids[0].address_line_1">
-                            <t t-out="property.survey_line_ids[0].address_line_1"/>,
-                          </t>
-                          <t t-if="property.survey_line_ids[0].address_line_2">
-                            <t t-out="property.survey_line_ids[0].address_line_2"/>,
-                          </t>
-                        </t>
-                      </div>
-                    </div>
-                  </div>
+              <div class="card shadow rounded-4 border-0 p-3 position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
+                  <t t-if="property.uuid">
+                    <t t-set="property_url" t-value="request.httprequest.url_root.strip('/') + '/property/' + property.uuid"/>
+                    <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!'"
+                       class="btn btn-success btn-sm d-flex align-items-center"
+                       style="font-weight:600;"
+                       target="_blank">
+                      <i class="bi bi-whatsapp me-1"></i> Share
+                    </a>
+                  </t>
                 </div>
-                <!-- Property Buttons -->
-                <div class="d-flex justify-content-between gap-3 mt-4">
-                  <div class="flex-grow-1">
-                    <img t-if="property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].property_image" 
-                         t-att-src="image_data_uri(property.survey_line_ids[0].property_image)" 
-                         class="img-fluid rounded shadow-sm" 
-                         alt="Property 1"
-                         style="width: 100%; height: 200px; object-fit: cover;"/>
+                <div class="row g-3 align-items-center">
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Unit No.</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.unit_no"><t t-out="property.unit_no"/></t>
+                    </div>
                   </div>
-                  <div class="flex-grow-1">
-                    <img t-if="property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].property_image1" 
-                         t-att-src="image_data_uri(property.survey_line_ids[0].property_image1)" 
-                         class="img-fluid rounded shadow-sm" 
-                         alt="Property 2"
-                         style="width: 100%; height: 200px; object-fit: cover;"/>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Digital Door Number</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.upic_no"><t t-out="property.upic_no"/></t>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Zone</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.zone_id and property.zone_id.name"><t t-out="property.zone_id.name"/></t>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Ward</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.ward_id and property.ward_id.name"><t t-out="property.ward_id.name"/></t>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Colony</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.colony_id and property.colony_id.name">
+                        <t t-out="property.colony_id.name"/>
+                      </t>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Property Id</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.property_no">
+                        <t t-out="property.property_no"/>
+                      </t>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="text-secondary" style="font-size:1rem;">Address</div>
+                    <div class="fw-bold text-uppercase" style="font-size:1.1rem;">
+                      <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
+                        <t t-if="property.survey_line_ids[0].address_line_1">
+                          <t t-out="property.survey_line_ids[0].address_line_1"/>,
+                        </t>
+                        <t t-if="property.survey_line_ids[0].address_line_2">
+                          <t t-out="property.survey_line_ids[0].address_line_2"/>,
+                        </t>
+                      </t>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="text-secondary" style="font-size:1rem;">Latitude &amp; Longitude</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
+                        <t t-if="property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude">
+                          <t t-out="property.survey_line_ids[0].latitude"/> &amp; <t t-out="property.survey_line_ids[0].longitude"/>
+                        </t>
+                      </t>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -145,32 +200,31 @@
           </section>
 
           <!-- Government Payment Services -->
-          <section class="py-5 bg-light">
+          <section class="govt-services-section">
             <div class="container">
-              <h2 class="text-center fw-bold mb-4">Government Payment Services</h2>
-              <div class="row g-4">
-                <div class="col-12 col-sm-6 col-md-4">
-                  <div class="card h-100 border-0 shadow-sm hover-shadow">
-                    <div class="card-body text-center p-4">
-                      <i class="bi bi-house-fill text-primary display-4 mb-3"></i>
-                      <h5 class="card-title fw-semibold">Property Tax</h5>
+              <div class="govt-services-box w-100">
+                <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
+                <div class="d-flex justify-content-between align-items-center govt-services-row flex-row" style="gap:2rem;">
+                  <!-- Property Tax -->
+                  <div class="flex-fill text-center">
+                    <div class="govt-service-icon-box">
+                      <i class="bi bi-house"></i>
                     </div>
+                    <div class="govt-service-label">Property Tax</div>
                   </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-4">
-                  <div class="card h-100 border-0 shadow-sm hover-shadow">
-                    <div class="card-body text-center p-4">
-                      <i class="bi bi-droplet-fill text-primary display-4 mb-3"></i>
-                      <h5 class="card-title fw-semibold">Water Tax</h5>
+                  <!-- Water Tax -->
+                  <div class="flex-fill text-center">
+                    <div class="govt-service-icon-box">
+                      <i class="bi bi-droplet"></i>
                     </div>
+                    <div class="govt-service-label">Water Tax</div>
                   </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-4">
-                  <div class="card h-100 border-0 shadow-sm hover-shadow">
-                    <div class="card-body text-center p-4">
-                      <i class="bi bi-plug-fill text-primary display-4 mb-3"></i>
-                      <h5 class="card-title fw-semibold">Electricity Bill</h5>
+                  <!-- Electricity Bill -->
+                  <div class="flex-fill text-center">
+                    <div class="govt-service-icon-box">
+                      <i class="bi bi-plug"></i>
                     </div>
+                    <div class="govt-service-label">Electricity Bill</div>
                   </div>
                 </div>
               </div>
@@ -180,56 +234,72 @@
           <!-- Emergency Services -->
           <section class="py-5">
             <div class="container">
-              <div class="card border-0 shadow-sm">
+              <div class="card border-0 shadow-sm" style="border-radius: 24px;">
                 <div class="card-body p-4">
-                  <h2 class="text-center fw-bold mb-4">Emergency Services</h2>
+                  <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Emergency Services</h2>
                   <div class="row g-3">
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 text-danger fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #f8d7da;">
-                        <i class="bi bi-exclamation-triangle-fill display-6 mb-2"></i>
-                        Emergency
+                      <div class="emergency-card emergency-bg-red text-center">
+                        <div>
+                          <i class="bi bi-exclamation-triangle-fill emergency-icon"></i>
+                          <div class="emergency-label">Emergency</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 text-dark fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #cce5ff;">
-                        <i class="bi bi-car-front-fill display-6 mb-2"></i>
-                        Police
+                      <div class="emergency-card emergency-bg-blue text-center">
+                        <div>
+                          <i class="bi bi-car-front-fill emergency-icon"></i>
+                          <div class="emergency-label">Police</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 text-warning fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #ffe4b8;">
-                        <i class="bi bi-truck display-6 mb-2"></i>
-                        Fire
+                      <div class="emergency-card emergency-bg-yellow text-center">
+                        <div>
+                          <i class="bi bi-truck emergency-icon"></i>
+                          <div class="emergency-label">Fire</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 text-info fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #a8d0e6;">
-                        <i class="bi bi-truck display-6 mb-2"></i>
-                        Ambulance
+                      <div class="emergency-card emergency-bg-cyan text-center">
+                        <div>
+                          <i class="bi bi-truck emergency-icon"></i>
+                          <div class="emergency-label">Ambulance</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #e4d7f9; color: #6a2ea0;">
-                        <i class="bi bi-person-fill display-6 mb-2"></i>
-                        Women Help
+                      <div class="emergency-card emergency-bg-purple text-center">
+                        <div>
+                          <i class="bi bi-person-fill emergency-icon"></i>
+                          <div class="emergency-label">Women Help</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #cee8d5; color: #2f593b;">
-                        <i class="bi bi-tree-fill display-6 mb-2"></i>
-                        Forest Office
+                      <div class="emergency-card emergency-bg-green text-center">
+                        <div>
+                          <i class="bi bi-tree-fill emergency-icon"></i>
+                          <div class="emergency-label">Forest Office</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #f4f1c3; color: #847c0e;">
-                        <i class="bi bi-building display-6 mb-2"></i>
-                        Municipal Help
+                      <div class="emergency-card emergency-bg-gold text-center">
+                        <div>
+                          <i class="bi bi-building emergency-icon"></i>
+                          <div class="emergency-label">Municipal Help</div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-6 col-md-3">
-                      <div class="p-3 rounded-3 fw-semibold d-flex flex-column align-items-center hover-shadow" style="background: #d5d9f5; color: #272e91;">
-                        <i class="bi bi-plug-fill display-6 mb-2"></i>
-                        Power Dept.
+                      <div class="emergency-card emergency-bg-indigo text-center">
+                        <div>
+                          <i class="bi bi-plug-fill emergency-icon"></i>
+                          <div class="emergency-label">Power Dept.</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -244,8 +314,9 @@
               <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                   <h2 class="text-center fw-bold mb-4">Your Officer</h2>
-                  <div class="row g-4 justify-content-center">
-                    <div class="col-12 col-md-5">
+                  <div class="row g-4">
+                    <!-- First Officer -->
+                    <div class="col-12 col-md-6">
                       <div class="card border-0 shadow-sm hover-shadow">
                         <div class="card-body p-4">
                           <div class="d-flex align-items-center gap-3">
@@ -261,7 +332,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-12 col-md-5">
+                    <!-- Second Officer -->
+                    <div class="col-12 col-md-6">
                       <div class="card border-0 shadow-sm hover-shadow">
                         <div class="card-body p-4">
                           <div class="d-flex align-items-center gap-3">
