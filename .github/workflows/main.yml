@@ -40,7 +40,7 @@ jobs:
       - name: "Send Email: Deployment Completed"
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.mail.us-west-2.awsapps.com
+          server_address: smtp.mail.us-east-1.awsapps.com
           server_port: 465
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASSWORD }}
