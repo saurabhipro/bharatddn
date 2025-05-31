@@ -70,7 +70,6 @@ class PropertyDetailsAPI(http.Controller):
             "mobile_no": property.mobile_no,
             "owner_name": property.owner_name,
             "occupier_name": property.occupier_name,
-            "owner_dukan_imarate_nav": property.owner_dukan_imarate_nav,
             "plot_area": property.plot_area,
             "renter_name": property.renter_name,
             "survey_line_ids": [self._format_survey_data(survey) for survey in property.survey_line_ids if property.survey_line_ids]
