@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/odoo18/bharatddn
-            git pull origin main
+            sudo git pull origin main
             sudo service odoo restart
 
       - name: "Send Email: Deployment Completed"
