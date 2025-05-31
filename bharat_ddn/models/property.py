@@ -186,11 +186,13 @@ class Property(models.Model):
                 qr = qrcode.QRCode(
                     version=1,
                     error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=10,
-                    border=4,
+                    box_size=300,
+                    border=10,
                 )
                 base_url = request.httprequest.host_url
-                full_url = f"{base_url}get/property-details/{record.uuid}"
+                if self.company_id and self.company_id.website:
+                    base_url = self.company_id.website
+                full_url = f"{base_url}/get/{record.uuid}"
                 qr.add_data(full_url)
 
                
