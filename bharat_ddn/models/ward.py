@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
+
 
 class Ward(models.Model):
     _name = 'ddn.ward'
@@ -25,17 +27,28 @@ class Ward(models.Model):
             
 
     def update_ward(self):
-        """ This function will update the pdf_url field and return a dynamic URL. """
+        """Update the pdf_url field and return a dynamic URL to download the PDF."""
+
         config_parameter = self.env['ir.config_parameter'].sudo()
         base_url = config_parameter.get_param('web.base.url', default=False)
 
-        new_pdf_url = f"{base_url}/download/ward_properties_pdf?ward_id={(self.id)}" 
-        self.write({'pdf_url': new_pdf_url})
-        property = self.env['ddn.property.info'].search([('ward_id','=',self.id)])
-        property.write({'property_status' : 'pdf_downloaded'})
+        if not base_url:
+            raise UserError("Base URL not configured in system parameters.")
+
+        for record in self:
+            new_pdf_url = f"{base_url}/download/ward_properties_pdf?ward_id={record.id}"
+            record.write({'pdf_url': new_pdf_url})
+
+            # Corrected domain with commas between tuples
+            properties = self.env['ddn.property.info'].search([
+                ('ward_id', '=', record.id),
+                ('property_status', '=', 'uploaded')
+            ])
+            if properties:
+                properties.write({'property_status': 'pdf_downloaded'})
 
         return {
-                'type': 'ir.actions.act_url',
-                'url': '/download/ward_properties_pdf?ward_id=%s' % (self.id),
-                'target': 'new',
-            } 
+            'type': 'ir.actions.act_url',
+            'url': f'/download/ward_properties_pdf?ward_id={self.id}',
+            'target': 'new',
+        }

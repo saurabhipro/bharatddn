@@ -24,27 +24,42 @@ import tempfile
 
 
 class PdfGeneratorController(http.Controller):
-    @http.route('/download/ward_properties_pdf', type='http', auth='user', methods=['GET'], csrf=True)
+
+    @http.route(['/download/ward_properties_pdf'], type='http', auth='user', methods=['GET'], csrf=True)
     def download_ward_properties_pdf(self, **kw):
+        print("function is working fine")
         ward_id = kw.get('ward_id')
-        if not ward_id:
-            return request.not_found("Ward ID is required.")
-        
-        try:
-            ward_id = int(ward_id)
-        except ValueError:
-            return request.not_found("Invalid Ward ID.")
-        
-        domain = [('ward_id', '=', ward_id)]
+        colony_id = kw.get('colony_id')
+
+        # Validate ward_id if provided
+        if ward_id:
+            try:
+                ward_id = int(ward_id)
+            except ValueError:
+                return request.not_found("Invalid Ward ID.")
+
+        # Validate colony_id if provided
+        if colony_id:
+            try:
+                colony_id = int(colony_id)
+            except ValueError:
+                return request.not_found("Invalid Colony ID.")
+
+        # Construct search domain
+        domain = []
+        if ward_id:
+            domain.append(('ward_id', '=', ward_id))
+        if colony_id:
+            domain.append(('colony_id', '=', colony_id))
+
         properties = request.env['ddn.property.info'].sudo().search(domain)
         if not properties:
-            return request.not_found("No properties found for this ward.")
-        
+            return request.not_found("No properties found for the given criteria.")
+
         batch_size = 100
         batch_file_paths = []
         total_properties = len(properties)
 
-        # ✅ Get the background image from the current user's company
         company = request.env.user.company_id
         if not company or not company.plate_background_image:
             return request.not_found("No background image configured for your company.")
@@ -71,15 +86,15 @@ class PdfGeneratorController(http.Controller):
                 for property_rec in batch_records:
                     c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
 
-                    zone = property_rec.zone_id.name or "-"
-                    block = property_rec.ward_id.name or "-"
+                    zip = property_rec.company_id.zip or "-"
+                    colony = property_rec.colony_id.name or "-"
                     unit_no = property_rec.unit_no or "-"
                     uuid = property_rec.uuid or "-"
 
                     c.setFont("Helvetica-Bold", 16)
-                    c.drawString(305, 228, zone)
-                    c.drawString(445, 228, block)
-                    c.drawString(550, 228, unit_no)
+                    c.drawString(130, 166, zip)
+                    c.drawString(365, 166, colony)
+                    c.drawString(700, 166, unit_no)
 
                     qr = qrcode.QRCode(
                         version=1,
@@ -87,8 +102,7 @@ class PdfGeneratorController(http.Controller):
                         box_size=2,
                         border=2
                     )
-                    # base_url = request.httprequest.host_url
-                    base_url = property_rec.company_id.website
+                    base_url = property_rec.company_id.website or request.httprequest.host_url
                     full_url = f"{base_url}/get/{uuid}"
                     
                     qr.add_data(full_url)
@@ -100,13 +114,12 @@ class PdfGeneratorController(http.Controller):
                     qr_buffer.seek(0)
                     qr_image = ImageReader(qr_buffer)
 
-                    c.drawImage(qr_image, 350, 330, width=140, height=140)
+                    c.drawImage(qr_image, 63, 353, width=140, height=140)
                     c.showPage()
 
                 c.save()
                 batch_file_paths.append(batch_pdf_path)
 
-            # Merge all PDFs
             merger = PdfMerger()
             for batch_pdf in batch_file_paths:
                 merger.append(batch_pdf)
@@ -116,27 +129,30 @@ class PdfGeneratorController(http.Controller):
             merger.close()
             final_pdf_io.seek(0)
 
-            # Cleanup batch files
             for batch_pdf in batch_file_paths:
                 try:
                     os.unlink(batch_pdf)
                 except Exception:
                     pass
 
-            # ✅ Cleanup temp background image
             try:
                 os.unlink(bg_image_path)
             except Exception:
                 pass
 
+            filename = "ward_properties.pdf"
+            if ward_id and colony_id:
+                filename = f"ward_{ward_id}_colony_{colony_id}_properties.pdf"
+            elif ward_id:
+                filename = f"ward_{ward_id}_properties.pdf"
+            elif colony_id:
+                filename = f"colony_{colony_id}_properties.pdf"
+
             headers = [
                 ('Content-Type', 'application/pdf'),
-                ('Content-Disposition', 'attachment; filename="ward_properties.pdf"')
+                ('Content-Disposition', f'attachment; filename="{filename}"')
             ]
             return request.make_response(final_pdf_io.read(), headers=headers)
 
         except Exception as e:
             return request.not_found(f"An error occurred: {str(e)}")
-
-
-

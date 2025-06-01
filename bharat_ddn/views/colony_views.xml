@@ -10,6 +10,7 @@
                     <field name="name"/>
                     <field name="code"/>
                     <field name="ward_id"/>
+                    <field name="property_count"/>
                     <field name="company_id"/>
                     <field name="active"/>
                 </list>
@@ -23,10 +24,12 @@
                 <form string="Colony">
                     <sheet>
                         <group>
-                                <field name="name"/>
-                                <field name="code"/>
-                                <field name="ward_id"/>
-                                <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="ward_id"/>
+                            <field name="property_count"/>
+                            <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            <field name="pdf_url" widget="url"/>
                         </group>
                     </sheet>
                     <chatter/>
@@ -40,6 +43,16 @@
             <field name="res_model">ddn.colony</field>
             <field name="view_mode">list,form</field>
             <field name="view_id" ref="view_colony_list"/>
+        </record>
+
+        <record id="model_ddn_colony_action_server" model="ir.actions.server">
+            <field name="name">Pdf Report</field>
+            <field name="model_id" ref="bharat_ddn.model_ddn_colony"/>
+            <field name="binding_model_id" ref="bharat_ddn.model_ddn_colony"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.update_ward()
+            </field>
         </record>
 
     </data>
