@@ -182,6 +182,7 @@ class Property(models.Model):
     @api.depends('uuid')
     def _compute_qr_code(self):
         for record in self:
+
             if record.uuid:
                 qr = qrcode.QRCode(
                     version=1,
@@ -190,7 +191,7 @@ class Property(models.Model):
                     border=10,
                 )
                 base_url = request.httprequest.host_url
-                if self.company_id and self.company_id.website:
+                if record.company_id and record.company_id.website:
                     base_url = self.company_id.website
                 full_url = f"{base_url}/get/{record.uuid}"
                 qr.add_data(full_url)
@@ -233,11 +234,14 @@ class Property(models.Model):
     @api.depends('uuid')
     def _compute_microsite_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        base_url = request.httprequest.host_url
         for rec in self:
-            if rec.uuid:
-                rec.microsite_url = f"{base_url}/get/{rec.uuid}"
-            else:
-                rec.microsite_url = ''
+            if rec.company_id and rec.company_id.website:
+                base_url = self.company_id.website
+                if rec.uuid:
+                    rec.microsite_url = f"{base_url}/get/{rec.uuid}"
+                else:
+                    rec.microsite_url = ''
 
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
@@ -246,7 +250,6 @@ class Property(models.Model):
         
         if res and ('latitude' in (fields or []) or 'longitude' in (fields or [])):
             for record in res:
-                # Use decimal coordinates for the map
                 if 'latitude' in record:
                     record['latitude'] = str(record.get('latitude', ''))
                 if 'longitude' in record:
