@@ -52,7 +52,7 @@ class PdfGeneratorController(http.Controller):
         if colony_id:
             domain.append(('colony_id', '=', colony_id))
 
-        properties = request.env['ddn.property.info'].sudo().search(domain,limit=100)
+        properties = request.env['ddn.property.info'].sudo().search(domain)
         if not properties:
             return request.not_found("No properties found for the given criteria.")
 
