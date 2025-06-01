@@ -27,7 +27,7 @@
         'views/res_users_views.xml',
         'views/mobile_otp_views.xml',
         'views/jwt_token_views.xml',
-        'views/property_survey.xml',
+        'views/property_survey_views.xml',
         'views/property_group_views.xml',
         'views/dashboard.xml',
         'views/res_company_views.xml',

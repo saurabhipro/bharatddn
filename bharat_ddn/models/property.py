@@ -30,7 +30,6 @@ class Property(models.Model):
     survey_line_ids = fields.One2many('ddn.property.survey', 'property_id', string="Survey Line", tracking=True)
     address_line_1 = fields.Char(string="Address 1")
     address_line_2 = fields.Char(string="Address 2")
-    house_number = fields.Char(string="H.No")
     surveyer_id = fields.Many2one('res.users', string="Surveyor")
     microsite_url = fields.Char(string='Microsite URL', compute='_compute_microsite_url', store=False)
     is_solar = fields.Char('Is Solar')

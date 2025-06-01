@@ -12,7 +12,6 @@ class SurveyParameters(models.Model):
     company_id = fields.Many2one('res.company', string="Company", related='property_id.company_id', store=True, default=lambda self : self.env.company.id, readonly=True)
     address_line_1 = fields.Char('Address Line 1', required=True)
     address_line_2 = fields.Char('Address Line 2')
-    house_number = fields.Char('House Number')
     total_floors = fields.Char('Total Floors')
     floor_number = fields.Char('Floor Number')
     owner_name = fields.Char('Owner Name')
@@ -32,7 +31,6 @@ class SurveyParameters(models.Model):
         if self.property_id:
             self.address_line_1 = self.property_id.address_line_1
             self.address_line_2 = self.property_id.address_line_2
-            self.house_number = self.property_id.house_number
             self.owner_name = self.property_id.owner_name
             self.mobile_no = self.property_id.mobile_no
             self.longitude = self.property_id.longitude
@@ -58,8 +56,7 @@ class SurveyParameters(models.Model):
                     vals_to_write['address_line_1'] = record.address_line_1
                 if record.address_line_2:
                     vals_to_write['address_line_2'] = record.address_line_2
-                if record.house_number:
-                    vals_to_write['house_number'] = record.house_number
+            
                 if record.owner_name:
                     vals_to_write['owner_name'] = record.owner_name
                 if vals_to_write:
@@ -84,8 +81,6 @@ class SurveyParameters(models.Model):
                     vals_to_write['address_line_1'] = record.address_line_1
                 if 'address_line_2' in vals and record.address_line_2:
                     vals_to_write['address_line_2'] = record.address_line_2
-                if 'house_number' in vals and record.house_number:
-                    vals_to_write['house_number'] = record.house_number
                 if 'owner_name' in vals and record.owner_name:
                     vals_to_write['owner_name'] = record.owner_name
                 if vals_to_write:

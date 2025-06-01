@@ -142,7 +142,6 @@
                                                 <group>
                                                     <field name="address_line_1"/>
                                                     <field name="address_line_2"/>
-                                                    <field name="house_number"/>
                                                     <field name="unit"/>
                                                     <field name="mobile_no"/>
                                                 </group>
