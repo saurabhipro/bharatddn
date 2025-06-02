@@ -1,6 +1,5 @@
 from odoo import http
 from .main import *
-
 from odoo import http
 from odoo.http import request, Response
 from datetime import datetime, date, timedelta
@@ -24,7 +23,7 @@ class PropertyDetailsAPI(http.Controller):
     @http.route('/api/get_property', type='http', auth='public', methods=['POST'], csrf=False)
     @check_permission
     def get_property_details(self, **kwargs):
-        """Get property details based on a single parameter (UPIC or mobile number)."""
+        """Get property details based on a single parameter (UPIC, mobile number, or UUID)."""
         try:
             data = json.loads(request.httprequest.data or "{}")
             parameter = data.get('parameter_name', '').strip()
@@ -35,8 +34,12 @@ class PropertyDetailsAPI(http.Controller):
             if parameter:
                 if parameter.isdigit() and len(parameter) == 10:
                     domain.append(('mobile_no', '=', parameter))
+                elif len(parameter) == 36:  # UUID length is 36 characters
+                    domain.append(('uuid', '=', parameter))
                 else:
                     domain.append(('upic_no', '=', parameter))
+
+            _logger.info(f"Searching with domain: {domain} and parameter: {parameter}")
 
             if domain:
                 property_details = request.env['ddn.property.info'].sudo().search(domain, limit=1)
@@ -50,7 +53,7 @@ class PropertyDetailsAPI(http.Controller):
                 'matched_count': len(property_data),
                 'page': page,
                 'limit': limit,
-                'message': 'No property found for the given UPIC/mobile number.' if not property_data else 'Property found.'
+                'message': 'No property found for the given parameter.' if not property_data else 'Property found.'
             }), status=200, content_type='application/json')
 
         except jwt.ExpiredSignatureError:
