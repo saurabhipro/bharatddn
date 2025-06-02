@@ -173,7 +173,7 @@
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
                 <t t-if="property.uuid">
-                  <t t-set="property_url" t-value="request.httprequest.url_root.strip('/') + '/get/' + property.uuid"/>
+                  <t t-set="property_url" t-value="(property.company_id.website or request.httprequest.url_root).strip('/') + '/get/' + property.uuid"/>
                   <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!'"
                      class="btn btn-success btn-sm d-flex align-items-center"
                      style="font-weight:600;"
