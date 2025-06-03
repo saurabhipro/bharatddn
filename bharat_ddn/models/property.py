@@ -9,12 +9,21 @@ import qrcode
 from io import BytesIO
 import base64
 from odoo.http import request
+from PIL import Image
+import io
+import logging
+from odoo.tools import config
+
+Image.MAX_IMAGE_PIXELS = 300000000  # e.g., 300 million pixels
+
+_logger = logging.getLogger(__name__)
 
 class Property(models.Model):
     _name = 'ddn.property.info'
     _description = 'Property Information'
     _inherit = ['mail.thread', 'mail.activity.mixin']    
     _rec_name = "upic_no"
+
 
     # Owner Information
     company_id = fields.Many2one('res.company', string="Company", default=lambda self : self.env.company.id, readonly=True)
@@ -162,7 +171,6 @@ class Property(models.Model):
     comb_prop_remark = fields.Text('Comb Prop Remark')
     
     # Location Information
-    
 
 
     property_status = fields.Selection([
@@ -181,30 +189,38 @@ class Property(models.Model):
     @api.depends('uuid')
     def _compute_qr_code(self):
         for record in self:
-
-            if record.uuid:
+            try:
+                # Get base URL from company website
+                base_url = request.httprequest.host_url
+                if record.company_id and record.company_id.website:
+                    base_url = record.company_id.website
+                
+                # Create property URL with UUID
+                property_url = f"{base_url}/get/{record.uuid}"
+                
+                # Create QR code instance
                 qr = qrcode.QRCode(
                     version=1,
                     error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=300,
-                    border=10,
+                    box_size=20,
+                    border=4,
                 )
-                base_url = request.httprequest.host_url
-                if record.company_id and record.company_id.website:
-                    base_url = self.company_id.website
-                full_url = f"{base_url}/get/{record.uuid}"
-                qr.add_data(full_url)
-
-               
+                
+                # Add URL to QR code
+                qr.add_data(property_url)
                 qr.make(fit=True)
-                img = qr.make_image(fill='black', back_color='white')
-
+                
+                # Create image
+                img = qr.make_image(fill_color="black", back_color="white")
+                
+                # Convert to base64
                 buffer = BytesIO()
                 img.save(buffer, format='PNG')
                 qr_image = base64.b64encode(buffer.getvalue())
-                buffer.close()
+                
                 record.qr_code = qr_image
-            else:
+            except Exception as e:
+                _logger.error(f"Error generating QR code for property {record.id}: {str(e)}")
                 record.qr_code = False
 
     
@@ -256,4 +272,9 @@ class Property(models.Model):
                     
         return res
 
+    def safe_open_image(self, source):
+        img = Image.open(io.BytesIO(source))
+        max_size = (4096, 4096)  # set your max width/height
+        img.thumbnail(max_size, Image.ANTIALIAS)
+        return img
     

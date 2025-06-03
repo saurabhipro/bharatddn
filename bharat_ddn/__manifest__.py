@@ -31,7 +31,7 @@
         'views/property_group_views.xml',
         'views/dashboard.xml',
         'views/res_company_views.xml',
-        'views/property_import_wizard_view.xml',
+        'wizard/property_import_wizard_view.xml',
         'views/property_id_data_views.xml',
         'security/ir_rule.xml',
         'views/menuitems.xml',  # Load menus last

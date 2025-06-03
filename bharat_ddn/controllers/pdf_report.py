@@ -19,9 +19,13 @@ import os
 import io
 import base64
 import tempfile
+from reportlab.lib.colors import white
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
-
-
+# Register a custom font (replace with your desired font file path)
+FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Example path, update as needed
+pdfmetrics.registerFont(TTFont("CustomBold", FONT_PATH))
 
 class PdfGeneratorController(http.Controller):
 
@@ -86,15 +90,41 @@ class PdfGeneratorController(http.Controller):
                 for property_rec in batch_records:
                     c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
 
-                    zip = property_rec.company_id.zip or "-"
-                    colony = property_rec.colony_id.name or "-"
-                    unit_no = property_rec.unit_no or "-"
-                    uuid = property_rec.uuid or "-"
+                    # Format house number to 4 digits
+                    raw_unit_no = property_rec.unit_no or "-"
+                    if raw_unit_no != "-":
+                        formatted_unit_no = str(raw_unit_no).zfill(4)
+                    else:
+                        formatted_unit_no = "-"
 
-                    c.setFont("Helvetica-Bold", 16)
-                    c.drawString(130, 166, zip)
-                    c.drawString(365, 166, colony)
-                    c.drawString(700, 166, unit_no)
+                    # Draw the big black zone-locality-unit_no in the center
+                    zone = property_rec.company_id.zip or "-"
+                    locality = property_rec.colony_id.code or "-"
+                    center_text = f"{zone}-{locality}-{formatted_unit_no}"
+
+                    c.setFont("CustomBold", 50)  # Larger, custom bold font
+                    c.setFillColorRGB(0, 0, 0)   # Black color
+                    center_x = page_width - 50
+                    center_y = 320
+                    c.drawRightString(center_x, center_y, center_text)
+
+                    # Set font and color for white text in red section
+                    c.setFont("CustomBold", 40)  # Larger font for red section
+                    c.setFillColor(white)
+
+                    # Define box positions and widths (adjust these as per your template)
+                    zone_box_x, zone_box_y, zone_box_width = 40, 175, 180
+                    locality_box_x, locality_box_y, locality_box_width = 280, 175, 250
+                    unit_no_box_x, unit_no_box_y, unit_no_box_width = 610, 175, 155
+
+                    # Get dynamic values
+                    zip = property_rec.company_id.zip or "-"
+                    colony = property_rec.colony_id.code or "-"
+
+                    # Centered text in each box
+                    c.drawCentredString(zone_box_x + zone_box_width / 2, zone_box_y, zone)
+                    c.drawCentredString(locality_box_x + locality_box_width / 2, locality_box_y, colony)
+                    c.drawCentredString(unit_no_box_x + unit_no_box_width / 2, unit_no_box_y, formatted_unit_no)
 
                     qr = qrcode.QRCode(
                         version=1,
@@ -103,7 +133,7 @@ class PdfGeneratorController(http.Controller):
                         border=2
                     )
                     base_url = property_rec.company_id.website or request.httprequest.host_url
-                    full_url = f"{base_url}/get/{uuid}"
+                    full_url = f"{base_url}/get/{property_rec.uuid}"
                     
                     qr.add_data(full_url)
                     qr.make(fit=True)
@@ -114,7 +144,15 @@ class PdfGeneratorController(http.Controller):
                     qr_buffer.seek(0)
                     qr_image = ImageReader(qr_buffer)
 
-                    c.drawImage(qr_image, 63, 353, width=140, height=140)
+                    # Draw QR code centered in its box (now fills the box)
+                    qr_box_x, qr_box_y, qr_box_width, qr_box_height = 45, 350, 170, 160
+                    qr_size = min(qr_box_width, qr_box_height)
+                    qr_x = qr_box_x - 9
+                    qr_y = qr_box_y - 15 # Move QR code slightly towards the bottom
+                    c.drawImage(qr_image, qr_x, qr_y, width=qr_size, height=qr_size)
+
+                    c.setFillColorRGB(0, 0, 0)  # Reset color if needed for other elements
+
                     c.showPage()
 
                 c.save()
