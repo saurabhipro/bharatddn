@@ -100,6 +100,11 @@
                 <form string="Property Information">
                     <header>
                         <field name="property_status" widget="statusbar"  options="{'clickable': '1'}"/>
+                        <button name="action_generate_pdf_plate"
+                                type="object"
+                                string="Generate PDF Plate"
+                                class="oe_highlight"
+                                icon="fa-file-pdf-o"/>
                     </header>
                     <sheet>
                     <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 230px !important; height: 130px !important;" options="{'preview_image': 'qr_code'}"/>

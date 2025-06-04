@@ -278,3 +278,13 @@ class Property(models.Model):
         img.thumbnail(max_size, Image.ANTIALIAS)
         return img
     
+    def action_generate_pdf_plate(self):
+        self.ensure_one()
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        url = f"{base_url}/download/ward_properties_pdf?property_id={self.id}"
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+        }
+    
