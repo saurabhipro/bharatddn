@@ -115,7 +115,7 @@ class PdfGeneratorController(http.Controller):
 
                     center_x = page_width - 50
                     center_y = 320
-                    c.setFont("CustomBold", 70)
+                    c.setFont("CustomBold", 65)
                     c.setFillColorRGB(1, 1, 1)  # White
                     for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-2,-2), (-2,2), (2,-2), (2,2)]:
                         c.drawRightString(center_x+dx, center_y+dy, center_text)
