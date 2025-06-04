@@ -107,7 +107,7 @@
                                 icon="fa-file-pdf-o"/>
                     </header>
                     <sheet>
-                    <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 230px !important; height: 130px !important;" options="{'preview_image': 'qr_code'}"/>
+                    <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 300px !important; height: 300px !important;" options="{'preview_image': 'qr_code'}"/>
 
                         <group>
                             <group>

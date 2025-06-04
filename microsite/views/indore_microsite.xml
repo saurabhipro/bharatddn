@@ -174,7 +174,8 @@
                 <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
                 <t t-if="property.uuid">
                   <t t-set="property_url" t-value="(property.company_id.website or request.httprequest.url_root).strip('/') + '/get/' + property.uuid"/>
-                  <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!'"
+                  <t t-set="maps_url" t-value="'https://www.google.com/maps/search/?api=1&amp;query=' + (property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude and (property.survey_line_ids[0].latitude + ',' + property.survey_line_ids[0].longitude) or '')"/>
+                  <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!%0A%0ALocation:%20' + maps_url"
                      class="btn btn-success btn-sm d-flex align-items-center"
                      style="font-weight:600;"
                      target="_blank">
