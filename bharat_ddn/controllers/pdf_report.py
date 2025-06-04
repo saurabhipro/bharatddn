@@ -102,7 +102,7 @@ class PdfGeneratorController(http.Controller):
                     c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
 
                     # Format house number to 4 digits
-                    raw_unit_no = property_rec.zone_id.name or "-"
+                    raw_unit_no = property_rec.unit_no or "-"
                     if raw_unit_no != "-":
                         formatted_unit_no = str(raw_unit_no).zfill(4)
                     else:
