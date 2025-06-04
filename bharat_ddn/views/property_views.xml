@@ -108,11 +108,12 @@
                     </header>
                     <sheet>
                     <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 300px !important; height: 300px !important;" options="{'preview_image': 'qr_code'}"/>
-
+                        <group>
+                            <field name="uuid"/>
+                            <field name="microsite_url" widget="url" string="Open Microsite"/>
+                        </group>
                         <group>
                             <group>
-                                <field name="uuid"/>
-                                <field name="microsite_url" widget="url" string="Open Microsite"/>
                                 <field name="upic_no"/>
                                 <field name="mobile_no"/>
                                 <field name="surveyer_id"/>
