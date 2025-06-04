@@ -76,14 +76,38 @@
           margin-bottom: 0.3rem;
           display: block;
         }
-        .emergency-bg-red { background: linear-gradient(135deg, #ff5858 0%, #f857a6 100%); }
-        .emergency-bg-blue { background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); }
-        .emergency-bg-yellow { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); color: #7a4a00; }
-        .emergency-bg-cyan { background: linear-gradient(135deg, #36d1c4 0%, #5b86e5 100%); }
-        .emergency-bg-purple { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #4b2e83; }
-        .emergency-bg-green { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); color: #1b4d1b; }
-        .emergency-bg-gold { background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); color: #7a4a00; }
-        .emergency-bg-indigo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .emergency-bg-red {
+          background: #fdebed;
+          color: #b71c1c; /* deep red for text/icon */
+        }
+        .emergency-bg-blue {
+          background: #e3f2fd;
+          color: #1565c0; /* deep blue for text/icon */
+        }
+        .emergency-bg-yellow {
+          background: #fff7e0;
+          color: #b26a00; /* deep gold for text/icon */
+        }
+        .emergency-bg-cyan {
+          background: #e0f7fa;
+          color: #00838f; /* teal for text/icon */
+        }
+        .emergency-bg-purple {
+          background: #f3e5f5;
+          color: #6a1b9a; /* purple for text/icon */
+        }
+        .emergency-bg-green {
+          background: #e8f5e9;
+          color: #2e7d32; /* green for text/icon */
+        }
+        .emergency-bg-gold {
+          background: #fffde7;
+          color: #bfa600; /* gold for text/icon */
+        }
+        .emergency-bg-indigo {
+          background: #e8eaf6;
+          color: #283593; /* indigo for text/icon */
+        }
         .emergency-label {
           font-size: 1.08rem;
           font-weight: 600;
@@ -99,7 +123,7 @@
           margin-right: 5%;
           margin-bottom: 2rem;
           box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
-          padding: 2rem 1.5rem;
+          padding: 0.7rem 0.5rem;
         }
         @media (max-width: 767.98px) {
           .govt-services-section .card-body {
@@ -152,99 +176,143 @@
             padding: 1rem 0.5rem;
           }
         }
+        .header-content-box {
+          max-width: 700px;
+          margin: 0 auto;
+          padding-left: 2rem;
+          padding-right: 2rem;
+          border-radius: 18px;
+          /* Optional: add a subtle shadow for a card effect */
+          /* box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10); */
+        }
+        @media (max-width: 767.98px) {
+          .header-content-box {
+            max-width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+        }
+        .center-section {
+          max-width: 900px;
+          margin: 0 auto 0.3rem auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .main-section-card {
+          width: 100%;
+          padding: 0.7rem 0.5rem;
+        }
+        .card-body {
+          padding: 1rem !important;
+        }
+        @media (max-width: 991.98px) {
+          .center-section {
+            max-width: 98vw;
+            margin-left: 1vw;
+            margin-right: 1vw;
+          }
+        }
+        .o_footer, footer, .footer {
+          display: none !important;
+        }
       </style>
       <div class="body-gradient-bg">
         <section class="id_indore_microsite_template">
           <!-- Header Section -->
           <header class="header-gradient text-white py-4">
-            <div class="row align-items-center flex-column flex-md-row">
-              <div class="col-12 text-center text-md-start">
-                <h1 class="display-6 fw-bold mb-1" style="letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                  Welcome to <span class="highlight-hindi">डिजिटल पता</span>
-                </h1>
-                <div class="h5 fw-light mb-0" style="letter-spacing: 1px;">INDORE MUNICIPAL CORPORATION</div>
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-12 text-center">
+                  <h1 class="display-6 fw-bold mb-1" style="letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.08); padding-top: 1rem; padding-bottom: 1rem;">
+                    Welcome to <span class="highlight-hindi">डिजिटल पता</span>
+                  </h1>
+                  <div class="h5 fw-light mb-0" style="letter-spacing: 1px;">INDORE MUNICIPAL CORPORATION</div>
+                </div>
               </div>
             </div>
           </header>
       
           <!-- Property Details Section -->
-          <section class="py-3">
-            <div class="card shadow rounded-4 border-0 p-3 position-relative main-section-card">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
-                <t t-if="property.uuid">
-                  <t t-set="property_url" t-value="(property.company_id.website or request.httprequest.url_root).strip('/') + '/get/' + property.uuid"/>
-                  <t t-set="maps_url" t-value="'https://www.google.com/maps/search/?api=1&amp;query=' + (property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude and (property.survey_line_ids[0].latitude + ',' + property.survey_line_ids[0].longitude) or '')"/>
-                  <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!%0A%0ALocation:%20' + maps_url"
-                     class="btn btn-success btn-sm d-flex align-items-center"
-                     style="font-weight:600;"
-                     target="_blank">
-                    <i class="bi bi-whatsapp me-1"></i> Share
-                  </a>
-                </t>
-              </div>
-              <div class="row g-3 align-items-center">
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Unit No.</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.unit_no"><t t-out="property.unit_no"/></t>
-                  </div>
+          <section class="py-1">
+            <div class="center-section">
+              <div class="card shadow rounded-4 border-0 p-3 position-relative main-section-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
+                  <t t-if="property.uuid">
+                    <t t-set="property_url" t-value="(property.company_id.website or request.httprequest.url_root).strip('/') + '/get/' + property.uuid"/>
+                    <t t-set="maps_url" t-value="'https://www.google.com/maps/search/?api=1&amp;query=' + (property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude and (property.survey_line_ids[0].latitude + ',' + property.survey_line_ids[0].longitude) or '')"/>
+                    <a t-att-href="'https://wa.me/?text=' + property_url + '%0ACheck%20out%20this%20property%20on%20Bharat%20DDN!%0A%0ALocation:%20' + maps_url"
+                       class="btn btn-success btn-sm d-flex align-items-center"
+                       style="font-weight:600;"
+                       target="_blank">
+                      <i class="bi bi-whatsapp me-1"></i> Share
+                    </a>
+                  </t>
                 </div>
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Digital Door Number</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.upic_no"><t t-out="property.upic_no"/></t>
+                <div class="row g-3 align-items-center">
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Unit No.</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.unit_no"><t t-out="property.unit_no"/></t>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Zone</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.zone_id and property.zone_id.name"><t t-out="property.zone_id.name"/></t>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Digital Door Number</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.upic_no"><t t-out="property.upic_no"/></t>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Ward</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.ward_id and property.ward_id.name"><t t-out="property.ward_id.name"/></t>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Zone</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.zone_id and property.zone_id.name"><t t-out="property.zone_id.name"/></t>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Colony</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.colony_id and property.colony_id.name">
-                      <t t-out="property.colony_id.name"/>
-                    </t>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Ward</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.ward_id and property.ward_id.name"><t t-out="property.ward_id.name"/></t>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="text-secondary" style="font-size:1rem;">Property Id</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.property_no">
-                      <t t-out="property.property_no"/>
-                    </t>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="text-secondary" style="font-size:1rem;">Address</div>
-                  <div class="fw-bold text-uppercase" style="font-size:1.1rem;">
-                    <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
-                      <t t-if="property.survey_line_ids[0].address_line_1">
-                        <t t-out="property.survey_line_ids[0].address_line_1"/>,
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Colony</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.colony_id and property.colony_id.name">
+                        <t t-out="property.colony_id.name"/>
                       </t>
-                      <t t-if="property.survey_line_ids[0].address_line_2">
-                        <t t-out="property.survey_line_ids[0].address_line_2"/>,
-                      </t>
-                    </t>
+                    </div>
                   </div>
-                </div>
-                <div class="col-12">
-                  <div class="text-secondary" style="font-size:1rem;">Latitude &amp; Longitude</div>
-                  <div class="fw-bold" style="font-size:1.1rem;">
-                    <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
-                      <t t-if="property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude">
-                        <t t-out="property.survey_line_ids[0].latitude"/> &amp; <t t-out="property.survey_line_ids[0].longitude"/>
+                  <div class="col-6">
+                    <div class="text-secondary" style="font-size:1rem;">Property Id</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.property_no">
+                        <t t-out="property.property_no"/>
                       </t>
-                    </t>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="text-secondary" style="font-size:1rem;">Address</div>
+                    <div class="fw-bold text-uppercase" style="font-size:1.1rem;">
+                      <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
+                        <t t-if="property.survey_line_ids[0].address_line_1">
+                          <t t-out="property.survey_line_ids[0].address_line_1"/>,
+                        </t>
+                        <t t-if="property.survey_line_ids[0].address_line_2">
+                          <t t-out="property.survey_line_ids[0].address_line_2"/>,
+                        </t>
+                      </t>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="text-secondary" style="font-size:1rem;">Latitude &amp; Longitude</div>
+                    <div class="fw-bold" style="font-size:1.1rem;">
+                      <t t-if="property.survey_line_ids and property.survey_line_ids[0]">
+                        <t t-if="property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude">
+                          <t t-out="property.survey_line_ids[0].latitude"/> &amp; <t t-out="property.survey_line_ids[0].longitude"/>
+                        </t>
+                      </t>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -252,35 +320,37 @@
           </section>
 
           <!-- Government Payment Services -->
-          <section class="py-3">
-            <div class="main-section-card">
-              <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
-              <div class="row g-4 text-center">
-                <!-- Property Tax -->
-                <div class="col-12 col-md-4">
-                  <div>
-                    <div class="govt-service-icon-box mb-2 mx-auto">
-                      <i class="bi bi-house"></i>
+          <section class="py-1">
+            <div class="center-section">
+              <div class="main-section-card">
+                <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
+                <div class="row g-4 text-center">
+                  <!-- Property Tax -->
+                  <div class="col-12 col-md-4">
+                    <div>
+                      <div class="govt-service-icon-box mb-2 mx-auto">
+                        <i class="bi bi-house"></i>
+                      </div>
+                      <div class="govt-service-label">Property Tax</div>
                     </div>
-                    <div class="govt-service-label">Property Tax</div>
                   </div>
-                </div>
-                <!-- Water Tax -->
-                <div class="col-12 col-md-4">
-                  <div>
-                    <div class="govt-service-icon-box mb-2 mx-auto">
-                      <i class="bi bi-droplet"></i>
+                  <!-- Water Tax -->
+                  <div class="col-12 col-md-4">
+                    <div>
+                      <div class="govt-service-icon-box mb-2 mx-auto">
+                        <i class="bi bi-droplet"></i>
+                      </div>
+                      <div class="govt-service-label">Water Tax</div>
                     </div>
-                    <div class="govt-service-label">Water Tax</div>
                   </div>
-                </div>
-                <!-- Electricity Bill -->
-                <div class="col-12 col-md-4">
-                  <div>
-                    <div class="govt-service-icon-box mb-2 mx-auto">
-                      <i class="bi bi-plug"></i>
+                  <!-- Electricity Bill -->
+                  <div class="col-12 col-md-4">
+                    <div>
+                      <div class="govt-service-icon-box mb-2 mx-auto">
+                        <i class="bi bi-plug"></i>
+                      </div>
+                      <div class="govt-service-label">Electricity Bill</div>
                     </div>
-                    <div class="govt-service-label">Electricity Bill</div>
                   </div>
                 </div>
               </div>
@@ -288,72 +358,74 @@
           </section>
 
           <!-- Emergency Services -->
-          <section class="py-5">
-            <div class="card border-0 shadow-sm main-section-card">
-              <div class="card-body p-4">
-                <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Emergency Services</h2>
-                <div class="row g-3">
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-red text-center">
-                      <div>
-                        <i class="bi bi-exclamation-triangle-fill emergency-icon"></i>
-                        <div class="emergency-label">Emergency</div>
+          <section class="py-1">
+            <div class="center-section">
+              <div class="card border-0 shadow-sm main-section-card">
+                <div class="card-body p-4">
+                  <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Emergency Services</h2>
+                  <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-red text-center">
+                        <div>
+                          <i class="bi bi-exclamation-triangle-fill emergency-icon"></i>
+                          <div class="emergency-label">Emergency</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-blue text-center">
-                      <div>
-                        <i class="bi bi-car-front-fill emergency-icon"></i>
-                        <div class="emergency-label">Police</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-blue text-center">
+                        <div>
+                          <i class="bi bi-car-front-fill emergency-icon"></i>
+                          <div class="emergency-label">Police</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-yellow text-center">
-                      <div>
-                        <i class="bi bi-truck emergency-icon"></i>
-                        <div class="emergency-label">Fire</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-yellow text-center">
+                        <div>
+                          <i class="bi bi-truck emergency-icon"></i>
+                          <div class="emergency-label">Fire</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-cyan text-center">
-                      <div>
-                        <i class="bi bi-truck emergency-icon"></i>
-                        <div class="emergency-label">Ambulance</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-cyan text-center">
+                        <div>
+                          <i class="bi bi-truck emergency-icon"></i>
+                          <div class="emergency-label">Ambulance</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-purple text-center">
-                      <div>
-                        <i class="bi bi-person-fill emergency-icon"></i>
-                        <div class="emergency-label">Women Help</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-purple text-center">
+                        <div>
+                          <i class="bi bi-person-fill emergency-icon"></i>
+                          <div class="emergency-label">Women Help</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-green text-center">
-                      <div>
-                        <i class="bi bi-tree-fill emergency-icon"></i>
-                        <div class="emergency-label">Forest Office</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-green text-center">
+                        <div>
+                          <i class="bi bi-tree-fill emergency-icon"></i>
+                          <div class="emergency-label">Forest Office</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-gold text-center">
-                      <div>
-                        <i class="bi bi-building emergency-icon"></i>
-                        <div class="emergency-label">Municipal Help</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-gold text-center">
+                        <div>
+                          <i class="bi bi-building emergency-icon"></i>
+                          <div class="emergency-label">Municipal Help</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-indigo text-center">
-                      <div>
-                        <i class="bi bi-plug-fill emergency-icon"></i>
-                        <div class="emergency-label">Power Dept.</div>
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-indigo text-center">
+                        <div>
+                          <i class="bi bi-plug-fill emergency-icon"></i>
+                          <div class="emergency-label">Power Dept.</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -363,52 +435,54 @@
           </section>
 
           <!-- Your Officer Section -->
-          <section class="py-5">
-            <div class="card border-0 shadow-sm main-section-card">
-              <div class="card-body p-4">
-                <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
-                <div class="row g-3">
-                  <!-- Zone Officer -->
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-blue text-center">
-                      <div>
-                        <i class="bi bi-person-badge emergency-icon"></i>
-                        <div class="emergency-label">Zone Officer</div>
-                        <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Ravi Singh</div>
-                        <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+          <section class="py-1">
+            <div class="center-section">
+              <div class="card border-0 shadow-sm main-section-card">
+                <div class="card-body p-4">
+                  <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
+                  <div class="row g-3">
+                    <!-- Zone Officer -->
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-blue text-center">
+                        <div>
+                          <i class="bi bi-person-badge emergency-icon"></i>
+                          <div class="emergency-label">Zone Officer</div>
+                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Ravi Singh</div>
+                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Ward Officer -->
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-purple text-center">
-                      <div>
-                        <i class="bi bi-person-vcard emergency-icon"></i>
-                        <div class="emergency-label">Ward Officer</div>
-                        <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Amit Kumar</div>
-                        <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                    <!-- Ward Officer -->
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-purple text-center">
+                        <div>
+                          <i class="bi bi-person-vcard emergency-icon"></i>
+                          <div class="emergency-label">Ward Officer</div>
+                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Amit Kumar</div>
+                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Municipal Officer -->
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-green text-center">
-                      <div>
-                        <i class="bi bi-building emergency-icon"></i>
-                        <div class="emergency-label">Municipal Officer</div>
-                        <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mrs. Priya Sharma</div>
-                        <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                    <!-- Municipal Officer -->
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-green text-center">
+                        <div>
+                          <i class="bi bi-building emergency-icon"></i>
+                          <div class="emergency-label">Municipal Officer</div>
+                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mrs. Priya Sharma</div>
+                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Property Officer -->
-                  <div class="col-6 col-md-3">
-                    <div class="emergency-card emergency-bg-indigo text-center">
-                      <div>
-                        <i class="bi bi-house-gear emergency-icon"></i>
-                        <div class="emergency-label">Property Officer</div>
-                        <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Rajesh Patel</div>
-                        <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                    <!-- Property Officer -->
+                    <div class="col-6 col-md-3">
+                      <div class="emergency-card emergency-bg-indigo text-center">
+                        <div>
+                          <i class="bi bi-house-gear emergency-icon"></i>
+                          <div class="emergency-label">Property Officer</div>
+                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Rajesh Patel</div>
+                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                        </div>
                       </div>
                     </div>
                   </div>
