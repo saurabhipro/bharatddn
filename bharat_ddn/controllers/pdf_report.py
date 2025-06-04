@@ -34,6 +34,14 @@ class PdfGeneratorController(http.Controller):
         print("function is working fine")
         ward_id = kw.get('ward_id')
         colony_id = kw.get('colony_id')
+        property_id = kw.get('property_id')
+
+        # Validate property_id if provided
+        if property_id:
+            try:
+                property_id = int(property_id)
+            except ValueError:
+                return request.not_found("Invalid Property ID.")
 
         # Validate ward_id if provided
         if ward_id:
@@ -51,10 +59,13 @@ class PdfGeneratorController(http.Controller):
 
         # Construct search domain
         domain = []
-        if ward_id:
-            domain.append(('ward_id', '=', ward_id))
-        if colony_id:
-            domain.append(('colony_id', '=', colony_id))
+        if property_id:
+            domain = [('id', '=', property_id)]
+        else:
+            if ward_id:
+                domain.append(('ward_id', '=', ward_id))
+            if colony_id:
+                domain.append(('colony_id', '=', colony_id))
 
         properties = request.env['ddn.property.info'].sudo().search(domain)
         if not properties:
@@ -91,21 +102,25 @@ class PdfGeneratorController(http.Controller):
                     c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
 
                     # Format house number to 4 digits
-                    raw_unit_no = property_rec.unit_no or "-"
+                    raw_unit_no = property_rec.zone_id.name or "-"
                     if raw_unit_no != "-":
                         formatted_unit_no = str(raw_unit_no).zfill(4)
                     else:
                         formatted_unit_no = "-"
 
                     # Draw the big black zone-locality-unit_no in the center
-                    zone = property_rec.company_id.zip or "-"
+                    zone = property_rec.zone_id.name or "-"
                     locality = property_rec.colony_id.code or "-"
                     center_text = f"{zone}-{locality}-{formatted_unit_no}"
 
-                    c.setFont("CustomBold", 50)  # Larger, custom bold font
-                    c.setFillColorRGB(0, 0, 0)   # Black color
                     center_x = page_width - 50
                     center_y = 320
+                    c.setFont("CustomBold", 70)
+                    c.setFillColorRGB(1, 1, 1)  # White
+                    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-2,-2), (-2,2), (2,-2), (2,2)]:
+                        c.drawRightString(center_x+dx, center_y+dy, center_text)
+
+                    c.setFillColorRGB(0, 0, 0)  # Black
                     c.drawRightString(center_x, center_y, center_text)
 
                     # Set font and color for white text in red section
