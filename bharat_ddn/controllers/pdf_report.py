@@ -160,7 +160,7 @@ class PdfGeneratorController(http.Controller):
                     qr_image = ImageReader(qr_buffer)
 
                     # Draw QR code centered in its box (now fills the box)
-                    qr_box_x, qr_box_y, qr_box_width, qr_box_height = 45, 350, 170, 160
+                    qr_box_x, qr_box_y, qr_box_width, qr_box_height = 45, 350, 170, 163
                     qr_size = min(qr_box_width, qr_box_height)
                     qr_x = qr_box_x - 9
                     qr_y = qr_box_y - 15 # Move QR code slightly towards the bottom
