@@ -8,7 +8,9 @@
         <menuitem id="ddn_menu_property_dashboard" name="Dashboard" action="my_dashboard_action" sequence="1"/>
         <menuitem id="ddn_menu_property_info" name="Property" action="action_property_info" sequence="2"/>
         <menuitem id="ddn_menu_survey" name="Surveys" action="action_property_survey" sequence="3"/>
-        <menuitem id="ddn_parent_menu_property_master" name="Masters" sequence="4">
+        <menuitem id="menu_ddn_report_wizard" name="Generate Report" action="action_ddn_report_wizard" sequence="4"/>
+
+        <menuitem id="ddn_parent_menu_property_master" name="Masters" sequence="5">
             <menuitem id="res_company_menu_item" name="Companies" action="base.action_res_company_form" sequence="1"/>
             <menuitem id="ddn_menu_zone"         name="Zones" action="action_zone" sequence="2"/>
             <menuitem id="ddn_menu_ward"         name="Wards" action="action_ward" sequence="3"/>
@@ -21,6 +23,8 @@
             <menuitem id="ddn_menu_property_import" name="Import Properties" action="action_property_import_wizard" sequence="10"/>
             <menuitem id="ddn_menu_property_id_data" name="Imported Property Data" action="action_property_id_data" sequence="11"/>
             <menuitem id="menu_property_import_wizard" name="Import Property Wizard" sequence="12" action="action_property_import_wizard"/>
+            <menuitem id="menu_ddn_services_manage" name="Manage Services" action="action_ddn_services" sequence="13"/>
+
             </menuitem>
     </menuitem>
 </odoo>

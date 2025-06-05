@@ -1,0 +1,40 @@
+<odoo>
+    <report
+        id="action_report_property_survey_xlsx"
+        model="ddn.report"
+        string="Survey XLSX"
+        report_type="xlsx"
+        name="bharat_ddn.report_property_survey_xlsx"
+        file="property_survey"
+        print_report_name="'Survey_Report'"
+    />
+
+
+
+    <record id="view_ddn_report_wizard" model="ir.ui.view">
+        <field name="name">ddn.report.form</field>
+        <field name="model">ddn.report</field>
+        <field name="arch" type="xml">
+            <form string="DDN Report Wizard">
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="company_id" readonly="1" invisible="1"/>
+                    <field name="zone_id" domain="[('company_id','=',company_id)]"/>
+                    <field name="ward_id" domain="[('zone_id','=',zone_id),('company_id','=',company_id)]"/>
+                </group>
+                <footer>
+                    <button string="Generate" type="object" name="print_xlsx_report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ddn_report_wizard" model="ir.actions.act_window">
+        <field name="name">DDN Report</field>
+        <field name="res_model">ddn.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

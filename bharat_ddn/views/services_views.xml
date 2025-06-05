@@ -1,0 +1,210 @@
+<odoo>
+
+    <record id="action_ddn_services" model="ir.actions.act_window">
+        <field name="name">DDN Services</field>
+        <field name="res_model">ddn.services</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item Binding -->
+
+
+    <!-- Tree View -->
+    <record id="view_ddn_services_tree" model="ir.ui.view">
+        <field name="name">ddn.services.list</field>
+        <field name="model">ddn.services</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+<record id="view_ddn_services_form" model="ir.ui.view">
+    <field name="name">ddn.services.form</field>
+    <field name="model">ddn.services</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name"/>
+                </group>
+            </sheet>
+
+            <notebook>
+                <!-- Govt Services -->
+                <field name="govt_line_ids">
+                    <list>
+                        <field name="name"/>
+                        <field name="text"/>
+                        <field name="hyperlink"/>
+                        <field name="icon"/>
+                        <field name="is_global"/>
+                        <field name="is_active"/>
+                    </list>
+                    <form>
+                        <group>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="is_active"/>
+                        </group>
+                    </form>
+                </field>
+
+
+                <!-- Tracking Services -->
+                <page string="Tracking Services">
+                    <field name="tracking_line_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="is_active"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="text"/>
+                                    <field name="hyperlink"/>
+                                </group>
+                                <group>
+                                    <field name="icon"/>
+                                    <field name="is_global"/>
+                                    <field name="is_active"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+
+                <!-- Know Officer Services -->
+                <page string="Know Officer Services">
+                    <field name="know_officer_line_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="company_id"/>
+                            <field name="zone_id"/>
+
+                            <field name="ward_id" domain="[('zone_id','=',zone_id)]"/>
+                            <field name="is_active"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="text"/>
+                                    <field name="hyperlink"/>
+                                    <field name="company_id"/>
+                                    <field name="zone_id" domain="[('company_id','=',company_id)]"/>
+                                    <field name="ward_id" domain="[('zone_id','=',zone_id),('company_id','=',company_id)]"/>
+                                </group>
+                                <group>
+                                    <field name="icon"/>
+                                    <field name="is_global"/>
+                                    <field name="is_active"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+
+                <!-- Dial Services -->
+                <page string="Dial Services">
+                    <field name="dial_line_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="is_active"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="text"/>
+                                    <field name="hyperlink"/>
+                                </group>
+                                <group>
+                                    <field name="icon"/>
+                                    <field name="is_global"/>
+                                    <field name="is_active"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+
+                <!-- Other Services -->
+                <page string="Other Services">
+                    <field name="other_line_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="is_active"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="text"/>
+                                    <field name="hyperlink"/>
+                                </group>
+                                <group>
+                                    <field name="icon"/>
+                                    <field name="is_global"/>
+                                    <field name="is_active"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+
+                <!-- Banner Services -->
+                <page string="Banner Services">
+                    <field name="banner_line_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="text"/>
+                            <field name="hyperlink"/>
+                            <field name="icon"/>
+                            <field name="is_global"/>
+                            <field name="is_active"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="text"/>
+                                    <field name="hyperlink"/>
+                                </group>
+                                <group>
+                                    <field name="icon"/>
+                                    <field name="is_global"/>
+                                    <field name="is_active"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </notebook>
+        </form>
+    </field>
+</record>
+
+</odoo>

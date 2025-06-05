@@ -11,7 +11,7 @@
     'website': 'https://www.windsurf.io',
     'category': 'Services/Property',
     'version': '0.1',
-    'depends': ['base', 'mail', 'web'],
+    'depends': ['base', 'mail', 'web', 'report_xlsx'],
     'data': [
         # Security
         'security/ir.model.access.csv',
@@ -29,9 +29,12 @@
         'views/jwt_token_views.xml',
         'views/property_survey_views.xml',
         'views/property_group_views.xml',
+        'views/services_views.xml',
         'views/dashboard.xml',
         'views/res_company_views.xml',
         'wizard/property_import_wizard_view.xml',
+        'wizard/ddn_report.xml',
+
         'views/property_id_data_views.xml',
         'security/ir_rule.xml',
         'views/menuitems.xml',  # Load menus last
