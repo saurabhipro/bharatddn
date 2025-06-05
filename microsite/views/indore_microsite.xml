@@ -53,7 +53,7 @@
           background: linear-gradient(135deg, #7b223c 0%, #b85b2c 100%) !important;
         }
         .emergency-card {
-          border: none;
+          border: 2.5px solid #e0e0e0;   /* Light gray border for all */
           border-radius: 18px;
           color: #fff;
           font-weight: 600;
@@ -63,13 +63,15 @@
           align-items: center;
           justify-content: center;
           min-height: 90px;
-          transition: transform 0.12s, box-shadow 0.12s;
+          transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
           cursor: pointer;
+          background-clip: padding-box;
         }
         .emergency-card:hover {
           transform: translateY(-4px) scale(1.03);
           box-shadow: 0 6px 24px 0 rgba(0,0,0,0.13);
           opacity: 0.95;
+          border-color: #7b223c; /* Highlight border on hover */
         }
         .emergency-icon {
           font-size: 2rem;
@@ -79,34 +81,42 @@
         .emergency-bg-red {
           background: #fdebed;
           color: #b71c1c; /* deep red for text/icon */
+          border-color: #f8bbbc;
         }
         .emergency-bg-blue {
           background: #e3f2fd;
           color: #1565c0; /* deep blue for text/icon */
+          border-color: #b3d6f7;
         }
         .emergency-bg-yellow {
           background: #fff7e0;
           color: #b26a00; /* deep gold for text/icon */
+          border-color: #ffe9b3;
         }
         .emergency-bg-cyan {
           background: #e0f7fa;
           color: #00838f; /* teal for text/icon */
+          border-color: #b3e6ea;
         }
         .emergency-bg-purple {
           background: #f3e5f5;
           color: #6a1b9a; /* purple for text/icon */
+          border-color: #e1c6f3;
         }
         .emergency-bg-green {
           background: #e8f5e9;
           color: #2e7d32; /* green for text/icon */
+          border-color: #bfe5c7;
         }
         .emergency-bg-gold {
           background: #fffde7;
           color: #bfa600; /* gold for text/icon */
+          border-color: #fff7b3;
         }
         .emergency-bg-indigo {
           background: #e8eaf6;
           color: #283593; /* indigo for text/icon */
+          border-color: #c6c8f3;
         }
         .emergency-label {
           font-size: 1.08rem;
@@ -216,6 +226,159 @@
         .o_footer, footer, .footer {
           display: none !important;
         }
+        /* Officer Card Customization */
+        .officer-card {
+          border: 2.5px solid #bdbdbd; /* Subtle gray border */
+          border-radius: 18px;
+          background: #fff;
+          color: #222 !important;
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+          font-weight: 600;
+          font-size: 1.08rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 120px;
+          transition: transform 0.12s, box-shadow 0.12s;
+          cursor: pointer;
+        }
+        .officer-card:hover {
+          transform: translateY(-4px) scale(1.03);
+          box-shadow: 0 6px 24px 0 rgba(0,0,0,0.13);
+          opacity: 0.97;
+          border-color: #7b223c; /* Highlight border on hover */
+        }
+        .officer-card .officer-label {
+          color: #222 !important;
+          font-size: 1.08rem;
+          font-weight: 700;
+          margin-top: 0.2rem;
+          letter-spacing: 0.2px;
+        }
+        .officer-card .officer-name,
+        .officer-card .officer-phone {
+          color: #333 !important;
+          font-size: 0.95rem;
+          font-weight: 500;
+          opacity: 1;
+          margin-top: 0.2rem;
+        }
+        .officer-card .officer-phone {
+          text-decoration: none;
+          display: block;
+          margin-top: 0.1rem;
+        }
+        .govt-payment-row {
+          display: flex;
+          flex-direction: row;
+          gap: 1.2rem;
+          justify-content: center;
+          align-items: stretch;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding-bottom: 0.5rem;
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .govt-payment-box {
+          background: #fff;
+          border-radius: 18px;
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+          border: none;
+          min-width: 120px;
+          flex: 1 0 120px;
+          max-width: 180px;
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+          margin-bottom: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+        }
+        .govt-payment-scroll::-webkit-scrollbar {
+          height: 8px;
+          background: #fff;
+        }
+        .govt-payment-scroll::-webkit-scrollbar-thumb {
+          background: #eee;
+          border-radius: 4px;
+        }
+        @media (max-width: 767.98px) {
+          .govt-payment-row {
+            gap: 1rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+          }
+          .govt-payment-box {
+            min-width: 120px;
+            max-width: 160px;
+            flex: 0 0 70vw;
+          }
+        }
+        .payment-services-row {
+          width: 100%;
+          gap: 2rem;
+          margin: 0 auto;
+          padding: 0;
+          flex-wrap: nowrap;
+          justify-content: center;
+          align-items: flex-start;
+        }
+        .payment-service-box {
+          flex: 0 1 140px;
+          min-width: 100px;
+          max-width: 160px;
+          padding: 0.5rem 0.2rem 0.3rem 0.2rem;
+          background: none;
+          box-shadow: none;
+          border-radius: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+        }
+        .icon-gradient-box {
+          width: 54px;
+          height: 54px;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #ff9800 0%, #e91e63 100%);
+          box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+          border: 2.5px solid #fff;
+        }
+        .icon-gradient-box i {
+          font-size: 2rem;
+          color: #fff;
+        }
+        .govt-service-label {
+          font-size: 1.08rem;
+          margin-top: 0.1rem;
+          color: #222;
+          font-weight: 600;
+        }
+        @media (max-width: 767.98px) {
+          .payment-services-row {
+            gap: 0.5rem;
+          }
+          .payment-service-box {
+            min-width: 80px;
+            max-width: 110px;
+            padding: 0.3rem 0.1rem 0.2rem 0.1rem;
+          }
+          .icon-gradient-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+          }
+          .icon-gradient-box i {
+            font-size: 1.2rem;
+          }
+          .govt-service-label {
+            font-size: 0.92rem;
+          }
+        }
       </style>
       <div class="body-gradient-bg">
         <section class="id_indore_microsite_template">
@@ -321,38 +484,28 @@
 
           <!-- Government Payment Services -->
           <section class="py-1">
-            <div class="center-section">
-              <div class="main-section-card">
-                <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
-                <div class="row g-4 text-center">
-                  <!-- Property Tax -->
-                  <div class="col-12 col-md-4">
-                    <div>
-                      <div class="govt-service-icon-box mb-2 mx-auto">
-                        <i class="bi bi-house"></i>
-                      </div>
-                      <div class="govt-service-label">Property Tax</div>
-                    </div>
-                  </div>
-                  <!-- Water Tax -->
-                  <div class="col-12 col-md-4">
-                    <div>
-                      <div class="govt-service-icon-box mb-2 mx-auto">
-                        <i class="bi bi-droplet"></i>
-                      </div>
-                      <div class="govt-service-label">Water Tax</div>
-                    </div>
-                  </div>
-                  <!-- Electricity Bill -->
-                  <div class="col-12 col-md-4">
-                    <div>
-                      <div class="govt-service-icon-box mb-2 mx-auto">
-                        <i class="bi bi-plug"></i>
-                      </div>
-                      <div class="govt-service-label">Electricity Bill</div>
-                    </div>
-                  </div>
+            <h2 class="text-center fw-bold mb-3" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
+            <div class="d-flex justify-content-center align-items-stretch payment-services-row">
+              <!-- Property Tax -->
+              <div class="payment-service-box text-center">
+                <div class="icon-gradient-box mb-2 mx-auto">
+                  <i class="bi bi-house"></i>
                 </div>
+                <div class="govt-service-label">Property Tax</div>
+              </div>
+              <!-- Water Tax -->
+              <div class="payment-service-box text-center">
+                <div class="icon-gradient-box mb-2 mx-auto">
+                  <i class="bi bi-droplet"></i>
+                </div>
+                <div class="govt-service-label">Water Tax</div>
+              </div>
+              <!-- Electricity Bill -->
+              <div class="payment-service-box text-center">
+                <div class="icon-gradient-box mb-2 mx-auto">
+                  <i class="bi bi-plug"></i>
+                </div>
+                <div class="govt-service-label">Electricity Bill</div>
               </div>
             </div>
           </section>
@@ -441,47 +594,48 @@
                 <div class="card-body p-4">
                   <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
                   <div class="row g-3">
+                  
                     <!-- Zone Officer -->
                     <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-blue text-center">
+                      <div class="officer-card text-center">
                         <div>
                           <i class="bi bi-person-badge emergency-icon"></i>
-                          <div class="emergency-label">Zone Officer</div>
-                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Ravi Singh</div>
-                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                          <div class="officer-label">Zone Officer</div>
+                          <div class="officer-name">Mr. Ravi Singh</div>
+                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
                         </div>
                       </div>
                     </div>
                     <!-- Ward Officer -->
                     <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-purple text-center">
+                      <div class="officer-card text-center">
                         <div>
                           <i class="bi bi-person-vcard emergency-icon"></i>
-                          <div class="emergency-label">Ward Officer</div>
-                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Amit Kumar</div>
-                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                          <div class="officer-label">Ward Officer</div>
+                          <div class="officer-name">Mr. Amit Kumar</div>
+                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
                         </div>
                       </div>
                     </div>
                     <!-- Municipal Officer -->
                     <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-green text-center">
+                      <div class="officer-card text-center">
                         <div>
                           <i class="bi bi-building emergency-icon"></i>
-                          <div class="emergency-label">Municipal Officer</div>
-                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mrs. Priya Sharma</div>
-                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                          <div class="officer-label">Municipal Officer</div>
+                          <div class="officer-name">Mrs. Priya Sharma</div>
+                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
                         </div>
                       </div>
                     </div>
                     <!-- Property Officer -->
                     <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-indigo text-center">
+                      <div class="officer-card text-center">
                         <div>
                           <i class="bi bi-house-gear emergency-icon"></i>
-                          <div class="emergency-label">Property Officer</div>
-                          <div class="text-white" style="font-size: 0.9rem; opacity: 0.9;">Mr. Rajesh Patel</div>
-                          <a href="tel:+919988776655" class="text-white text-decoration-none" style="font-size: 0.9rem;">+91 998877665</a>
+                          <div class="officer-label">Property Officer</div>
+                          <div class="officer-name">Mr. Rajesh Patel</div>
+                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
                         </div>
                       </div>
                     </div>
@@ -495,7 +649,3 @@
     </t>
   </template>
 </odoo>
-
-
-
-

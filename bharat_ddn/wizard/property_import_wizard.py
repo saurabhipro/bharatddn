@@ -62,9 +62,9 @@ class PropertyImportWizard(models.TransientModel):
                             _logger.error(f"Skipping row due to missing required fields: {row}")
                             continue
                             
-                        zone_id = self.env['ddn.zone'].search([('name', '=', zone_name)], limit=1)
-                        ward_id = self.env['ddn.ward'].search([('name', '=', ward_name)], limit=1)
-                        colony_id = self.env['ddn.colony'].search([('name', '=', colony_name)], limit=1)
+                        zone_id = self.env['ddn.zone'].search([('name', 'ilike', zone_name)], limit=1)
+                        ward_id = self.env['ddn.ward'].search([('name', 'ilike', ward_name)], limit=1)
+                        colony_id = self.env['ddn.colony'].search([('name', 'ilike', colony_name)], limit=1)
                         
                         if not all([zone_id, ward_id, colony_id]):
                             _logger.error(f"Skipping row due to missing related records: Zone={zone_name}, Ward={ward_name}, Colony={colony_name}")
