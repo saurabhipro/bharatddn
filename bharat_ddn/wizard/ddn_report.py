@@ -14,7 +14,6 @@ class DdnReport(models.TransientModel):
 
 
     def print_xlsx_report(self):
-        print("dfjldjflskjfdlkjdf - ",fffdgd)
         data = {
             'form': self.read()[0]
         }
