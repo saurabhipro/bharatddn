@@ -399,9 +399,9 @@
           <!-- Property Details Section -->
           <section class="py-1">
             <div class="center-section">
-              <div class="card shadow rounded-4 border-0 p-3 position-relative main-section-card">
+              <div class="card p-4 position-relative border border-white rounded-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="fw-bold fs-4" style="letter-spacing:1px;">Property Details</span>
+                  <h2 class="fw-bold mb-3" style="font-size:1.3rem; letter-spacing:1px;">Property Details</h2>
                   <t t-if="property.uuid">
                     <t t-set="property_url" t-value="(property.company_id.website or request.httprequest.url_root).strip('/') + '/get/' + property.uuid"/>
                     <t t-set="maps_url" t-value="'https://www.google.com/maps/search/?api=1&amp;query=' + (property.survey_line_ids and property.survey_line_ids[0] and property.survey_line_ids[0].latitude and property.survey_line_ids[0].longitude and (property.survey_line_ids[0].latitude + ',' + property.survey_line_ids[0].longitude) or '')"/>
@@ -512,10 +512,10 @@
 
           <!-- Emergency Services -->
           <section class="py-1">
+            <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Emergency Services</h2>
             <div class="center-section">
-              <div class="card border-0 shadow-sm main-section-card">
+              <div class="card p-4 position-relative border border-white rounded-4">
                 <div class="card-body p-4">
-                  <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Emergency Services</h2>
                   <div class="row g-3">
                     <div class="col-6 col-md-3">
                       <div class="emergency-card emergency-bg-red text-center">
@@ -590,7 +590,7 @@
           <!-- Your Officer Section -->
           <section class="py-1">
             <div class="center-section">
-              <div class="card border-0 shadow-sm main-section-card">
+              <div class="card p-4 position-relative border border-white rounded-4">
                 <div class="card-body p-4">
                   <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
                   <div class="row g-3">
