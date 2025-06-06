@@ -22,12 +22,94 @@ import tempfile
 from reportlab.lib.colors import white
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from PIL import Image, ImageDraw, ImageFont
+import logging
+
+_logger = logging.getLogger(__name__)
 
 # Register a custom font (replace with your desired font file path)
 FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Example path, update as needed
 pdfmetrics.registerFont(TTFont("CustomBold", FONT_PATH))
 
 class PdfGeneratorController(http.Controller):
+
+    def generate_ddn_image(self, property_rec, bg_image_path):
+        """
+        Generate a complete image with text and QR code using original Python coordinates
+        """
+        try:
+            background = Image.open(bg_image_path).convert("RGBA")
+            draw = ImageDraw.Draw(background)
+
+            # Fonts
+            font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+            center_font = ImageFont.truetype(font_path, 110)
+            value_font = ImageFont.truetype(font_path, 70)
+
+            # Property details
+            zone = property_rec.zone_id.name or "-"
+            locality = property_rec.colony_id.code or "-"
+            raw_unit_no = property_rec.unit_no or "-"
+            formatted_unit_no = str(raw_unit_no).zfill(4) if raw_unit_no != "-" else "-"
+
+            # Center text (with outline) - this is the only text in the image area
+            center_text = f"{zone}-{locality}-{formatted_unit_no}"
+            bbox = draw.textbbox((0, 0), center_text, font=center_font)
+            text_width = bbox[2] - bbox[0]
+            right_x = background.width - 20 - text_width  # Move text 10px to the left
+            center_y = 340  # Adjust if needed
+
+            # Draw white outline
+            for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-2,-2), (-2,2), (2,-2), (2,2)]:
+                draw.text((right_x + dx, center_y + dy), center_text, font=center_font, fill='white')
+            # Draw main text
+            draw.text((right_x, center_y), center_text, font=center_font, fill='black')
+
+            # Table cell positions and widths (adjust if needed)
+            value_y = 570  # Increased from 310 to move text down further
+            
+            zone_box_x, zone_box_y, zone_box_width = 150, 250, 100
+            locality_box_x, locality_box_y, locality_box_width = 450, 175, 250
+            unit_no_box_x, unit_no_box_y, unit_no_box_width = 900, 175, 155
+
+            # Y coordinate for values (increase this to move text down)
+
+            def draw_centered_text(x, y, w, text, font, fill):
+                bbox = draw.textbbox((0, 0), text, font=font)
+                text_width = bbox[2] - bbox[0]
+                text_x = x + w/2 - text_width/2
+                # Draw white outline
+                for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-2,-2), (-2,2), (2,-2), (2,2)]:
+                    draw.text((text_x + dx, y + dy), text, font=font, fill='white')
+                # Draw main text
+                draw.text((text_x, y), text, font=font, fill=fill)
+
+            # Draw the values in the table
+            draw_centered_text(zone_box_x, value_y, zone_box_width, zone, value_font, 'black')
+            draw_centered_text(locality_box_x, value_y, locality_box_width, locality, value_font, 'black')
+            draw_centered_text(unit_no_box_x, value_y, unit_no_box_width, formatted_unit_no, value_font, 'black')
+
+            # QR code (unchanged)
+            qr_box_x, qr_box_y, qr_box_width, qr_box_height = 50, 170, 225, 220
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_H,
+                box_size=15,
+                border=0
+            )
+            base_url = property_rec.company_id.website or request.httprequest.host_url
+            full_url = f"{base_url}/get/{property_rec.uuid}"
+            qr.add_data(full_url)
+            qr.make(fit=True)
+            qr_img = qr.make_image(fill_color="black", back_color="white").convert("RGBA")
+            qr_img = qr_img.resize((qr_box_width, qr_box_height), Image.LANCZOS)
+            background.alpha_composite(qr_img, (qr_box_x, qr_box_y))
+
+            return background
+
+        except Exception as e:
+            print(f"Error generating DDN image: {str(e)}")
+            raise
 
     @http.route(['/download/ward_properties_pdf'], type='http', auth='user', methods=['GET'], csrf=True)
     def download_ward_properties_pdf(self, **kw):
@@ -71,128 +153,84 @@ class PdfGeneratorController(http.Controller):
         if not properties:
             return request.not_found("No properties found for the given criteria.")
 
-        batch_size = 100
-        batch_file_paths = []
-        total_properties = len(properties)
-
         company = request.env.user.company_id
         if not company or not company.plate_background_image:
             return request.not_found("No background image configured for your company.")
 
         try:
-            plate_background_image_data = base64.b64decode(company.plate_background_image)
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".jpeg") as temp_img_file:
-                temp_img_file.write(plate_background_image_data)
-                bg_image_path = temp_img_file.name
-        except Exception as e:
-            return request.not_found(f"Error loading background image: {str(e)}")
+            # Save background image to temporary file
+            bg_image_data = base64.b64decode(company.plate_background_image)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_bg:
+                bg_image_path = temp_bg.name
+                temp_bg.write(bg_image_data)
 
-        try:
-            for batch_start in range(0, total_properties, batch_size):
-                batch_records = properties[batch_start: batch_start + batch_size]
+            # Create a temporary directory to store individual PDFs
+            temp_dir = tempfile.mkdtemp()
+            individual_pdf_paths = []
 
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_batch:
-                    batch_pdf_path = temp_batch.name
+            # Process each property separately
+            for property_rec in properties:
+                try:
+                    # Log property info
+                    _logger.info(f"Generating PDF for property: ID={property_rec.id}, Zone={getattr(property_rec.zone_id, 'name', '-')}, Locality={getattr(property_rec.colony_id, 'code', '-')}, Unit No={property_rec.unit_no}")
 
-                c = canvas.Canvas(batch_pdf_path, pagesize=landscape(A4))
-                page_width, page_height = landscape(A4)
-                bg_image = ImageReader(bg_image_path)
-
-                for property_rec in batch_records:
-                    c.drawImage(bg_image, 0, 0, width=page_width, height=page_height)
-
-                    # Format house number to 4 digits
-                    raw_unit_no = property_rec.unit_no or "-"
-                    if raw_unit_no != "-":
-                        formatted_unit_no = str(raw_unit_no).zfill(4)
-                    else:
-                        formatted_unit_no = "-"
-
-                    # Draw the big black zone-locality-unit_no in the center
-                    zone = property_rec.zone_id.name or "-"
-                    locality = property_rec.colony_id.code or "-"
-                    center_text = f"{zone}-{locality}-{formatted_unit_no}"
-
-                    center_x = page_width - 50
-                    center_y = 320
-                    c.setFont("CustomBold", 65)
-                    c.setFillColorRGB(1, 1, 1)  # White
-                    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-2,-2), (-2,2), (2,-2), (2,2)]:
-                        c.drawRightString(center_x+dx, center_y+dy, center_text)
-
-                    c.setFillColorRGB(0, 0, 0)  # Black
-                    c.drawRightString(center_x, center_y, center_text)
-
-                    # Set font and color for white text in red section
-                    c.setFont("CustomBold", 40)  # Larger font for red section
-                    c.setFillColor(white)
-
-                    # Define box positions and widths (adjust these as per your template)
-                    zone_box_x, zone_box_y, zone_box_width = 40, 175, 180
-                    locality_box_x, locality_box_y, locality_box_width = 280, 175, 250
-                    unit_no_box_x, unit_no_box_y, unit_no_box_width = 610, 175, 155
-
-                    # Get dynamic values
-                    zip = property_rec.company_id.zip or "-"
-                    colony = property_rec.colony_id.code or "-"
-
-                    # Centered text in each box
-                    c.drawCentredString(zone_box_x + zone_box_width / 2, zone_box_y, zone)
-                    c.drawCentredString(locality_box_x + locality_box_width / 2, locality_box_y, colony)
-                    c.drawCentredString(unit_no_box_x + unit_no_box_width / 2, unit_no_box_y, formatted_unit_no)
-
-                    qr = qrcode.QRCode(
-                        version=1,
-                        error_correction=qrcode.constants.ERROR_CORRECT_H,
-                        box_size=2,
-                        border=2
-                    )
-                    base_url = property_rec.company_id.website or request.httprequest.host_url
-                    full_url = f"{base_url}/get/{property_rec.uuid}"
+                    # Generate the complete image
+                    background = self.generate_ddn_image(property_rec, bg_image_path)
                     
-                    qr.add_data(full_url)
-                    qr.make(fit=True)
-                    qr_img = qr.make_image(fill_color="black", back_color="white")
+                    # Save the complete image to a temporary file (convert to RGB)
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png", dir=temp_dir) as temp_img:
+                        rgb_background = background.convert("RGB")
+                        rgb_background.save(temp_img.name, "PNG")
+                        img_path = temp_img.name
+                    
+                    # Create PDF with the complete image
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf", dir=temp_dir) as temp_pdf:
+                        pdf_path = temp_pdf.name
+                    
+                    # Set PDF page size to match background image size
+                    c = canvas.Canvas(pdf_path, pagesize=(background.width, background.height))
+                    img = ImageReader(img_path)
+                    c.drawImage(img, 0, 0, width=background.width, height=background.height)
+                    c.save()
+                    
+                    individual_pdf_paths.append(pdf_path)
+                    
+                    # Clean up temporary image file
+                    os.unlink(img_path)
+                    
+                except Exception as e:
+                    print(f"Error processing property: {str(e)}")
+                    continue
 
-                    qr_buffer = io.BytesIO()
-                    qr_img.save(qr_buffer, format="PNG")
-                    qr_buffer.seek(0)
-                    qr_image = ImageReader(qr_buffer)
-
-                    # Draw QR code centered in its box (now fills the box)
-                    qr_box_x, qr_box_y, qr_box_width, qr_box_height = 45, 350, 170, 165
-                    qr_size = min(qr_box_width, qr_box_height)
-                    qr_x = qr_box_x - 9
-                    qr_y = qr_box_y - 15 # Move QR code slightly towards the bottom
-                    c.drawImage(qr_image, qr_x, qr_y, width=qr_size, height=qr_size)
-
-                    c.setFillColorRGB(0, 0, 0)  # Reset color if needed for other elements
-
-                    c.showPage()
-
-                c.save()
-                batch_file_paths.append(batch_pdf_path)
-
+            # Merge all PDFs
             merger = PdfMerger()
-            for batch_pdf in batch_file_paths:
-                merger.append(batch_pdf)
+            for pdf_path in individual_pdf_paths:
+                merger.append(pdf_path)
 
+            # Create final PDF
             final_pdf_io = io.BytesIO()
             merger.write(final_pdf_io)
             merger.close()
             final_pdf_io.seek(0)
 
-            for batch_pdf in batch_file_paths:
+            # Clean up temporary files
+            for pdf_path in individual_pdf_paths:
                 try:
-                    os.unlink(batch_pdf)
+                    os.unlink(pdf_path)
                 except Exception:
                     pass
+
+            try:
+                os.rmdir(temp_dir)
+            except Exception:
+                pass
 
             try:
                 os.unlink(bg_image_path)
             except Exception:
                 pass
 
+            # Set filename based on filters
             filename = "ward_properties.pdf"
             if ward_id and colony_id:
                 filename = f"ward_{ward_id}_colony_{colony_id}_properties.pdf"
