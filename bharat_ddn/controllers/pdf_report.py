@@ -43,7 +43,7 @@ class PdfGeneratorController(http.Controller):
 
             # Fonts
             font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-            center_font = ImageFont.truetype(font_path, 110)
+            center_font = ImageFont.truetype(font_path, 100)
             value_font = ImageFont.truetype(font_path, 70)
 
             # Property details
@@ -68,7 +68,7 @@ class PdfGeneratorController(http.Controller):
             # Table cell positions and widths (adjust if needed)
             value_y = 570  # Increased from 310 to move text down further
             
-            zone_box_x, zone_box_y, zone_box_width = 150, 250, 100
+            zone_box_x, zone_box_y, zone_box_width = 140, 250, 100
             locality_box_x, locality_box_y, locality_box_width = 450, 175, 250
             unit_no_box_x, unit_no_box_y, unit_no_box_width = 900, 175, 155
 
@@ -92,10 +92,10 @@ class PdfGeneratorController(http.Controller):
             # QR code (unchanged)
             qr_box_x, qr_box_y, qr_box_width, qr_box_height = 50, 170, 225, 220
             qr = qrcode.QRCode(
-                version=1,
+                version=2,
                 error_correction=qrcode.constants.ERROR_CORRECT_H,
-                box_size=15,
-                border=0
+                box_size=5,
+                border=1
             )
             base_url = property_rec.company_id.website or request.httprequest.host_url
             full_url = f"{base_url}/get/{property_rec.uuid}"
