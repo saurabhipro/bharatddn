@@ -24,6 +24,14 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from PIL import Image, ImageDraw, ImageFont
 import logging
+import threading
+from queue import Queue
+import concurrent.futures
+from odoo import api
+import odoo
+import zipfile
+import shutil
+from odoo.modules.registry import Registry
 
 _logger = logging.getLogger(__name__)
 
@@ -47,8 +55,8 @@ class PdfGeneratorController(http.Controller):
             value_font = ImageFont.truetype(font_path, 70)
 
             # Property details
-            zone = property_rec.zone_id.name or "-"
-            locality = property_rec.colony_id.code or "-"
+            zone = getattr(property_rec.zone_id, 'name', '-') if property_rec.zone_id else '-'
+            locality = getattr(property_rec.colony_id, 'code', '-') if property_rec.colony_id else '-'
             raw_unit_no = property_rec.unit_no or "-"
             formatted_unit_no = str(raw_unit_no).zfill(4) if raw_unit_no != "-" else "-"
 
@@ -111,6 +119,66 @@ class PdfGeneratorController(http.Controller):
             print(f"Error generating DDN image: {str(e)}")
             raise
 
+    def process_property_batch(self, property_ids, bg_image_path, temp_dir, thread_id, start_unit, end_unit, db_name, uid, context):
+        """Process a batch of properties in a separate thread"""
+        all_batch_pdf_paths = []
+        processed_count = 0
+        error_count = 0
+        
+        _logger.info(f"Batch {thread_id} (OS thread: {threading.current_thread().name}) - Processing unit numbers")
+        
+        # Create a new database cursor for this thread
+        registry = Registry(db_name)
+        with registry.cursor() as cr:
+            env = api.Environment(cr, uid, context)
+            
+            for property_id in property_ids:
+                try:
+                    property_rec = env['ddn.property.info'].browse(property_id)
+                    unit_no = int(property_rec.unit_no) if property_rec.unit_no and str(property_rec.unit_no).isdigit() else None
+                    
+                    _logger.info(f"Property Unit No: {property_rec.unit_no} - processed")
+
+                    # Generate the complete image
+                    background = self.generate_ddn_image(property_rec, bg_image_path)
+                    
+                    # Save the complete image to a temporary file with compression
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png", dir=temp_dir) as temp_img:
+                        rgb_background = background.convert("RGB")
+                        rgb_background.save(temp_img.name, "PNG", optimize=True, quality=85)
+                        img_path = temp_img.name
+                    
+                    # Create PDF with the complete image
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf", dir=temp_dir) as temp_pdf:
+                        pdf_path = temp_pdf.name
+                    
+                    # Set PDF page size to match background image size
+                    c = canvas.Canvas(pdf_path, pagesize=(background.width, background.height))
+                    img = ImageReader(img_path)
+                    c.drawImage(img, 0, 0, width=background.width, height=background.height, mask='auto')
+                    c.save()
+                    
+                    all_batch_pdf_paths.append(pdf_path)
+                    processed_count += 1
+                    
+                    # Clean up temporary image file
+                    os.unlink(img_path)
+                    
+                except Exception as e:
+                    error_count += 1
+                    _logger.error(f"Batch {thread_id} (OS thread: {threading.current_thread().name}) - Error processing property {property_id}: {str(e)}")
+                    continue
+            
+            _logger.info(f"Batch {thread_id} (OS thread: {threading.current_thread().name}) - Completed processing. Successfully processed: {processed_count}, Errors: {error_count}, Total PDFs generated: {len(all_batch_pdf_paths)}")
+            return all_batch_pdf_paths
+
+    def merge_pdfs(self, pdf_paths, output_path):
+        merger = PdfMerger()
+        for pdf in pdf_paths:
+            merger.append(pdf)
+        merger.write(output_path)
+        merger.close()
+
     @http.route(['/download/ward_properties_pdf'], type='http', auth='user', methods=['GET'], csrf=True)
     def download_ward_properties_pdf(self, **kw):
         print("function is working fine")
@@ -158,92 +226,85 @@ class PdfGeneratorController(http.Controller):
             return request.not_found("No background image configured for your company.")
 
         try:
-            # Save background image to temporary file
             bg_image_data = base64.b64decode(company.plate_background_image)
             with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_bg:
                 bg_image_path = temp_bg.name
                 temp_bg.write(bg_image_data)
 
-            # Create a temporary directory to store individual PDFs
             temp_dir = tempfile.mkdtemp()
-            individual_pdf_paths = []
+            batch_dir = os.path.join(temp_dir, "batches")
+            os.makedirs(batch_dir, exist_ok=True)
 
-            # Process each property separately
-            for property_rec in properties:
-                try:
-                    # Log property info
-                    _logger.info(f"Generating PDF for property: ID={property_rec.id}, Zone={getattr(property_rec.zone_id, 'name', '-')}, Locality={getattr(property_rec.colony_id, 'code', '-')}, Unit No={property_rec.unit_no}")
+            db_name = request.env.cr.dbname
+            uid = request.env.uid
+            context = request.env.context
 
-                    # Generate the complete image
-                    background = self.generate_ddn_image(property_rec, bg_image_path)
-                    
-                    # Save the complete image to a temporary file (convert to RGB)
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png", dir=temp_dir) as temp_img:
-                        rgb_background = background.convert("RGB")
-                        rgb_background.save(temp_img.name, "PNG")
-                        img_path = temp_img.name
-                    
-                    # Create PDF with the complete image
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf", dir=temp_dir) as temp_pdf:
-                        pdf_path = temp_pdf.name
-                    
-                    # Set PDF page size to match background image size
-                    c = canvas.Canvas(pdf_path, pagesize=(background.width, background.height))
-                    img = ImageReader(img_path)
-                    c.drawImage(img, 0, 0, width=background.width, height=background.height)
-                    c.save()
-                    
-                    individual_pdf_paths.append(pdf_path)
-                    
-                    # Clean up temporary image file
-                    os.unlink(img_path)
-                    
-                except Exception as e:
-                    print(f"Error processing property: {str(e)}")
-                    continue
+            batch_size = 20  # <--- Set batch size to 20 here
+            property_ids = [rec.id for rec in properties]
+            batches = [property_ids[i:i+batch_size] for i in range(0, len(property_ids), batch_size)]
 
-            # Merge all PDFs
-            merger = PdfMerger()
-            for pdf_path in individual_pdf_paths:
-                merger.append(pdf_path)
+            batch_pdf_paths = [None] * len(batches)
+            max_threads = 10  # Number of threads
 
-            # Create final PDF
-            final_pdf_io = io.BytesIO()
-            merger.write(final_pdf_io)
-            merger.close()
-            final_pdf_io.seek(0)
+            def process_and_merge_batch(batch_index, batch):
+                batch_temp_dir = os.path.join(batch_dir, f"batch_{batch_index+1}")
+                os.makedirs(batch_temp_dir, exist_ok=True)
 
-            # Clean up temporary files
-            for pdf_path in individual_pdf_paths:
-                try:
-                    os.unlink(pdf_path)
-                except Exception:
-                    pass
+                pdf_paths = self.process_property_batch(
+                    batch,
+                    bg_image_path,
+                    batch_temp_dir,
+                    batch_index+1,
+                    None, None,
+                    db_name,
+                    uid,
+                    context
+                )
 
-            try:
-                os.rmdir(temp_dir)
-            except Exception:
-                pass
+                batch_pdf_path = os.path.join(batch_dir, f"batch_{batch_index+1}.pdf")
+                self.merge_pdfs(pdf_paths, batch_pdf_path)
 
-            try:
+                # Clean up individual PDFs for this batch
+                for pdf in pdf_paths:
+                    if os.path.exists(pdf):
+                        os.unlink(pdf)
+                shutil.rmtree(batch_temp_dir, ignore_errors=True)
+
+                return batch_pdf_path
+
+            final_pdf_path = os.path.join(temp_dir, "ward_properties_final.pdf")
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
+                future_to_index = {
+                    executor.submit(process_and_merge_batch, batch_index, batch): batch_index
+                    for batch_index, batch in enumerate(batches)
+                }
+                for future in concurrent.futures.as_completed(future_to_index):
+                    batch_index = future_to_index[future]
+                    batch_pdf_path = future.result()
+                    batch_pdf_paths[batch_index] = batch_pdf_path  # Place in correct order
+
+            # Merge all batch PDFs into a single final PDF (now in order)
+            self.merge_pdfs(batch_pdf_paths, final_pdf_path)
+
+            with open(final_pdf_path, "rb") as f:
+                final_pdf_data = f.read()
+
+            # Clean up
+            for batch_pdf in batch_pdf_paths:
+                if os.path.exists(batch_pdf):
+                    os.unlink(batch_pdf)
+            if os.path.exists(bg_image_path):
                 os.unlink(bg_image_path)
-            except Exception:
-                pass
-
-            # Set filename based on filters
-            filename = "ward_properties.pdf"
-            if ward_id and colony_id:
-                filename = f"ward_{ward_id}_colony_{colony_id}_properties.pdf"
-            elif ward_id:
-                filename = f"ward_{ward_id}_properties.pdf"
-            elif colony_id:
-                filename = f"colony_{colony_id}_properties.pdf"
+            shutil.rmtree(batch_dir, ignore_errors=True)
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
             headers = [
                 ('Content-Type', 'application/pdf'),
-                ('Content-Disposition', f'attachment; filename="{filename}"')
+                ('Content-Disposition', 'attachment; filename="ward_properties.pdf"')
             ]
-            return request.make_response(final_pdf_io.read(), headers=headers)
+            return request.make_response(final_pdf_data, headers=headers)
 
         except Exception as e:
+            _logger.error(f"An error occurred: {str(e)}")
             return request.not_found(f"An error occurred: {str(e)}")
