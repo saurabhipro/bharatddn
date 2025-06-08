@@ -18,3 +18,4 @@ from . import colony
 
 # from . import kml
 
+from . import services

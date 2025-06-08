@@ -14,6 +14,8 @@ class CustomWebsite(http.Controller):
 
         property = request.env['ddn.property.info'].sudo().search([('uuid', '=', uuid)], limit=1)
         print("property - ", property.colony_id.name)
+        services = request.env['ddn.services'].sudo().search([], limit=1)
+        
 
         if not property:
             # return request.render('web.404')
@@ -25,4 +27,5 @@ class CustomWebsite(http.Controller):
         else:
             print("Property: No survey lines found")
 
-        return request.render('microsite.id_indore_microsite_template', {'property':property})
+        return request.render('microsite.id_indore_microsite_template', {'property':property, 'services':services})
+5

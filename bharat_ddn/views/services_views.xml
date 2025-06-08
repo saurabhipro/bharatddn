@@ -33,7 +33,8 @@
             </sheet>
 
             <notebook>
-                <!-- Govt Services -->
+                <page name="govt_line_ids" string="Govt Services">
+                    <!-- Govt Services -->
                 <field name="govt_line_ids">
                     <list>
                         <field name="name"/>
@@ -54,6 +55,7 @@
                         </group>
                     </form>
                 </field>
+                </page>
 
 
                 <!-- Tracking Services -->
@@ -136,6 +138,9 @@
                                     <field name="name"/>
                                     <field name="text"/>
                                     <field name="hyperlink"/>
+                                    <field name="bg_color"/>
+
+                                    
                                 </group>
                                 <group>
                                     <field name="icon"/>

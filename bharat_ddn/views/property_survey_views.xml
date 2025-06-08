@@ -26,6 +26,8 @@
                     <sheet>
                         <group>
                             <group>
+                                <field name="property_id"/>
+
                                 <field name="address_line_1"/>
                                 <field name="address_line_2"/>
                                 <field name="unit"/>

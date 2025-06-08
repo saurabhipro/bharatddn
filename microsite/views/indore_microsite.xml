@@ -483,167 +483,110 @@
           </section>
 
           <!-- Government Payment Services -->
-          <section class="py-1">
-            <h2 class="text-center fw-bold mb-3" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
-            <div class="d-flex justify-content-center align-items-stretch payment-services-row">
-              <!-- Property Tax -->
-              <div class="payment-service-box text-center">
-                <div class="icon-gradient-box mb-2 mx-auto">
-                  <i class="bi bi-house"></i>
+          <t t-foreach="services" t-as="srv">
+            <section class="py-1">
+              <h2 class="text-center fw-bold mb-3" style="font-size:1.3rem; letter-spacing:1px;">Government Payment Services</h2>
+              <div class="d-flex justify-content-center align-items-stretch payment-services-row">
+                <t t-foreach="srv.govt_line_ids" t-as="govt"> 
+                    <div class="payment-service-box text-center">
+                      <div class="icon-gradient-box mb-2 mx-auto">
+                        <div class="govt-service-label">
+                          <t t-raw="govt.text"/>
+                        </div>
+                      </div>
+                      <div class="govt-service-label">
+                        <t t-out="govt.name"/>
+                      </div>
+                    </div>
+                  </t>
                 </div>
-                <div class="govt-service-label">Property Tax</div>
-              </div>
-              <!-- Water Tax -->
-              <div class="payment-service-box text-center">
-                <div class="icon-gradient-box mb-2 mx-auto">
-                  <i class="bi bi-droplet"></i>
-                </div>
-                <div class="govt-service-label">Water Tax</div>
-              </div>
-              <!-- Electricity Bill -->
-              <div class="payment-service-box text-center">
-                <div class="icon-gradient-box mb-2 mx-auto">
-                  <i class="bi bi-plug"></i>
-                </div>
-                <div class="govt-service-label">Electricity Bill</div>
-              </div>
-            </div>
-          </section>
+                
+            </section>
+          
 
-          <!-- Emergency Services -->
-          <section class="py-1">
-            <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Emergency Services</h2>
-            <div class="center-section">
-              <div class="card p-4 position-relative border border-white rounded-4">
-                <div class="card-body p-4">
-                  <div class="row g-3">
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-red text-center">
-                        <div>
-                          <i class="bi bi-exclamation-triangle-fill emergency-icon"></i>
-                          <div class="emergency-label">Emergency</div>
+            <!-- Emergency Services -->
+            <section class="py-1">
+              <h2 class="text-center fw-bold mb-4" style="font-size:1.3rem; letter-spacing:1px;">Emergency Services</h2>
+              <div class="center-section">
+                <div class="card p-4 position-relative border border-white rounded-4">
+                  <div class="card-body p-4">
+                    <div class="row g-3">
+                      <t t-foreach="srv.dial_line_ids" t-as="dial"> 
+                        <div class="col-6 col-md-3">
+                        <div t-att-class="'emergency-card emergency-bg-' + dial.bg_color + ' text-center'">
+                            <div>
+                              <t t-raw="dial.text"/>
+                              <div class="emergency-label"><t t-raw="dial.name"/></div>
+                            </div>
+                          </div>
+                        </div>
+                      </t>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Your Officer Section -->
+            <section class="py-1">
+              <div class="center-section">
+                <div class="card p-4 position-relative border border-white rounded-4">
+                  <div class="card-body p-4">
+                    <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
+                    <div class="row g-3">
+                    
+                      <!-- Zone Officer -->
+                      <div class="col-6 col-md-3">
+                        <div class="officer-card text-center">
+                          <div>
+                            <i class="bi bi-person-badge emergency-icon"></i>
+                            <div class="officer-label">Zone Officer</div>
+                            <div class="officer-name">Mr. Ravi Singh</div>
+                            <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-blue text-center">
-                        <div>
-                          <i class="bi bi-car-front-fill emergency-icon"></i>
-                          <div class="emergency-label">Police</div>
+                      <!-- Ward Officer -->
+                      <div class="col-6 col-md-3">
+                        <div class="officer-card text-center">
+                          <div>
+                            <i class="bi bi-person-vcard emergency-icon"></i>
+                            <div class="officer-label">Ward Officer</div>
+                            <div class="officer-name">Mr. Amit Kumar</div>
+                            <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-yellow text-center">
-                        <div>
-                          <i class="bi bi-truck emergency-icon"></i>
-                          <div class="emergency-label">Fire</div>
+                      <!-- Municipal Officer -->
+                      <div class="col-6 col-md-3">
+                        <div class="officer-card text-center">
+                          <div>
+                            <i class="bi bi-building emergency-icon"></i>
+                            <div class="officer-label">Municipal Officer</div>
+                            <div class="officer-name">Mrs. Priya Sharma</div>
+                            <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-cyan text-center">
-                        <div>
-                          <i class="bi bi-truck emergency-icon"></i>
-                          <div class="emergency-label">Ambulance</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-purple text-center">
-                        <div>
-                          <i class="bi bi-person-fill emergency-icon"></i>
-                          <div class="emergency-label">Women Help</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-green text-center">
-                        <div>
-                          <i class="bi bi-tree-fill emergency-icon"></i>
-                          <div class="emergency-label">Forest Office</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-gold text-center">
-                        <div>
-                          <i class="bi bi-building emergency-icon"></i>
-                          <div class="emergency-label">Municipal Help</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                      <div class="emergency-card emergency-bg-indigo text-center">
-                        <div>
-                          <i class="bi bi-plug-fill emergency-icon"></i>
-                          <div class="emergency-label">Power Dept.</div>
+                      <!-- Property Officer -->
+                      <div class="col-6 col-md-3">
+                        <div class="officer-card text-center">
+                          <div>
+                            <i class="bi bi-house-gear emergency-icon"></i>
+                            <div class="officer-label">Property Officer</div>
+                            <div class="officer-name">Mr. Rajesh Patel</div>
+                            <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <!-- Your Officer Section -->
-          <section class="py-1">
-            <div class="center-section">
-              <div class="card p-4 position-relative border border-white rounded-4">
-                <div class="card-body p-4">
-                  <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Your Officers</h2>
-                  <div class="row g-3">
-                  
-                    <!-- Zone Officer -->
-                    <div class="col-6 col-md-3">
-                      <div class="officer-card text-center">
-                        <div>
-                          <i class="bi bi-person-badge emergency-icon"></i>
-                          <div class="officer-label">Zone Officer</div>
-                          <div class="officer-name">Mr. Ravi Singh</div>
-                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Ward Officer -->
-                    <div class="col-6 col-md-3">
-                      <div class="officer-card text-center">
-                        <div>
-                          <i class="bi bi-person-vcard emergency-icon"></i>
-                          <div class="officer-label">Ward Officer</div>
-                          <div class="officer-name">Mr. Amit Kumar</div>
-                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Municipal Officer -->
-                    <div class="col-6 col-md-3">
-                      <div class="officer-card text-center">
-                        <div>
-                          <i class="bi bi-building emergency-icon"></i>
-                          <div class="officer-label">Municipal Officer</div>
-                          <div class="officer-name">Mrs. Priya Sharma</div>
-                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Property Officer -->
-                    <div class="col-6 col-md-3">
-                      <div class="officer-card text-center">
-                        <div>
-                          <i class="bi bi-house-gear emergency-icon"></i>
-                          <div class="officer-label">Property Officer</div>
-                          <div class="officer-name">Mr. Rajesh Patel</div>
-                          <a href="tel:+919988776655" class="officer-phone">+91 998877665</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+          </t>
         </section>
       </div>
     </t>

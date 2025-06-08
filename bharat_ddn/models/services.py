@@ -69,6 +69,7 @@ class DialOfficerLine(models.Model):
     is_global = fields.Boolean(string="Is Global", default=False)
     is_active = fields.Boolean(string="Is Active", default=True)
     service_id = fields.Many2one('ddn.services', string="Service")
+    bg_color = fields.Char(string="BG-Color")
 
 
 class OtherOfficerLine(models.Model):
