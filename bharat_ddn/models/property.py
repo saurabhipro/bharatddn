@@ -28,7 +28,7 @@ class Property(models.Model):
     # Owner Information
     company_id = fields.Many2one('res.company', string="Company", default=lambda self : self.env.company.id, readonly=True)
     unit_no = fields.Char('Unit No.')
-    uuid = fields.Char(string='UUID', readonly=True, copy=False, default=lambda self: str(uuid.uuid4()))
+    uuid = fields.Char(string='UUID', readonly=True, copy=False, store=True, default=lambda self: str(uuid.uuid4()))
     zone_id = fields.Many2one('ddn.zone', string='Zone')
     ward_id = fields.Many2one('ddn.ward',string='Ward')
     colony_id = fields.Many2one('ddn.colony', string='Colony')
