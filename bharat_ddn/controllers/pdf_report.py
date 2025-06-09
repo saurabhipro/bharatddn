@@ -24,7 +24,7 @@ class PDFConfig:
     # Font Configuration
     # BASE_EXPORT_DIR = '/home/anjli/Anjli/crm/BharatDDN/pdf'  # Base directory for all PDF exports
 
-    BASE_EXPORT_DIR = '/home/odoo18/property_pdfs'  # Base directory for all PDF exports
+    BASE_EXPORT_DIR = '/home/odoo18/odoo/downloaded_pdfs'  # Base directory for all PDF exports
     FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     IMAGE_QUALITY = 20 # Increased quality for better clarity
     BATCH_SIZE = 100  # Process 20 properties at a time
