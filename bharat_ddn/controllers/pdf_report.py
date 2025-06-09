@@ -22,7 +22,8 @@ _logger = logging.getLogger(__name__)
 # Configuration Settings
 class PDFConfig:
     # Font Configuration
-    
+    # BASE_EXPORT_DIR = '/home/anjli/Anjli/crm/BharatDDN/pdf'  # Base directory for all PDF exports
+
     BASE_EXPORT_DIR = '/home/odoo18/property_pdfs'  # Base directory for all PDF exports
     FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     IMAGE_QUALITY = 20 # Increased quality for better clarity
@@ -206,7 +207,7 @@ class PdfGeneratorController(http.Controller):
     def process_property_batch(self, property_ids, bg_image_path, colony_id=None, batch_number=1):
         processed_count = 0
         error_count = 0
-        colony_dir = self.get_colony_folder(colony_id) if colony_id else os.path.join(PDFConfig.BASE_EXPORT_DIR, "default")
+        colony_dir = self.get_colony_folder(colony_id) if colony_id else os.path.join(PDFConfig.BASE_EXPORT_DIR, "sudama_nagar")
         os.makedirs(colony_dir, exist_ok=True)
 
         # Create a single PDF for this batch with sequential numbering
