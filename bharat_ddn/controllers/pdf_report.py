@@ -28,7 +28,7 @@ class PDFConfig:
     FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     CENTER_FONT_SIZE = 150
     VALUE_FONT_SIZE = 70
-    BATCH_SIZE = 10000  # Process 20 properties at a time
+    BATCH_SIZE = 1000  # Process 20 properties at a time
 
     # Image Generation Settings
     CENTER_TEXT_Y = 500
