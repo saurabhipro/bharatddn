@@ -14,7 +14,6 @@ import zipfile
 import shutil
 import time
 import traceback
-from PyPDF2 import PdfMerger
 
 _logger = logging.getLogger(__name__)
 
@@ -24,25 +23,30 @@ _logger = logging.getLogger(__name__)
 class PDFConfig:
     # Font Configuration
     
-    BASE_EXPORT_DIR = '/home/anjli/Anjli/crm/BharatDDN/pdf'  # Base directory for all PDF exports
+    BASE_EXPORT_DIR = '/home/odoo18/property_pdfs'  # Base directory for all PDF exports
     FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    CENTER_FONT_SIZE = 150
-    VALUE_FONT_SIZE = 70
-    BATCH_SIZE = 1000  # Process 20 properties at a time
+    IMAGE_QUALITY = 20 # Increased quality for better clarity
+    BATCH_SIZE = 100  # Process 20 properties at a time
+    
+    CENTER_FONT_SIZE = 140
+    VALUE_FONT_SIZE = 120
 
-    # Image Generation Settings
-    CENTER_TEXT_Y = 500
-    VALUE_TEXT_Y = 570
-    TEXT_OUTLINE_OFFSET = 2
     IMAGE_FORMAT = 'JPEG'
-    IMAGE_QUALITY = 10     # Increased quality for better clarity
     BACKGROUND_COLOR = 'white'  # Added background color setting
    
+    CENTER_TEXT_Y = 500
+    VALUE_TEXT_Y = 570
+    CENTER_TEXT_RIGHT_MARGIN = 60  # Increase this value to move text further left
+    TEXT_OUTLINE_OFFSET = 5
     # Table Cell Positions and Dimensions
-    TABLE_ROW_Y = 900
+    TABLE_ROW_Y = 850
     BOX_START_X = 150
     BOX_WIDTH = 250
     BOX_GAP = 350
+    QR_VERSION = 1
+    QR_ERROR_CORRECTION = qrcode.constants.ERROR_CORRECT_H
+    QR_BOX_SIZE = 20
+    QR_BORDER = 1   
    
     ZONE_BOX = {
         'x': 200,
@@ -64,10 +68,6 @@ class PDFConfig:
         'width': 330,
         'height': 320
     }
-    QR_VERSION = 1
-    QR_ERROR_CORRECTION = qrcode.constants.ERROR_CORRECT_H
-    QR_BOX_SIZE = 20
-    QR_BORDER = 1
    
  
 # Register the custom font
@@ -132,7 +132,7 @@ class PdfGeneratorController(http.Controller):
             center_text = f"{zone}-{locality}-{formatted_unit_no}"
             bbox = draw.textbbox((0, 0), center_text, font=center_font)
             text_width = bbox[2] - bbox[0]
-            right_x = background.width - 20 - text_width
+            right_x = background.width - PDFConfig.CENTER_TEXT_RIGHT_MARGIN - text_width
             center_y = PDFConfig.CENTER_TEXT_Y
  
             # Draw white outline
@@ -203,14 +203,14 @@ class PdfGeneratorController(http.Controller):
         
         return colony_dir
 
-    def process_property_batch(self, property_ids, bg_image_path, colony_id=None):
+    def process_property_batch(self, property_ids, bg_image_path, colony_id=None, batch_number=1):
         processed_count = 0
         error_count = 0
         colony_dir = self.get_colony_folder(colony_id) if colony_id else os.path.join(PDFConfig.BASE_EXPORT_DIR, "default")
         os.makedirs(colony_dir, exist_ok=True)
 
-        # Create a single PDF for this batch
-        batch_pdf_filename = f"batch_{int(time.time())}.pdf"
+        # Create a single PDF for this batch with sequential numbering
+        batch_pdf_filename = f"batch_{batch_number}.pdf"
         batch_pdf_path = os.path.join(colony_dir, batch_pdf_filename)
         _logger.info(f"Starting batch PDF creation: {batch_pdf_filename}")
         
@@ -275,15 +275,6 @@ class PdfGeneratorController(http.Controller):
                 except:
                     pass
             return processed_count, colony_dir, None
-
-    def merge_pdfs(self, pdf_paths, output_path):
-        merger = PdfMerger()
-        for pdf in pdf_paths:
-            _logger.info(f"Adding to merger: {pdf}")
-            merger.append(pdf)
-        merger.write(output_path)
-        merger.close()
-        _logger.info(f"Merged PDF written to: {output_path}")
 
     @http.route(['/download/ward_properties_pdf'], type='http', auth='user', methods=['GET'], csrf=True)
     def download_ward_properties_pdf(self, **kw):
@@ -354,67 +345,39 @@ class PdfGeneratorController(http.Controller):
             total_processed = 0
             output_dir = None
             batch_pdf_paths = []
-            
-            # Process first batch and send to browser immediately
-            first_batch_ids = property_ids[:batch_size]
-            _logger.info(f"Processing first batch with {len(first_batch_ids)} properties")
-            processed, output_dir, first_batch_pdf = self.process_property_batch(first_batch_ids, bg_image_path, colony_id)
-            total_processed += processed
 
-            if first_batch_pdf and os.path.exists(first_batch_pdf):
-                _logger.info(f"Sending first batch PDF to browser: {first_batch_pdf}")
-                with open(first_batch_pdf, 'rb') as f:
-                    return request.make_response(
-                        f.read(),
-                        headers=[
-                            ('Content-Type', 'application/pdf'),
-                            ('Content-Disposition', f'inline; filename=first_batch.pdf')
-                        ]
-                    )
-
-            # If first batch failed, process remaining batches
-            remaining_ids = property_ids[batch_size:]
-            for i in range(0, len(remaining_ids), batch_size):
-                batch_ids = remaining_ids[i:i + batch_size]
-                _logger.info(f"Processing batch {i//batch_size + 2} with {len(batch_ids)} properties")
-                processed, output_dir, batch_pdf_path = self.process_property_batch(batch_ids, bg_image_path, colony_id)
+            # Process all batches
+            for i in range(0, len(property_ids), batch_size):
+                batch_ids = property_ids[i:i + batch_size]
+                batch_number = (i // batch_size) + 1
+                _logger.info(f"Processing batch {batch_number} with {len(batch_ids)} properties")
+                
+                processed, output_dir, batch_pdf_path = self.process_property_batch(
+                    batch_ids, bg_image_path, colony_id, batch_number=batch_number)
                 total_processed += processed
                 
                 if batch_pdf_path and os.path.exists(batch_pdf_path):
                     batch_pdf_paths.append(batch_pdf_path)
-                    _logger.info(f"Added batch PDF to zip list: {batch_pdf_path}")
+                    _logger.info(f"Added batch PDF to list: {batch_pdf_path}")
 
-            # Create zip for remaining batches
-            if batch_pdf_paths:
-                zip_filename = f"remaining_batches_{int(time.time())}.zip"
-                zip_path = os.path.join(output_dir, zip_filename)
+            # Update export status to indicate completion
+            if colony_id:
+                PDFExportStatus.set_export_status(colony_id, True, output_dir)
+                _logger.info(f"All batches processed. Total processed: {total_processed}")
+                _logger.info(f"PDFs are available in directory: {output_dir}")
                 
-                _logger.info(f"Creating zip file with {len(batch_pdf_paths)} PDFs")
-                with zipfile.ZipFile(zip_path, 'w') as zipf:
-                    for pdf_path in batch_pdf_paths:
-                        if os.path.exists(pdf_path):
-                            zipf.write(pdf_path, os.path.basename(pdf_path))
-                            _logger.info(f"Added to zip: {pdf_path}")
-
-                def file_iterator(file_path, chunk_size=8192):
-                    with open(file_path, 'rb') as f:
-                        while True:
-                            chunk = f.read(chunk_size)
-                            if not chunk:
-                                break
-                            yield chunk
-
-                headers = [
-                    ('Content-Type', 'application/zip'),
-                    ('Content-Disposition', f'attachment; filename={zip_filename}')
-                ]
-                return request.make_response(file_iterator(zip_path), headers=headers)
+                # Return success message with directory information
+                return request.make_response(
+                    f"PDF generation completed. {total_processed} properties processed. Files are available in: {output_dir}",
+                    headers=[('Content-Type', 'text/plain')]
+                )
             else:
-                _logger.error("No PDFs were successfully created")
                 return request.not_found("No PDFs were generated successfully")
 
         except Exception as e:
             _logger.error(f"An error occurred: {str(e)}")
+            if colony_id:
+                PDFExportStatus.set_export_status(colony_id, False, output_dir)
             return request.not_found(f"An error occurred: {str(e)}")
 
     @http.route(['/get/export_status'], type='json', auth='user')
