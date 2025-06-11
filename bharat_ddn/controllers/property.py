@@ -287,16 +287,20 @@ class PropertyIdDataAPI(http.Controller):
     def search_property_id_data(self, **kwargs):
         try:
             data = json.loads(request.httprequest.data or '{}')
-            mobile_no = data.get('mobile_no')
-            owner_name = data.get('owner_name')
-            domain = []
-            if mobile_no:
-                domain.append(('mobile_no', '=', mobile_no))
-            if owner_name:
-                domain.append(('owner_name', 'ilike', owner_name))
-            if not domain:
-                return Response(json.dumps({'error': 'Please provide mobile_no or owner_name'}), status=400, content_type='application/json')
-            records = request.env['property.id.data'].sudo().search(domain)
+            parameter = data.get('parameter_name', '').strip()
+            
+            if not parameter:
+                return Response(json.dumps({'error': 'Please provide parameter_name'}), status=400, content_type='application/json')
+            
+            # Search across all relevant fields
+            records = request.env['property.id.data'].sudo().search([
+                '|',  # OR condition
+                '|',  # OR condition
+                ('mobile_no', '=', parameter),
+                ('property_id', '=', parameter),
+                ('owner_name', 'ilike', parameter)
+            ])
+            
             result = [
                 {
                     'property_id': rec.property_id,
