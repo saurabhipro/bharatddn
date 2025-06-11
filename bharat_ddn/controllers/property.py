@@ -68,13 +68,12 @@ class PropertyDetailsAPI(http.Controller):
             "upic_no": property.upic_no,
             "zone_id": property.zone_id.name,
             "ward_id": property.ward_id.name,
+            "colony_name": property.colony_id.name if property.colony_id else '',
+            "unit_no": property.unit_no if property.unit_no else '',
             "latitude": property.latitude,
             "longitude": property.longitude,
             "mobile_no": property.mobile_no,
             "owner_name": property.owner_name,
-            "occupier_name": property.occupier_name,
-            "plot_area": property.plot_area,
-            "renter_name": property.renter_name,
             "survey_line_ids": [self._format_survey_data(survey) for survey in property.survey_line_ids if property.survey_line_ids]
         }
 
