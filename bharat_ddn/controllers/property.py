@@ -279,6 +279,70 @@ class PropertyDetailsAPI(http.Controller):
             'property_status': 'discovered'
         }
 
+    @http.route('/api/recent_surveys', type='http', auth='public', methods=['POST'], csrf=False)
+    @check_permission
+    def get_recent_surveys(self, **kwargs):
+        """Get top 5 most recent surveys based on surveyor ID and (optionally) ward ID."""
+        try:
+            data = json.loads(request.httprequest.data or "{}")
+            surveyor_id = data.get('surveyor_id')
+            ward_id = data.get('ward_id')
+
+            if not surveyor_id:
+                return Response(
+                    json.dumps({'error': 'surveyor_id is required'}),
+                    status=400,
+                    content_type='application/json'
+                )
+
+            # Build domain
+            domain = [('surveyer_id', '=', surveyor_id)]
+            if ward_id:
+                domain.append(('property_id.ward_id', '=', ward_id))
+
+            # Get the top 5 most recent surveys
+            recent_surveys = request.env['ddn.property.survey'].sudo().search(
+                domain,
+                order='create_date desc',
+                limit=5
+            )
+
+            survey_data_list = []
+            for survey in recent_surveys:
+                survey_data = {
+                    'upic_no': survey.property_id.upic_no,
+                    'ward_name': survey.property_id.ward_id.name,
+                    'zone_name': survey.property_id.zone_id.name,
+                    'owner_name': survey.owner_name,
+                    'mobile_no': survey.mobile_no,
+                    'address': f"{survey.address_line_1}, {survey.address_line_2}",
+                    'created_date': survey.create_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    'property_image': str(survey.property_image),
+                    'property_image1': str(survey.property_image1),
+                    'total_floors': survey.total_floors,
+                    'floor_number': survey.floor_number,
+                    'unit': survey.unit
+                }
+                survey_data_list.append(survey_data)
+
+            return Response(
+                json.dumps({
+                    'status': 'success',
+                    'message': 'Recent surveys fetched successfully',
+                    'recent_surveys': survey_data_list
+                }),
+                status=200,
+                content_type='application/json'
+            )
+
+        except Exception as e:
+            _logger.error(f"Error in get_recent_surveys: {str(e)}")
+            return Response(
+                json.dumps({'error': str(e)}),
+                status=500,
+                content_type='application/json'
+            )
+
 class PropertyIdDataAPI(http.Controller):
     @http.route('/api/property_id_data/search', type='http', auth='public', methods=['POST'], csrf=False)
     def search_property_id_data(self, **kwargs):
