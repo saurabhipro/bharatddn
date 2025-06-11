@@ -150,6 +150,7 @@ class PropertyDetailsAPI(http.Controller):
         """Prepare survey line values from data."""
         return {
             'company_id': data.get("company_id"),
+            'property_id': data.get("property_id", False),
             'address_line_1': data.get("address_line_1", ''),
             'address_line_2': data.get("address_line_2", ''),
             'unit': data.get("unit", ''),
