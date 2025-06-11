@@ -149,22 +149,18 @@ class PropertyDetailsAPI(http.Controller):
     def _prepare_survey_line_vals(self, data):
         """Prepare survey line values from data."""
         return {
+            'company_id': data.get("company_id"),
             'address_line_1': data.get("address_line_1", ''),
             'address_line_2': data.get("address_line_2", ''),
-            'street': data.get("street", ''),
             'unit': data.get("unit", ''),
             'total_floors': data.get("total_floors", ''),
             'mobile_no': data.get("mobile_no", False),
             'floor_number': data.get("floor_number", ''),
             'owner_name': data.get("owner_name", ''),
             'father_name': data.get("father_name", ''),
-            'area': data.get("area", ''),
-            'area_code': data.get("area_code", ''),
             'longitude': data.get("longitude", ''),
             'latitude': data.get("latitude", ''),
             'surveyer_id': data.get("surveyer_id", False),
-            'installer_id': data.get("installer_id", False),
-            'company_id': data.get("company_id"),
             'property_image': data.get("property_image", False),
             'property_image1': data.get("property_image1", False),
         }
