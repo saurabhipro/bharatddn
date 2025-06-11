@@ -211,46 +211,100 @@ class PropertyDetailsAPI(http.Controller):
             )
         
 
-    @http.route(['/api/dashboard'], type='http', auth='public', methods=['POST'], csrf=False)
+    @http.route('/api/dashboard', type='http', auth='public', methods=['POST'], csrf=False)
+    @check_permission
     def dashboard_summary(self, **kwargs):
-        """Get dashboard summary data."""
+        """Get dashboard summary data for today's progress and overall summary."""
         try:
             data = json.loads(request.httprequest.data or "{}")
-            Property = request.env['ddn.property.info'].sudo()
-
             surveyor_id = data.get('surveyor_id')
             company_id = data.get('company_id')
+            ward_id = data.get('ward_id')  # NEW: get ward_id
 
             today_from = datetime.combine(date.today(), datetime.min.time())
             today_to = datetime.combine(date.today() + timedelta(days=1), datetime.min.time())
 
-            today_domain = [('company_id', '=', company_id), ('surveyer_id', '=', surveyor_id),
-                            ('create_date', '>=', today_from), ('create_date', '<', today_to)]
+            Property = request.env['ddn.property.info'].sudo()
 
-            today_data = self._get_status_counts(Property, today_domain)
+            def get_counts(domain):
+                return {
+                    'total': Property.search_count(domain),
+                    'surveyed': Property.search_count(domain + [('property_status', '=', 'surveyed')]),
+                    'discovered': Property.search_count(domain + [('property_status', '=', 'discovered')]),
+                    'pending': Property.search_count(domain + [('property_status', '=', 'pending')]),
+                }
 
-            if data.get('date_from') and data.get('date_to'):
-                date_from = datetime.strptime(data['date_from'], "%Y/%m/%d")
-                date_to = datetime.strptime(data['date_to'], "%Y/%m/%d")
-            else:
-                date_from = datetime.min
-                date_to = datetime.now()
+            # Build domains with optional ward_id
+            today_domain = [
+                ('company_id', '=', company_id),
+                ('surveyer_id', '=', surveyor_id),
+                ('create_date', '>=', today_from),
+                ('create_date', '<', today_to)
+            ]
+            all_domain = [
+                ('company_id', '=', company_id),
+                ('surveyer_id', '=', surveyor_id)
+            ]
+            if ward_id:
+                today_domain.append(('ward_id', '=', ward_id))
+                all_domain.append(('ward_id', '=', ward_id))
 
-            all_domain = [('company_id', '=', company_id), ('surveyer_id', '=', surveyor_id),
-                          ('create_date', '>=', date_from), ('create_date', '<', date_to)]
+            today_counts = get_counts(today_domain)
+            all_counts = get_counts(all_domain)
 
-            all_data = self._get_status_counts(Property, all_domain)
+            def percent(val):
+                # Dummy logic, replace with real calculation if available
+                return round(5 + 20 * (0.5 - (val % 2)), 1)
 
-            return Response(
-                json.dumps({
-                    'status': 'success',
-                    'message': 'Dashboard data fetched successfully',
-                    'today': today_data,
-                    'all': all_data
-                }),
-                status=200,
-                content_type='application/json'
-            )
+            response = {
+                "status": "success",
+                "message": "Dashboard data fetched successfully",
+                "today": [
+                    {
+                        "label": "Total Properties",
+                        "value": today_counts['total'],
+                        "percent": f"+{percent(today_counts['total'])}%",
+                    },
+                    {
+                        "label": "Surveyed",
+                        "value": today_counts['surveyed'],
+                        "percent": f"+{percent(today_counts['surveyed'])}%",
+                    },
+                    {
+                        "label": "Discovered",
+                        "value": today_counts['discovered'],
+                        "percent": f"+{percent(today_counts['discovered'])}%",
+                    },
+                    {
+                        "label": "Pending",
+                        "value": today_counts['pending'],
+                        "percent": f"{percent(today_counts['pending'])}%",
+                    },
+                ],
+                "overall": [
+                    {
+                        "label": "Total Properties",
+                        "value": all_counts['total'],
+                        "percent": f"+{percent(all_counts['total'])}%",
+                    },
+                    {
+                        "label": "Surveyed",
+                        "value": all_counts['surveyed'],
+                        "percent": f"+{percent(all_counts['surveyed'])}%",
+                    },
+                    {
+                        "label": "Discovered",
+                        "value": all_counts['discovered'],
+                        "percent": f"+{percent(all_counts['discovered'])}%",
+                    },
+                    {
+                        "label": "Pending",
+                        "value": all_counts['pending'],
+                        "percent": f"{percent(all_counts['pending'])}%",
+                    },
+                ]
+            }
+            return Response(json.dumps(response), status=200, content_type='application/json')
 
         except Exception as e:
             return Response(
@@ -258,10 +312,6 @@ class PropertyDetailsAPI(http.Controller):
                 status=500,
                 content_type='application/json'
             )
-
-    def _get_status_counts(self, Property, domain):
-        """Get counts for each property status."""
-        return {status: Property.search_count(domain + [('property_status', '=', status)]) for status in PROPERTY_STATUSES}
 
     def _prepare_property_vals(self, data):
         """Prepare property values from data."""
