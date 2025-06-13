@@ -1,85 +1,162 @@
+// Variables
+$primary-color: #1976d2;
+$primary-light: #42a5f5;
+$border-radius: 8px;
+$transition-duration: 0.2s;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin gradient-bg($start-color, $end-color) {
+    background: linear-gradient(135deg, $start-color 0%, $end-color 100%);
+}
+
+@mixin card-base {
+    border-radius: $border-radius;
+    text-align: center;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    transition: box-shadow $transition-duration;
+}
+
+// Dashboard Grid
 .property-dashboard {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 24px;
-    margin: 24px 0;
-}
-.dashboard-card {
-    background: linear-gradient(135deg, #f8fafc 0%, #e3f0ff 100%);
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.13);
-    padding: 12px 12px 8px 12px;
-    min-height: 90px;
-    text-align: center;
-    transition: box-shadow 0.2s, border-color 0.2s;
-    position: relative;
-    border: 2.5px solid rgba(25, 118, 210, 0.18);
-    font-family: 'Segoe UI', 'Arial', sans-serif;
-}
-.dashboard-card:hover {
-    border-color: #1976d2;
-    box-shadow: 0 8px 32px rgba(25, 118, 210, 0.22);
-}
-.dashboard-card .icon {
-    font-size: 1.5em;
-    margin-bottom: 6px;
-    display: block;
-    color: #fff !important;
-}
-.dashboard-card.uploaded .icon { color: #1976d2; }
-.dashboard-card.pdf .icon { color: #e53935; }
-.dashboard-card.plate .icon { color: #43a047; }
-.dashboard-card.surveyed .icon { color: #fbc02d; }
-.dashboard-card.unlocked .icon { color: #6d4c41; }
-.dashboard-card.discovered .icon { color: #8e24aa; }
-.dashboard-card.zones .icon { color: #00bcd4; }
-.dashboard-card.wards .icon { color: #ff9800; }
-.dashboard-card.users .icon { color: #607d8b; }
-.dashboard-card.today {
-    background: linear-gradient(135deg, #fffbe7 0%, #ffe082 100%);
-    border: 1.5px solid #ffe082;
-}
-.dashboard-card.today .icon { color: #ffb300; }
-.dashboard-card .count {
-    font-size: 1.3em;
-    font-weight: bold;
-    margin-bottom: 4px;
-    color: #222;
-}
-.dashboard-card .label {
-    font-size: 1.15em;
-    color: #444;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-.dashboard-card .status-link {
-    font-size: 0.95em;
-    margin-top: 2px;
-    color: #1976d2;
-    text-decoration: underline;
-    display: block;
-}
-@media (max-width: 1200px) {
-    .property-dashboard {
+    margin: 12px 0;
+
+    @media (max-width: 1200px) {
         grid-template-columns: repeat(3, 1fr);
     }
-}
-@media (max-width: 800px) {
-    .property-dashboard {
+    @media (max-width: 800px) {
         grid-template-columns: repeat(2, 1fr);
     }
-}
-@media (max-width: 500px) {
-    .property-dashboard {
+    @media (max-width: 500px) {
         grid-template-columns: 1fr;
     }
 }
 
+// Dashboard Cards
+.dashboard-card {
+    @include card-base;
+    padding: 8px;
+    min-width: 120px;
+    min-height: 45px;
+    background: #f8fafc;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 4px rgba($primary-color, 0.06);
+    position: relative;
+
+    // Card variants
+    &.uploaded { @include gradient-bg($primary-color, $primary-light); }
+    &.pdf { @include gradient-bg(#e53935, #ff7043); }
+    &.plate { @include gradient-bg(#43a047, #a5d6a7); }
+    &.surveyed { @include gradient-bg(#fbc02d, #fff176); }
+    &.today { @include gradient-bg(#ffb300, #ffe082); }
+    &.unlocked { @include gradient-bg(#6d4c41, #a1887f); }
+    &.discovered { @include gradient-bg(#8e24aa, #ce93d8); }
+    &.zones { @include gradient-bg(#00bcd4, #4dd0e1); }
+    &.wards { @include gradient-bg(#ff9800, #ffb74d); }
+    &.users { @include gradient-bg(#607d8b, #b0bec5); }
+
+    // Card elements
+    * {
+        color: #fff !important;
+        position: relative;
+        z-index: 1;
+    }
+
+    .icon {
+        font-size: 1.2em;
+        margin-bottom: 4px;
+    }
+
+    .count {
+        font-size: 1.1em;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .label {
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 1px;
+    }
+
+    .status-link {
+        font-size: 1em;
+        margin-top: 4px;
+        text-decoration: underline;
+        display: block;
+        font-weight: 500;
+    }
+
+    .bg-icon {
+        position: absolute;
+        bottom: 4px;
+        right: 8px;
+        font-size: 2.4em;
+        color: rgba(255,255,255,0.25);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &:hover, &:active, &:focus {
+        box-shadow: 0 4px 16px rgba($primary-color, 0.15);
+        border: 1px solid #e0e0e0 !important;
+        outline: none;
+    }
+}
+
+// Dashboard Header
+.dashboard-header {
+    @include gradient-bg($primary-color, $primary-light);
+    @include flex-center;
+    justify-content: flex-start;
+    border-radius: $border-radius;
+    margin: 0 0 12px 0;
+    padding: 7px 14px;
+    box-shadow: 0 2px 8px rgba($primary-color, 0.10);
+    border: none;
+
+    &-content {
+        @include flex-center;
+        gap: 14px;
+    }
+
+    &-icon {
+        font-size: 1.2em;
+        color: #fff;
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        padding: 5px;
+        @include flex-center;
+    }
+
+    &-title {
+        font-size: 1em;
+        font-weight: bold;
+        color: #fff;
+        letter-spacing: 1px;
+    }
+
+    &-count {
+        font-size: 0.6em;
+        color: #e3f2fd;
+        margin-left: 5px;
+    }
+}
+
+// Property Map
 .property-map-container {
     margin: 20px 0;
     padding: 20px;
     background: white;
-    border-radius: 8px;
+    border-radius: $border-radius;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .filter-section {
@@ -100,7 +177,7 @@
     }
 }
 
-/* Modern table styles */
+// Property Ward Table
 .property-ward-table {
     width: 100%;
     border-collapse: collapse;
@@ -109,20 +186,79 @@
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     margin-top: 24px;
+
+    th, td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #e0e0e0;
+        text-align: center;
+    }
+
+    th {
+        background: #f5f5f5;
+        color: $primary-color;
+        font-weight: bold;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tbody tr:hover {
+        background: #f0f7fa;
+    }
 }
-.property-ward-table th, .property-ward-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #e0e0e0;
-    text-align: center;
+
+// Filter Bar
+.filter-bar {
+    @include flex-center;
+    gap: 10px;
+    padding: 4px 8px;
+    background: #f9fbfd;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba($primary-color, 0.04);
+    margin-bottom: 10px;
 }
-.property-ward-table th {
-    background: #f5f5f5;
-    color: #1976d2;
-    font-weight: bold;
+
+.filter-select {
+    height: 24px;
+    font-size: 0.9em;
+    padding: 1px 6px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    min-width: 100px;
 }
-.property-ward-table tr:last-child td {
-    border-bottom: none;
+
+.filter-btn, .clear-btn {
+    height: 24px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    border: none;
+    padding: 0 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background $transition-duration;
+
+    i {
+        margin-right: 4px;
+    }
 }
-.property-ward-table tbody tr:hover {
-    background: #f0f7fa;
+
+.filter-btn {
+    @include gradient-bg($primary-color, $primary-light);
+    color: #fff;
+
+    &:hover {
+        @include gradient-bg(#1565c0, $primary-color);
+    }
+}
+
+.clear-btn {
+    background: #fff;
+    color: $primary-color;
+    border: 1px solid #e0e0e0;
+
+    &:hover {
+        background: #f0f4f8;
+    }
 }
