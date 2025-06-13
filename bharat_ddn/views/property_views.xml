@@ -108,12 +108,18 @@
                                 icon="fa-file-pdf-o"/>
                     </header>
                     <sheet>
-                    <field name="qr_code" widget="image" class="oe_avatar img1" style="width: 300px !important; height: 300px !important;" options="{'preview_image': 'qr_code'}"/>
-                        <group>
-                            <field name="uuid"/>
-                            <field name="microsite_url" widget="url" string="Open Microsite"/>
+                        <group col="2">
+                            <group>
+                                <field name="uuid"/>
+                                <field name="microsite_url" widget="url" string="Open Microsite"/>
+                            </group>
+                            <group>
+                                <field name="qr_code" widget="image" class="oe_avatar img1"
+                                    style="max-width: 180px; max-height: 180px; width: 100%; height: auto; margin-left: auto; margin-right: 0;"
+                                    options="{'preview_image': 'qr_code'}"/>
+                            </group>
                         </group>
-                        <group>
+                        <group col="2">
                             <group>
                                 <field name="upic_no"/>
                                 <field name="mobile_no"/>
@@ -134,7 +140,7 @@
                                 <field name="company_id"/>
                                 <field name="address_line_1"/>
                                 <field name="address_line_2"/>
-                                <field name="property_no"/>                                
+                                <field name="property_no"/>
                             </group>
                         </group>
                         <group>
@@ -224,7 +230,6 @@
                                         <field name="donkey"/>
                                         <field name="other"/>
                                     </group>
-
                                 </group>
                             </page>
 
