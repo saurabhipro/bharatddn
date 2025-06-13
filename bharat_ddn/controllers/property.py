@@ -5,6 +5,7 @@ from odoo.http import request, Response
 from datetime import datetime, date, timedelta
 import json
 import logging
+import logging
 
 
 _logger = logging.getLogger(__name__)
@@ -74,6 +75,8 @@ class PropertyDetailsAPI(http.Controller):
             "longitude": property.longitude,
             "mobile_no": property.mobile_no,
             "owner_name": property.owner_name,
+            "property_type": property.property_type_id.name if property.property_type_id else '',
+            "property_type_id": property.property_type_id.id if property.property_type_id else False,
             "survey_line_ids": [self._format_survey_data(survey) for survey in property.survey_line_ids if property.survey_line_ids]
         }
 
@@ -107,8 +110,13 @@ class PropertyDetailsAPI(http.Controller):
         try:
             data = json.loads(request.httprequest.data or "{}")
             upic_no = data.get('upic_no', '')
+            property_type_id = data.get('property_type_id')  # Get property_type_id from request
+
             if not upic_no:
                 return Response(json.dumps({'error': 'upic_no is required'}), status=400, content_type='application/json')
+            
+            if not property_type_id:
+                return Response(json.dumps({'error': 'property_type_id is required'}), status=400, content_type='application/json')
             
             property_record = request.env['ddn.property.info'].sudo().search([('upic_no', '=', upic_no)])
 
@@ -125,12 +133,15 @@ class PropertyDetailsAPI(http.Controller):
                     content_type='application/json'
                 )
             
+            # Add property_id to the data
+            data['property_id'] = property_record.id
             survey_line_vals = self._prepare_survey_line_vals(data)
 
             # Update both survey line and property status
             property_record.write({
                 'survey_line_ids': [(0, 0, survey_line_vals)],
-                'property_status': 'surveyed'  # Update property status to surveyed
+                'property_status': 'surveyed',  # Update property status to surveyed
+                'property_type': property_type_id  # Update property type in the property record
             })
 
             _logger.info(f"Successfully created a new survey for property {upic_no}")
@@ -326,7 +337,8 @@ class PropertyDetailsAPI(http.Controller):
             'surveyer_id': data.get('surveyer_id'),
             'zone_id': data.get('zone_id'),
             'ward_id': data.get('ward_id'),
-            'property_status': 'discovered'
+            'property_status': 'discovered',
+            'property_type_id': data.get('property_type_id'),
         }
 
     @http.route('/api/recent_surveys', type='http', auth='public', methods=['POST'], csrf=False)
@@ -389,6 +401,44 @@ class PropertyDetailsAPI(http.Controller):
             _logger.error(f"Error in get_recent_surveys: {str(e)}")
             return Response(
                 json.dumps({'error': str(e)}),
+                status=500,
+                content_type='application/json'
+            )
+
+    @http.route('/api/property_types', type='http', auth='public', methods=['GET'], csrf=False)
+    @check_permission
+    def get_property_types(self, **kwargs):
+        """Get all property types with their names and IDs."""
+        try:
+            property_types = request.env['ddn.property.type'].sudo().search([])
+            
+            property_type_list = [{
+                'id': pt.id,
+                'name': pt.name,
+                'code': pt.code if hasattr(pt, 'code') else '',
+                'description': pt.description if hasattr(pt, 'description') else '',
+                'group_id': pt.group_id.id if pt.group_id else False,
+                'group_name': pt.group_id.name if pt.group_id else ''
+            } for pt in property_types]
+
+            return Response(
+                json.dumps({
+                    'status': 'success',
+                    'message': 'Property types fetched successfully',
+                    'property_types': property_type_list
+                }),
+                status=200,
+                content_type='application/json'
+            )
+
+        except Exception as e:
+            _logger.error(f"Error in get_property_types: {str(e)}")
+            return Response(
+                json.dumps({
+                    'status': 'error',
+                    'message': 'An error occurred while fetching property types',
+                    'details': str(e)
+                }),
                 status=500,
                 content_type='application/json'
             )

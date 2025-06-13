@@ -180,6 +180,7 @@ class Property(models.Model):
         ('discovered', 'Discovered')
          ], string="Property Status", default="uploaded")
     
+    property_type = fields.Many2one('ddn.property.type', string='Property Type', tracking=True)
     
     _sql_constraints = [
         ('unique_upic_no', 'UNIQUE(upic_no)', 'The UPICNO must be unique.')

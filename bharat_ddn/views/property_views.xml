@@ -14,6 +14,7 @@
                     <field name="zone_id" optional="show"/>
                     <field name="ward_id" optional="show"/>
                     <field name="colony_id" optional="show"/>
+                    <field name="property_type" optional="show"/>
                     <field name="property_no" optional="hide"/>
                     <field name="plot_no" optional="hide"/>
                     <field name="bill_no" optional="hide"/>
@@ -120,6 +121,7 @@
                                 <field name="zone_id"/>
                                 <field name="ward_id"/>
                                 <field name="colony_id"/>
+                                <field name="property_type"/>
                                 <field name="latitude"/>
                                 <field name="longitude"/>
                             </group>
@@ -306,6 +308,7 @@
                     <field name="property_description"/>
                     <field name="latitude"/>
                     <field name="longitude"/>
+                    <field name="property_type"/>
                 </search>
             </field>
         </record>
