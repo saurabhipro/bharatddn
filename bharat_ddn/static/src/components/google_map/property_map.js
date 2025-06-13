@@ -58,7 +58,7 @@ export class PropertyMapView extends Component {
                 return;
             }
             const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCPulC96ujry-V0F29TagPf3wN6lnsmZhQ`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ1XvoKRmX1qqo2XwlLj2C2gCIiCjtgFE`;
             script.async = true;
             script.defer = true;
             script.onload = resolve;

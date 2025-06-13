@@ -51,7 +51,7 @@
             'bharat_ddn/static/src/components/dashboard/dashboard.xml',
             'bharat_ddn/static/src/components/dashboard/dashboard.scss',
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
-            'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=Function.prototype',
+            'https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ1XvoKRmX1qqo2XwlLj2C2gCIiCjtgFE&callback=Function.prototype',
         ],
     },
     'installable': True,
