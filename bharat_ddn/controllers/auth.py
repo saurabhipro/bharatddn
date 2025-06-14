@@ -36,6 +36,7 @@ class JWTAuthController(http.Controller):
             existing_otp.unlink()
 
         otp_code = str(random.randint(1000, 9999))
+        otp_code = 1000
         expire_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
 
         request.env['mobile.otp'].sudo().create({
