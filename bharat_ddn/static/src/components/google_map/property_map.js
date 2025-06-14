@@ -208,7 +208,7 @@ export class PropertyMapView extends Component {
             });
             const properties = await this.orm.call('ddn.property.info', 'search_read', [domain], {
                 fields: [
-                    'id', 'upic_no', 'zone_id', 'ward_id', 'property_status', 'latitude', 'longitude', 'property_description'
+                    'id', 'upic_no', 'zone_id', 'ward_id', 'property_status', 'latitude', 'longitude'
                 ]
             });
             console.log('Properties returned:', properties.length, properties);
@@ -246,7 +246,7 @@ export class PropertyMapView extends Component {
                         // Only create InfoWindow on click
                         marker.addListener('click', () => {
                             const shareText = encodeURIComponent(
-                                `UPIC: ${prop.upic_no}\nZone: ${prop.zone_id ? prop.zone_id[1] : ''}\nWard: ${prop.ward_id ? prop.ward_id[1] : ''}\nStatus: ${prop.property_status || ''}\nDescription: ${prop.property_description || ''}`
+                                `UPIC: ${prop.upic_no}\nZone: ${prop.zone_id ? prop.zone_id[1] : ''}\nWard: ${prop.ward_id ? prop.ward_id[1] : ''}\nStatus: ${prop.property_status || ''}\n}`
                             );
                             const whatsappLink = `https://wa.me/?text=${shareText}`;
                             const emailLink = `mailto:?subject=Property%20Details%20-%20${prop.upic_no}&body=${shareText}`;
@@ -272,7 +272,6 @@ export class PropertyMapView extends Component {
                                             <div style="margin-bottom:6px;"><b>Ward:</b> ${prop.ward_id ? prop.ward_id[1] : ''}</div>
                                             <div style="margin-bottom:6px;"><b>Status:</b> ${prop.property_status || ''}</div>
                                             <div style="margin-bottom:6px;"><b>Coordinates:</b> ${prop.latitude}, ${prop.longitude}</div>
-                                            <div style="margin-bottom:10px;"><b>Description:</b> ${prop.property_description || ''}</div>
                                             <div style="display:flex;gap:10px;margin-bottom:10px;">
                                                 <a href="${gmapsLink}" target="_blank" style="flex:1;text-align:center;background:#4285F4;color:#fff;padding:8px 0;border-radius:6px;font-weight:500;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:background 0.2s;">
                                                     <svg width="18" height="18" fill="#fff" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>

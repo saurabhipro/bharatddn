@@ -1,5 +1,9 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import boto3
+import base64
+from odoo.exceptions import UserError
+
 
 class SurveyParameters(models.Model):
     _name = 'ddn.property.survey'
@@ -24,7 +28,60 @@ class SurveyParameters(models.Model):
     installer_id = fields.Many2one('res.users', string='Installer')
     property_image = fields.Binary() 
     property_image1 = fields.Binary() 
+    image1_s3_url = fields.Char(string="URL Image", readonly=True)
+    image2_s3_url = fields.Char(string="Url Image2", readonly=True)
+
+
     mobile_no = fields.Char('Mobile No')
+
+
+    def _upload_image_field_to_s3(self, field_name, s3_filename):
+        self.ensure_one()
+
+        image_data = getattr(self, field_name, False)
+        if not image_data:
+            raise UserError(f"The field '{field_name}' is empty.")
+
+        company_id = self.company_id
+        AWS_ACCESS_KEY = company_id.aws_acsess_key
+        AWS_SECRET_KEY = company_id.aws_secret_key
+        AWS_REGION = company_id.aws_region
+        S3_BUCKET_NAME = company_id.s3_bucket_name
+
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY,
+            aws_secret_access_key=AWS_SECRET_KEY,
+            region_name=AWS_REGION,
+            verify=False  # Disable only in development
+        )
+
+        # Decode and upload
+        decoded_image = base64.b64decode(image_data)
+        s3_key = f"{s3_filename}.jpg"
+
+        s3_client.put_object(
+            Bucket=S3_BUCKET_NAME,
+            Key=s3_key,
+            Body=decoded_image,
+            ContentType='image/jpeg'
+        )
+
+        return f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
+    
+
+
+    def action_upload_all_images(self):
+        for rec in self:
+            rec.image1_s3_url = rec._upload_image_field_to_s3('property_image', f"{rec.property_id.upic_no}_1")
+            rec.image2_s3_url = rec._upload_image_field_to_s3('property_image1', f'{rec.property_id.upic_no}_2')
+
+            # Clear binary fields to save DB space
+            rec.property_image = False
+            rec.property_image1 = False
+
+
+
 
     @api.onchange('property_id')
     def _onchange_property_id(self):

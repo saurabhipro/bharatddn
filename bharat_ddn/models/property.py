@@ -152,7 +152,6 @@ class Property(models.Model):
     
     # Billing Information
     bill_no = fields.Char('Bill No')
-    property_description = fields.Text('Property Description')
     
     # Plot Information
     plot_area = fields.Float('Plot Area')  # In Sq. Ft. or desired unit

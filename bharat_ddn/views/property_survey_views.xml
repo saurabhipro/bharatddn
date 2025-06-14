@@ -35,7 +35,7 @@
                                 <field name="floor_number"/>
                                 <field name="owner_name"/>
                                 <field name="mobile_no"/>
-                                <field name="property_image" widget="image"/>
+                                <field name="property_image" widget="image" invisible="image1_s3_url"/>
                             </group>
                             <group>
                                 <field name="father_name"/>
@@ -45,9 +45,18 @@
                                 <field name="surveyer_id"/>
                                 <field name="installer_id"/>
                                 <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>         
-                                <field name="property_image1" widget="image"/>
+                                <field name="property_image1" widget="image"  invisible="image2_s3_url"/>
                             </group>
                     
+                        </group>
+                        <group>
+                            <group>
+                                <field name="image1_s3_url" widget="url"/>
+                            </group>
+                            <group>
+                                <field name="image2_s3_url" widget="url"/>
+                            </group>
+                            <button name="action_upload_all_images" type="object" string="Upload to S3" class="btn-primary" invisible="image2_s3_url and image2_s3_url"/>
                         </group>
                     </sheet>
                     <chatter/>

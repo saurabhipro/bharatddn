@@ -47,7 +47,9 @@ class JWTAuthController(http.Controller):
         })
 
         try:
-            api_url = f"https://webmsg.smsbharti.com/app/smsapi/index.php?key=5640415B1D6730&campaign=0&routeid=9&type=text&contacts={mobile}&senderid=SPTSMS&msg=Your%20otp%20is%20{otp_code}%20SELECTIAL&template_id=1707166619134631839"
+            template_url = request.env['ir.config_parameter'].sudo().get_param('otp_url')
+            api_url = template_url.format(mobile=mobile, otp_code=otp_code)
+            # api_url = f"https://webmsg.smsbharti.com/app/smsapi/index.php?key=5640415B1D6730&campaign=0&routeid=9&type=text&contacts={mobile}&senderid=SPTSMS&msg=Your%20otp%20is%20{otp_code}%20SELECTIAL&template_id=1707166619134631839"
             response = requests.get(api_url)
             if response.status_code == 200:
                 if 'ERR' in response.text:

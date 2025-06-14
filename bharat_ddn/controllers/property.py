@@ -6,6 +6,8 @@ from datetime import datetime, date, timedelta
 import json
 import logging
 import logging
+import boto3
+import base64
 
 
 _logger = logging.getLogger(__name__)
@@ -105,12 +107,10 @@ class PropertyDetailsAPI(http.Controller):
     @check_permission
     def create_survey(self, **kwargs):
         """Create a new survey for a property."""
-        _logger.info("create_survey API endpoint hit")
-
         try:
             data = json.loads(request.httprequest.data or "{}")
             upic_no = data.get('upic_no', '')
-            property_type_id = data.get('property_type_id')  # Get property_type_id from request
+            property_type_id = data.get('property_type_id')
 
             if not upic_no:
                 return Response(json.dumps({'error': 'upic_no is required'}), status=400, content_type='application/json')
@@ -132,19 +132,56 @@ class PropertyDetailsAPI(http.Controller):
                     status=400, 
                     content_type='application/json'
                 )
+            # Get company details for S3
+            company_id = property_record.company_id
+            if not company_id:
+                return Response(json.dumps({'error': 'Company not found for the property'}), status=400, content_type='application/json')
+
+            # Upload images to S3 if they exist
+            property_image_url = None
+            property_image1_url = None
+
+            if data.get('property_image'):
+                # Validate base64 string
+                if not data['property_image'].strip():
+                    return Response(json.dumps({'error': 'Empty property_image data'}), status=400, content_type='application/json')
+                
+                try:
+                    property_image_url = self._upload_image_to_s3(
+                        data['property_image'],
+                        f"{upic_no}_1",
+                        company_id
+                    )
+                except ValueError as ve:
+                    return Response(json.dumps({'error': str(ve)}), status=400, content_type='application/json')
+                except Exception as e:
+                    _logger.error(f"Error uploading property_image: {str(e)}")
+                    return Response(json.dumps({'error': f'Error uploading property_image: {str(e)}'}), status=500, content_type='application/json')
+
+            if data.get('property_image1'):
+                try:
+                    property_image1_url = self._upload_image_to_s3(
+                        data['property_image1'],
+                        f"{upic_no}_2",
+                        company_id
+                    )
+                except Exception as e:
+                    _logger.error(f"Error uploading property_image1: {str(e)}")
+                    return Response(json.dumps({'error': f'Error uploading property_image1: {str(e)}'}), status=500, content_type='application/json')
             
             # Add property_id to the data
             data['property_id'] = property_record.id
+            data['image1_s3_url'] = property_image_url
+            data['image2_s3_url'] = property_image1_url
+            
             survey_line_vals = self._prepare_survey_line_vals(data)
-
             # Update both survey line and property status
             property_record.write({
                 'survey_line_ids': [(0, 0, survey_line_vals)],
-                'property_status': 'surveyed',  # Update property status to surveyed
-                'property_type': property_type_id  # Update property type in the property record
+                'property_status': 'surveyed',
+                'property_type': property_type_id
             })
 
-            _logger.info(f"Successfully created a new survey for property {upic_no}")
             return Response(json.dumps({'message': 'Survey created successfully'}), status=200, content_type='application/json')
 
         except jwt.ExpiredSignatureError:
@@ -154,8 +191,56 @@ class PropertyDetailsAPI(http.Controller):
             _logger.error("Invalid JWT token")
             raise AccessError('Invalid JWT token')
         except Exception as e:
-            _logger.error(f"Error occurred: {str(e)}")
             return Response(json.dumps({'error': str(e)}), status=500, content_type='application/json')
+
+    def _upload_image_to_s3(self, image_data, s3_filename, company_id):
+        """Upload image to S3 bucket and return the URL."""
+        try:
+            AWS_ACCESS_KEY = company_id.aws_acsess_key
+            AWS_SECRET_KEY = company_id.aws_secret_key
+            AWS_REGION = company_id.aws_region
+            S3_BUCKET_NAME = company_id.s3_bucket_name
+
+            if not all([AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, S3_BUCKET_NAME]):
+                raise ValueError("Missing AWS credentials in company settings")
+
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_KEY,
+                aws_secret_access_key=AWS_SECRET_KEY,
+                region_name=AWS_REGION,
+                verify=False  # ⚠️ Keep False only in dev
+            )
+
+            # ✅ Fix base64 padding
+            def fix_base64_padding(b64_string):
+                if not b64_string:
+                    raise ValueError("Empty base64 string")
+                missing_padding = len(b64_string) % 4
+                if missing_padding:
+                    b64_string += '=' * (4 - missing_padding)
+                return b64_string
+
+
+            fixed_b64 = fix_base64_padding(image_data)
+            decoded_image = base64.b64decode(fixed_b64)
+
+
+            s3_key = f"{s3_filename}.jpg"
+
+            s3_client.put_object(
+                Bucket=S3_BUCKET_NAME,
+                Key=s3_key,
+                Body=decoded_image,
+                ContentType='image/jpeg'
+            )
+
+
+            return f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
+
+        except Exception as e:
+            _logger.error(f"Error in _upload_image_to_s3: {str(e)}")
+            raise UserError(f"Failed to upload image to S3: {str(e)}")
 
     def _prepare_survey_line_vals(self, data):
         """Prepare survey line values from data."""

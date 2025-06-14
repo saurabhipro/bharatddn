@@ -8,7 +8,22 @@
                 <field name="arch" type="xml">
                     <xpath expr="//field[@name='phone']" position="after">
                         <field name="plate_background_image"  widget="image" class="oe_avatar"/>
-                        <field name="s3_bucket_base_url" string="S3 Bucket Base URL" help="Base URL for the S3 bucket (e.g., https://your-bucket.s3.amazonaws.com/)"/>
+                        <field name="s3_bucket_name" string="S3 Bucket Base URL" help="Base URL for the S3 bucket (e.g., https://your-bucket.s3.amazonaws.com/)"/>
+                    </xpath>
+                    <xpath expr="//notebook" position="inside">
+                        <page string="AWS Configuration" name="aws_configuration">
+                            <group>
+                                <group>
+                                    <field name="s3_bucket_name"/>
+                                    <field name="aws_acsess_key"/>
+                                </group>
+                                <group>
+                                    <field name="aws_region"/>
+                                    <field name="aws_secret_key"/>
+                                </group>
+                            </group>
+
+                        </page>
                     </xpath>
                 </field>
             </record>
