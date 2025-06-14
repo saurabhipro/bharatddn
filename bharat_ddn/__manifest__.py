@@ -43,8 +43,8 @@
     'assets': {
         'web.assets_backend': [
             # Components
-            'bharat_ddn/static/src/components/kpi_card/kpi_card.js',
-            'bharat_ddn/static/src/components/kpi_card/kpi_card.xml',
+            # 'bharat_ddn/static/src/components/kpi_card/kpi_card.js',
+            # 'bharat_ddn/static/src/components/kpi_card/kpi_card.xml',
             'bharat_ddn/static/src/components/google_map/property_map.js',
             'bharat_ddn/static/src/components/google_map/property_map_template.xml',
             'bharat_ddn/static/src/components/dashboard/dashboard.js',

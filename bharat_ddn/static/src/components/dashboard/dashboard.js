@@ -1,13 +1,12 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { KpiCard } from "../kpi_card/kpi_card";
 import { PropertyMapView } from "../google_map/property_map";
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 
 export class OwlCrmDashboard extends Component {
-    static components = { KpiCard, PropertyMapView };
+    static components = {PropertyMapView };
 
     setup() {
         this.orm = useService("orm");
