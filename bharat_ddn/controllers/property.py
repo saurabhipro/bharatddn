@@ -534,27 +534,17 @@ class PropertyDetailsAPI(http.Controller):
                 limit=5
             )
 
-            survey_data_list = []
-            for survey in recent_surveys:
-                survey_data = {
-                    'upic_no': survey.property_id.upic_no,
-                    'ward_name': survey.property_id.ward_id.name,
-                    'zone_name': survey.property_id.zone_id.name,
-                    'owner_name': survey.owner_name,
-                    'mobile_no': survey.mobile_no,
-                    'address': f"{survey.address_line_1}, {survey.address_line_2}",
-                    'created_date': survey.create_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    'total_floors': survey.total_floors,
-                    'floor_number': survey.floor_number,
-                    'unit': survey.unit
-                }
-                survey_data_list.append(survey_data)
+            # Get unique properties from the surveys
+            properties = recent_surveys.mapped('property_id')
+            
+            # Format the response using the same format as get_property
+            property_data = [self._format_property_data(property) for property in properties]
 
             return Response(
                 json.dumps({
-                    'status': 'success',
-                    'message': 'Recent surveys fetched successfully',
-                    'recent_surveys': survey_data_list
+                    'property_details': property_data,
+                    'matched_count': len(property_data),
+                    'message': 'Recent surveys fetched successfully'
                 }),
                 status=200,
                 content_type='application/json'
