@@ -90,12 +90,10 @@ class JWTAuthController(http.Controller):
 
         payload = {
             'user_id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        print("Token - ", token)
         request.env['jwt.token'].sudo().create({'user_id': user.id, 'token': token})
-        print("------------------ ", {'user_id': user, 'company_ids': user.company_id.id, 'token': token})
         return Response(json.dumps({'user_id': user.id, 'company_id': user.company_id.id, 'token': token}), status=200, content_type='application/json' )
 
     """ API CRUD """

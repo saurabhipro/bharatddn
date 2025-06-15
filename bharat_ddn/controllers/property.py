@@ -77,8 +77,8 @@ class PropertyDetailsAPI(http.Controller):
             "longitude": property.longitude,
             "mobile_no": property.mobile_no,
             "owner_name": property.owner_name,
-            "property_type": property.property_type_id.name if property.property_type_id else '',
-            "property_type_id": property.property_type_id.id if property.property_type_id else False,
+            "property_type": property.property_type.name if property.property_type else '',
+            "property_type_id": property.property_type.id if property.property_type else False,
             "survey_line_ids": [self._format_survey_data(survey) for survey in property.survey_line_ids if property.survey_line_ids]
         }
 
