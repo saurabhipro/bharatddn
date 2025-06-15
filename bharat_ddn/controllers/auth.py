@@ -94,7 +94,24 @@ class JWTAuthController(http.Controller):
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         request.env['jwt.token'].sudo().create({'user_id': user.id, 'token': token})
-        return Response(json.dumps({'user_id': user.id, 'company_id': user.company_id.id, 'token': token}), status=200, content_type='application/json' )
+
+        # After successful login:
+        user = request.env['res.users'].sudo().browse(user.id)
+        wards = []
+        for ward in user.ward_id:
+            wards.append({
+                'id': ward.id,
+                'name': ward.name,
+                # add other ward fields if needed
+            })
+
+        response = {
+            'user_id': user.id,
+            'company_id': user.company_id.id,
+            'token': token,
+            'wards': wards,
+        }
+        return Response(json.dumps(response), content_type='application/json', status=200)
 
     """ API CRUD """
     @http.route('/api/get_contacts', type='json', auth='none', methods=['POST'], csrf=False)

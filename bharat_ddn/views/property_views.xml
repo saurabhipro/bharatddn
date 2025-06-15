@@ -186,17 +186,9 @@
                                                 </group>
                                             </group>
                                             <h4>Property Survey</h4>
-                                            <group>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <field name="property_image" widget="image" optional="show" 
-                                                                        style="max-width: 100px; max-height: 100px;" invisible="image1_s3_url"/>
-                                                    </div>
-                                                    <div class="col">
-                                                        <field name="property_image1" widget="image" optional="show" 
-                                                            style="max-width: 100px; max-height: 100px;" invisible="image2_s3_url"/>
-                                                    </div>
-                                                </div>
+                                            <group col="2">
+                                                <field name="property_image" widget="image" optional="show" style="max-width: 100px; max-height: 100px;"/>
+                                                <field name="property_image1" widget="image" optional="show" style="max-width: 100px; max-height: 100px;"/>
                                             </group>
 
                                             <group>
