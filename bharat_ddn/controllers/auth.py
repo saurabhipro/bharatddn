@@ -155,7 +155,16 @@ class JWTAuthController(http.Controller):
                     'name': user.name,
                     'email': user.email,
                     'mobile': user.mobile,
-                    'image_1920': str(user.image_1920)  # base64
+                    'image_1920': str(user.image_1920),  # base64
+                    'company_id': user.company_id.id,
+                    'company_name': user.company_id.name,
+                    'wards': [
+                        {
+                            'id': ward.id,
+                            'name': ward.name
+                        }
+                        for ward in user.ward_id
+                    ]
                 }
                 return Response(
                     json.dumps({'status': 'success', 'message': 'User profile fetched successfully', 'data': user_data}),
