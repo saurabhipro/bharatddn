@@ -288,3 +288,49 @@ class Property(models.Model):
             'target': 'new',
         }
     
+    def _prepare_property_vals(self, data):
+        """Prepare property values from data."""
+        # Get zone and ward IDs from names if provided
+        zone_id = False
+        ward_id = False
+        
+        if data.get('zone_name'):
+            zone = request.env['ddn.zone'].sudo().search([('name', '=', data['zone_name'])], limit=1)
+            zone_id = zone.id if zone else False
+            
+        if data.get('ward_name'):
+            ward = request.env['ddn.ward'].sudo().search([('name', '=', data['ward_name'])], limit=1)
+            ward_id = ward.id if ward else False
+
+        # Get colony ID if colony_name is provided
+        colony_id = False
+        if data.get('colony_name'):
+            colony = request.env['ddn.colony'].sudo().search([('name', '=', data['colony_name'])], limit=1)
+            colony_id = colony.id if colony else False
+
+        # Map property_type_id to property_type
+        property_type = data.get('property_type_id')
+
+        # Get property_status with default value
+        property_status = data.get('property_status', 'discovered')
+        # Validate property_status
+        valid_statuses = ['uploaded', 'pdf_downloaded', 'surveyed', 'discovered']
+        if property_status not in valid_statuses:
+            property_status = 'discovered'  # Default to discovered if invalid status
+
+        return {
+            'company_id': data.get('company_id'),
+            'address_line_1': data.get('address_line_1'),
+            'address_line_2': data.get('address_line_2'),
+            'mobile_no': data.get('mobile'),
+            'owner_name': data.get('owner_name'),
+            'longitude': data.get('longitude'),
+            'latitude': data.get('latitude'),
+            'surveyer_id': data.get('surveyer_id'),
+            'zone_id': zone_id or data.get('zone_id'),
+            'ward_id': ward_id or data.get('ward_id'),
+            'colony_id': colony_id,
+            'property_status': property_status,  # Now accepts custom status
+            'property_type': property_type
+        }
+    

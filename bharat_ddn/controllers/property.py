@@ -268,9 +268,23 @@ class PropertyDetailsAPI(http.Controller):
         """Create a new property record."""
         try:
             data = json.loads(request.httprequest.data or "{}")
+            
+            # Validate required fields
+            required_fields = ['company_id', 'surveyer_id', 'address_line_1', 'mobile']
+            missing_fields = [field for field in required_fields if not data.get(field)]
+            
+            if missing_fields:
+                return Response(
+                    json.dumps({
+                        'status': 'error',
+                        'message': f'Missing required fields: {", ".join(missing_fields)}'
+                    }),
+                    status=400,
+                    content_type='application/json'
+                )
+
             vals = self._prepare_property_vals(data)
             property_record = request.env['ddn.property.info'].sudo().create(vals)
-            property_record.property_status = 'discovered'  # Update property status to surveyed
             
             return Response(
                 json.dumps({
@@ -432,6 +446,24 @@ class PropertyDetailsAPI(http.Controller):
 
     def _prepare_property_vals(self, data):
         """Prepare property values from data."""
+        # Get zone and ward IDs from names if provided
+        zone_id = False
+        ward_id = False
+        
+        if data.get('zone_name'):
+            zone = request.env['ddn.zone'].sudo().search([('name', '=', data['zone_name'])], limit=1)
+            zone_id = zone.id if zone else False
+        
+        if data.get('ward_name'):
+            ward = request.env['ddn.ward'].sudo().search([('name', '=', data['ward_name'])], limit=1)
+            ward_id = ward.id if ward else False
+
+        # Get colony ID if colony_name is provided
+        colony_id = False
+        if data.get('colony_name'):
+            colony = request.env['ddn.colony'].sudo().search([('name', '=', data['colony_name'])], limit=1)
+            colony_id = colony.id if colony else False
+
         return {
             'company_id': data.get('company_id'),
             'address_line_1': data.get('address_line_1'),
@@ -441,10 +473,10 @@ class PropertyDetailsAPI(http.Controller):
             'longitude': data.get('longitude'),
             'latitude': data.get('latitude'),
             'surveyer_id': data.get('surveyer_id'),
-            'zone_id': data.get('zone_id'),
-            'ward_id': data.get('ward_id'),
-            'property_status': 'discovered',
-            'property_type_id': data.get('property_type_id'),
+            'zone_id': zone_id or data.get('zone_id'),
+            'ward_id': ward_id or data.get('ward_id'),
+            'colony_id': colony_id,
+            'property_status': 'discovered'
         }
 
     @http.route('/api/recent_surveys', type='http', auth='public', methods=['POST'], csrf=False)
