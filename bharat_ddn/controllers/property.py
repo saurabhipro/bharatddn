@@ -613,4 +613,110 @@ class PropertyIdDataAPI(http.Controller):
         except Exception as e:
             return Response(json.dumps({'error': str(e)}), status=500, content_type='application/json')
 
+    @http.route('/api/surveyor/surveys', type='http', auth='public', methods=['GET'], csrf=False)
+    @check_permission
+    def list_surveyor_surveys(self, **kwargs):
+        try:
+            page = int(request.httprequest.args.get('page', 1))
+            limit = int(request.httprequest.args.get('limit', 10))
+            offset = (page - 1) * limit
+
+            # Use the new helper function
+            user_id = extract_user_id_from_token(request.httprequest.headers.get('Authorization'))
+            if not user_id:
+                return Response(
+                    json.dumps({'error': 'Invalid or missing authorization token'}),
+                    status=401,
+                    content_type='application/json'
+                )
+
+            # Search for properties surveyed by this surveyor
+            domain = [('surveyer_id', '=', user_id)]
+            
+            # Get total count for pagination
+            total_count = request.env['ddn.property.info'].sudo().search_count(domain)
+            
+            # Get paginated records
+            properties = request.env['ddn.property.info'].sudo().search(
+                domain,
+                offset=offset,
+                limit=limit,
+                order='id desc'
+            )
+
+            # Format the response data
+            survey_list = []
+            for property in properties:
+                survey_data = {
+                    'upic_no': property.upic_no,
+                    'property_id': property.id,
+                    'status': property.property_status,
+                    'address': {
+                        'line1': property.address_line_1,
+                        'line2': property.address_line_2
+                    },
+                    'owner_name': property.owner_name,
+                    'mobile_no': property.mobile_no,
+                    'zone': property.zone_id.name if property.zone_id else '',
+                    'ward': property.ward_id.name if property.ward_id else '',
+                    'colony': property.colony_id.name if property.colony_id else '',
+                    'property_type': property.property_type.name if property.property_type else '',
+                    'survey_details': []
+                }
+
+                # Add survey details if available
+                for survey in property.survey_line_ids:
+                    survey_details = {
+                        'area': survey.area,
+                        'total_floors': survey.total_floors,
+                        'floor_number': survey.floor_number,
+                        'father_name': survey.father_name,
+                        'survey_date': survey.create_date.strftime('%Y-%m-%d %H:%M:%S') if survey.create_date else '',
+                        'images': {
+                            'image1': survey.image1_s3_url,
+                            'image2': survey.image2_s3_url
+                        }
+                    }
+                    survey_data['survey_details'].append(survey_details)
+
+                survey_list.append(survey_data)
+
+            response = {
+                'status': 'success',
+                'data': {
+                    'surveys': survey_list,
+                    'pagination': {
+                        'total_records': total_count,
+                        'total_pages': (total_count + limit - 1) // limit,
+                        'current_page': page,
+                        'limit': limit
+                    }
+                }
+            }
+
+            return Response(
+                json.dumps(response),
+                status=200,
+                content_type='application/json'
+            )
+
+        except Exception as e:
+            return Response(
+                json.dumps({
+                    'status': 'error',
+                    'message': 'An error occurred',
+                    'details': str(e)
+                }),
+                status=500,
+                content_type='application/json'
+            )
+
+def extract_user_id_from_token(token):
+    if not token:
+        raise AccessError('Authorization header is missing or invalid')
+    if token.startswith("Bearer "):
+        token = token[7:]
+    decoded_token = jwt.decode(token, options={"verify_signature": False})
+    return decoded_token['user_id']
+
 
