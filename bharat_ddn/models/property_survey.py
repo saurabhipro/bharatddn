@@ -33,6 +33,7 @@ class SurveyParameters(models.Model):
 
 
     mobile_no = fields.Char('Mobile No')
+    survey_date = fields.Date('Survey Date', default=fields.Date.context_today)
 
 
     def _upload_image_field_to_s3(self, field_name, s3_filename):
@@ -75,7 +76,6 @@ class SurveyParameters(models.Model):
         for rec in self:
             rec.image1_s3_url = rec._upload_image_field_to_s3('property_image', f"{rec.property_id.upic_no}_1")
             rec.image2_s3_url = rec._upload_image_field_to_s3('property_image1', f'{rec.property_id.upic_no}_2')
-
             # Clear binary fields to save DB space
             rec.property_image = False
             rec.property_image1 = False

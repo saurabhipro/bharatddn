@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <list string="Property Types">
                     <field name="property_id"/>
+                    <field name="survey_date"/>
                     <field name="owner_name"/>
                     <field name="father_name"/>
                     <field name="longitude"/>
@@ -22,20 +23,18 @@
             <field name="name">ddn.property.survey.form</field>
             <field name="model">ddn.property.survey</field>
             <field name="arch" type="xml">
-                <form string="Property Type">
+                <form string="Property Survey">
                     <sheet>
                         <group>
                             <group>
                                 <field name="property_id"/>
-
+                                <field name="survey_date" string="Survey Date Time"/>
                                 <field name="address_line_1"/>
                                 <field name="address_line_2"/>
                                 <field name="unit"/>
                                 <field name="total_floors"/>
                                 <field name="floor_number"/>
                                 <field name="owner_name"/>
-                                <field name="mobile_no"/>
-                                <field name="property_image" widget="image" invisible="image1_s3_url"/>
                             </group>
                             <group>
                                 <field name="father_name"/>
@@ -44,10 +43,17 @@
                                 <field name="latitude"/>
                                 <field name="surveyer_id"/>
                                 <field name="installer_id"/>
-                                <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>         
-                                <field name="property_image1" widget="image"  invisible="image2_s3_url"/>
+                                <field name="mobile_no"/>
+                                <field name="company_id" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
                             </group>
-                    
+                        </group>
+                        <group string="Property Images">
+                            <group>
+                                <field name="property_image" widget="image" class="oe_avatar" string="Property Image"/>
+                            </group>
+                            <group>
+                                <field name="property_image1" widget="image" class="oe_avatar" string="Property Image1"/>
+                            </group>
                         </group>
                         <group>
                             <group>
@@ -56,8 +62,8 @@
                             <group>
                                 <field name="image2_s3_url" widget="url"/>
                             </group>
-                            <button name="action_upload_all_images" type="object" string="Upload to S3" class="btn-primary" invisible="image2_s3_url and image2_s3_url"/>
                         </group>
+                        <button name="action_upload_all_images" type="object" string="Upload to S3" class="btn-primary" invisible="image2_s3_url and image2_s3_url"/>
                     </sheet>
                     <chatter/>
                 </form>

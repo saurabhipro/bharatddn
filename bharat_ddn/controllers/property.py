@@ -352,30 +352,57 @@ class PropertyDetailsAPI(http.Controller):
             Survey = request.env['ddn.property.survey'].sudo()
 
             def get_counts(company_id, ward_id, surveyor_id):
+                today = datetime.now().date()
+                today_start = datetime.combine(today, datetime.min.time())
+                today_end = datetime.combine(today, datetime.max.time())
+
                 # Total properties in the ward (not filtered by surveyor)
                 total = Property.search_count([
                     ('company_id', '=', company_id),
                     ('ward_id', '=', ward_id)
                 ])
-                # Surveyed count in the ward by this surveyor
+
+                # Today's surveyed count in the ward by this surveyor
+                today_surveyed = Survey.search_count([
+                    ('company_id', '=', company_id),
+                    ('property_id.ward_id', '=', ward_id),
+                    ('surveyer_id', '=', surveyor_id),
+                    ('create_date', '>=', today_start),
+                    ('create_date', '<=', today_end)
+                ])
+
+                # Today's discovered count
+                today_discovered = Property.search_count([
+                    ('company_id', '=', company_id),
+                    ('ward_id', '=', ward_id),
+                    ('property_status', '=', 'discovered'),
+                    ('create_date', '>=', today_start),
+                    ('create_date', '<=', today_end)
+                ])
+
+                # Calculate today's pending (total - today's surveyed - today's discovered)
+                today_pending = total - today_surveyed - today_discovered
+
+                # Overall counts (without date filter)
                 surveyed = Survey.search_count([
                     ('company_id', '=', company_id),
                     ('property_id.ward_id', '=', ward_id),
                     ('surveyer_id', '=', surveyor_id)
                 ])
-                # Discovered and pending from property model, filtered by ward
+
                 discovered = Property.search_count([
                     ('company_id', '=', company_id),
                     ('ward_id', '=', ward_id),
                     ('property_status', '=', 'discovered')
                 ])
-                pending = Property.search_count([
-                    ('company_id', '=', company_id),
-                    ('ward_id', '=', ward_id),
-                    ('property_status', '=', 'pending')
-                ])
+
+                pending = total - surveyed - discovered
+
                 return {
                     'total': total,
+                    'today_surveyed': today_surveyed,
+                    'today_discovered': today_discovered,
+                    'today_pending': today_pending,
                     'surveyed': surveyed,
                     'discovered': discovered,
                     'pending': pending,
@@ -397,19 +424,19 @@ class PropertyDetailsAPI(http.Controller):
                         "percent": f"+{percent(counts['total'])}%",
                     },
                     {
-                        "label": "Surveyed",
-                        "value": counts['surveyed'],
-                        "percent": f"+{percent(counts['surveyed'])}%",
+                        "label": "Today's Surveyed",
+                        "value": counts['today_surveyed'],
+                        "percent": f"+{percent(counts['today_surveyed'])}%",
                     },
                     {
-                        "label": "Discovered",
-                        "value": counts['discovered'],
-                        "percent": f"+{percent(counts['discovered'])}%",
+                        "label": "Today's Discovered",
+                        "value": counts['today_discovered'],
+                        "percent": f"+{percent(counts['today_discovered'])}%",
                     },
                     {
-                        "label": "Pending",
-                        "value": counts['pending'],
-                        "percent": f"{percent(counts['pending'])}%",
+                        "label": "Today's Pending",
+                        "value": counts['today_pending'],
+                        "percent": f"{percent(counts['today_pending'])}%",
                     },
                 ],
                 "overall": [
