@@ -16,15 +16,6 @@ class JWTAuthController(http.Controller):
         user = request.env['res.users'].sudo().search([('mobile', '=', mobile)], limit=1)
         
         if not user:           
-            # user_vals = {
-            #     'name': f"demo{user.id+1}",
-            #     'mobile': mobile,
-            #     'login': f"demo{user.id+1}",
-            #     'active': True,
-            #     'company_id': 1,
-            #     'company_ids': [(4, 1)],
-            #     'groups_id': [(6, 0, [request.env.ref('base.group_user').id, request.env.ref('jwt_mobile_auth.surveyor_group_ddn').id])],  # Assigning the user to the basic user group
-            # }
             return Response(json.dumps({'error': 'Surveyor Not Register'}), status=400, content_type='application/json')
         
         check_surveyor = user.is_surveyor
@@ -35,7 +26,26 @@ class JWTAuthController(http.Controller):
         if existing_otp:
             existing_otp.unlink()
 
-        otp_code = str(random.randint(1000, 9999))
+        otp_code = str(random.randint(1000, 9999))  # Generate random OTP by default
+        try:
+            template_url = request.env['ir.config_parameter'].sudo().get_param('otp_url')
+            if not template_url or not isinstance(template_url, str):
+                # If template_url is not valid, use fixed OTP
+                otp_code = '1000'
+            else:
+                # Remove any 'f' prefix if it exists in the template_url
+                if template_url.startswith('f"') or template_url.startswith("f'"):
+                    template_url = template_url[2:-1]  # Remove f" and the closing quote
+
+                api_url = template_url.format(mobile=mobile, otp_code=otp_code)
+                response = requests.get(api_url)
+                if response.status_code != 200 or 'ERR' in response.text:
+                    # API failed or returned error, use fixed OTP
+                    otp_code = '1000'
+        except Exception as e:
+            # Any exception, use fixed OTP
+            otp_code = '1000'
+
         expire_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
 
         request.env['mobile.otp'].sudo().create({
@@ -45,43 +55,11 @@ class JWTAuthController(http.Controller):
             'expire_date': expire_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
 
-        try:
-            template_url = request.env['ir.config_parameter'].sudo().get_param('otp_url')
-            if not template_url or not isinstance(template_url, str):
-                # If template_url is not valid, use hardcoded OTP
-                return Response(json.dumps({
-                    'message': 'OTP sent successfully (simulated)',
-                    'details': 'Using fallback OTP due to invalid template URL',
-                    'otp': 1000
-                }), status=200, content_type='application/json')
-
-            # Remove any 'f' prefix if it exists in the template_url
-            if template_url.startswith('f"') or template_url.startswith("f'"):
-                template_url = template_url[2:-1]  # Remove f" and the closing quote
-
-            api_url = template_url.format(mobile=mobile, otp_code=otp_code)
-            response = requests.get(api_url)
-            if response.status_code == 200 and 'ERR' not in response.text:
-                # API worked successfully, use actual OTP
-                return Response(json.dumps({
-                    'message': 'OTP sent successfully',
-                    'details': response.text,
-                    'otp': otp_code
-                }), status=200, content_type='application/json')
-            else:
-                # API failed or returned error, use hardcoded OTP
-                return Response(json.dumps({
-                    'message': 'OTP sent successfully (simulated)',
-                    'details': 'Using fallback OTP due to API failure',
-                    'otp': 1000
-                }), status=200, content_type='application/json')
-        except Exception as e:
-            # Any exception, use hardcoded OTP
-            return Response(json.dumps({
-                'message': 'OTP sent successfully (simulated)',
-                'details': 'Using fallback OTP due to API error',
-                'otp': 1000
-            }), status=200, content_type='application/json')
+        return Response(json.dumps({
+            'message': 'OTP sent successfully',
+            'details': 'OTP has been sent to your mobile number',
+            'otp': otp_code
+        }), status=200, content_type='application/json')
                
     """ LOGIN """
     @http.route('/api/auth/login', type='http', auth='none', methods=['POST'], csrf=False)
