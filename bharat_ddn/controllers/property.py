@@ -315,38 +315,59 @@ class PropertyDetailsAPI(http.Controller):
             data = json.loads(request.httprequest.data or "{}")
             surveyor_id = data.get('surveyor_id')
             company_id = data.get('company_id')
-            ward_id = data.get('ward_id')  # NEW: get ward_id
 
-            today_from = datetime.combine(date.today(), datetime.min.time())
-            today_to = datetime.combine(date.today() + timedelta(days=1), datetime.min.time())
+            # Get surveyor's ward
+            surveyor = request.env['res.users'].sudo().browse(surveyor_id)
+            if not surveyor:
+                return Response(
+                    json.dumps({'error': 'Surveyor not found'}),
+                    status=404,
+                    content_type='application/json'
+                )
+            
+            ward_id = surveyor.ward_id.id if surveyor.ward_id else False
+
+            if not ward_id:
+                return Response(
+                    json.dumps({'error': 'Surveyor does not have a ward assigned'}),
+                    status=400,
+                    content_type='application/json'
+                )
 
             Property = request.env['ddn.property.info'].sudo()
+            Survey = request.env['ddn.property.survey'].sudo()
 
-            def get_counts(domain):
+            def get_counts(company_id, ward_id, surveyor_id):
+                # Total properties in the ward (not filtered by surveyor)
+                total = Property.search_count([
+                    ('company_id', '=', company_id),
+                    ('ward_id', '=', ward_id)
+                ])
+                # Surveyed count in the ward by this surveyor
+                surveyed = Survey.search_count([
+                    ('company_id', '=', company_id),
+                    ('property_id.ward_id', '=', ward_id),
+                    ('surveyer_id', '=', surveyor_id)
+                ])
+                # Discovered and pending from property model, filtered by ward
+                discovered = Property.search_count([
+                    ('company_id', '=', company_id),
+                    ('ward_id', '=', ward_id),
+                    ('property_status', '=', 'discovered')
+                ])
+                pending = Property.search_count([
+                    ('company_id', '=', company_id),
+                    ('ward_id', '=', ward_id),
+                    ('property_status', '=', 'pending')
+                ])
                 return {
-                    'total': Property.search_count(domain),
-                    'surveyed': Property.search_count(domain + [('property_status', '=', 'surveyed')]),
-                    'discovered': Property.search_count(domain + [('property_status', '=', 'discovered')]),
-                    'pending': Property.search_count(domain + [('property_status', '=', 'pending')]),
+                    'total': total,
+                    'surveyed': surveyed,
+                    'discovered': discovered,
+                    'pending': pending,
                 }
 
-            # Build domains with optional ward_id
-            today_domain = [
-                ('company_id', '=', company_id),
-                ('surveyer_id', '=', surveyor_id),
-                ('create_date', '>=', today_from),
-                ('create_date', '<', today_to)
-            ]
-            all_domain = [
-                ('company_id', '=', company_id),
-                ('surveyer_id', '=', surveyor_id)
-            ]
-            if ward_id:
-                today_domain.append(('ward_id', '=', ward_id))
-                all_domain.append(('ward_id', '=', ward_id))
-
-            today_counts = get_counts(today_domain)
-            all_counts = get_counts(all_domain)
+            counts = get_counts(company_id, ward_id, surveyor_id)
 
             def percent(val):
                 # Dummy logic, replace with real calculation if available
@@ -358,45 +379,45 @@ class PropertyDetailsAPI(http.Controller):
                 "today": [
                     {
                         "label": "Total Properties",
-                        "value": today_counts['total'],
-                        "percent": f"+{percent(today_counts['total'])}%",
+                        "value": counts['total'],
+                        "percent": f"+{percent(counts['total'])}%",
                     },
                     {
                         "label": "Surveyed",
-                        "value": today_counts['surveyed'],
-                        "percent": f"+{percent(today_counts['surveyed'])}%",
+                        "value": counts['surveyed'],
+                        "percent": f"+{percent(counts['surveyed'])}%",
                     },
                     {
                         "label": "Discovered",
-                        "value": today_counts['discovered'],
-                        "percent": f"+{percent(today_counts['discovered'])}%",
+                        "value": counts['discovered'],
+                        "percent": f"+{percent(counts['discovered'])}%",
                     },
                     {
                         "label": "Pending",
-                        "value": today_counts['pending'],
-                        "percent": f"{percent(today_counts['pending'])}%",
+                        "value": counts['pending'],
+                        "percent": f"{percent(counts['pending'])}%",
                     },
                 ],
                 "overall": [
                     {
                         "label": "Total Properties",
-                        "value": all_counts['total'],
-                        "percent": f"+{percent(all_counts['total'])}%",
+                        "value": counts['total'],
+                        "percent": f"+{percent(counts['total'])}%",
                     },
                     {
                         "label": "Surveyed",
-                        "value": all_counts['surveyed'],
-                        "percent": f"+{percent(all_counts['surveyed'])}%",
+                        "value": counts['surveyed'],
+                        "percent": f"+{percent(counts['surveyed'])}%",
                     },
                     {
                         "label": "Discovered",
-                        "value": all_counts['discovered'],
-                        "percent": f"+{percent(all_counts['discovered'])}%",
+                        "value": counts['discovered'],
+                        "percent": f"+{percent(counts['discovered'])}%",
                     },
                     {
                         "label": "Pending",
-                        "value": all_counts['pending'],
-                        "percent": f"{percent(all_counts['pending'])}%",
+                        "value": counts['pending'],
+                        "percent": f"{percent(counts['pending'])}%",
                     },
                 ]
             }
