@@ -517,8 +517,6 @@ class PropertyDetailsAPI(http.Controller):
                     'mobile_no': survey.mobile_no,
                     'address': f"{survey.address_line_1}, {survey.address_line_2}",
                     'created_date': survey.create_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    'property_image': str(survey.property_image),
-                    'property_image1': str(survey.property_image1),
                     'total_floors': survey.total_floors,
                     'floor_number': survey.floor_number,
                     'unit': survey.unit
