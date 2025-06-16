@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import base64
 import re
@@ -41,7 +42,8 @@ class Property(models.Model):
     address_line_2 = fields.Char(string="Address 2")
     surveyer_id = fields.Many2one('res.users', string="Surveyor")
     microsite_url = fields.Char(string='Microsite URL', compute='_compute_microsite_url', store=False)
-    is_solar = fields.Char('Is Solar')
+    is_solar = fields.Boolean(string='Is Solar', default=True)
+    is_rainwater_harvesting = fields.Boolean(string='Is Rain water harvesting', default=True)
 
     latitude = fields.Char(
         string='Latitude',
@@ -61,7 +63,6 @@ class Property(models.Model):
     no_of_solar = fields.Char('No Of Solar')
     is_bore = fields.Char('Is Boar')
     no_of_bore = fields.Char('No Of Boar')
-    is_rainwater_harvesting = fields.Char('Is Rain water harvesting')
     no_of_rain_water_harvesting = fields.Char('No Of Rain Water harvesting')
     
     # Water Connection and Hand Pump Information

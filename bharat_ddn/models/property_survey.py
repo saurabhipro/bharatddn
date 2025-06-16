@@ -30,10 +30,10 @@ class SurveyParameters(models.Model):
     property_image1 = fields.Binary() 
     image1_s3_url = fields.Char(string="URL Image", readonly=True)
     image2_s3_url = fields.Char(string="Url Image2", readonly=True)
-
-
     mobile_no = fields.Char('Mobile No')
     survey_date = fields.Date('Survey Date', default=fields.Date.context_today)
+    is_solar = fields.Boolean(string='Is Solar', default=True)
+    is_rainwater_harvesting = fields.Boolean(string='Is Rain water harvesting', default=True)
 
 
     def _upload_image_field_to_s3(self, field_name, s3_filename):

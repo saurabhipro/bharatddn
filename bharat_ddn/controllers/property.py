@@ -101,6 +101,8 @@ class PropertyDetailsAPI(http.Controller):
             "installer_id": survey.installer_id.id,
             "property_image": str(survey.property_image),
             "property_image1": str(survey.property_image1),
+            "is_solar": survey.is_solar,
+            "is_rainwater_harvesting": survey.is_rainwater_harvesting,
         }
 
     @http.route('/api/property/create_survey', type='http', auth='public', methods=['POST'], csrf=False)
@@ -260,6 +262,8 @@ class PropertyDetailsAPI(http.Controller):
             'surveyer_id': data.get("surveyer_id", False),
             'property_image': data.get("property_image", False),
             'property_image1': data.get("property_image1", False),
+            'is_solar': data.get("is_solar", True),  # Default to True if not provided
+            'is_rainwater_harvesting': data.get("is_rainwater_harvesting", True),  # Default to True if not provided
         }
 
     @http.route('/api/create_property', type='http', auth='public', methods=['POST'], csrf=False)
