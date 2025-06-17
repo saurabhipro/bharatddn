@@ -75,7 +75,7 @@ class PropertyImportWizard(models.TransientModel):
                             'ward_id': ward_id.id,
                             'colony_id': colony_id.id,
                             'upic_no': row[header_map['upicno']],
-                            'property_no': row[header_map['propperty_id']],
+                            'property_id': row[header_map['propperty_id']],
                             'unit_no': row[header_map['unit_no']],
                         }
                         rows.append(vals)
@@ -163,7 +163,7 @@ class PropertyImportWizard(models.TransientModel):
                     error_sheet.cell(row=row_idx, column=2, value=record.get('ward_id'))
                     error_sheet.cell(row=row_idx, column=3, value=record.get('colony_id'))
                     error_sheet.cell(row=row_idx, column=4, value=record.get('upic_no'))
-                    error_sheet.cell(row=row_idx, column=5, value=record.get('property_no'))
+                    error_sheet.cell(row=row_idx, column=5, value=record.get('property_id'))
                     error_sheet.cell(row=row_idx, column=6, value=record.get('unit_no'))
                     error_sheet.cell(row=row_idx, column=7, value='Duplicate UPIC number')
                 
@@ -210,7 +210,7 @@ class PropertyImportWizard(models.TransientModel):
             'ward_id': ward_id.id,
             'colony_id': colony_id.id,
             'upic_no': 'TEST001',
-            'property_no': 'TEST001',
+            'property_id': 'TEST001',
             'unit_no': '1'
         })
         

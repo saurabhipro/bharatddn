@@ -67,6 +67,7 @@ class PropertyDetailsAPI(http.Controller):
     def _format_property_data(self, property):
         """Format property data for response."""
         return {
+            "property_id": property.property_id or "",
             "status": property.property_status,
             "upic_no": property.upic_no,
             "zone_id": property.zone_id.name,
@@ -99,10 +100,10 @@ class PropertyDetailsAPI(http.Controller):
             "latitude": survey.latitude,
             "surveyer_id": survey.surveyer_id.id,
             "installer_id": survey.installer_id.id,
-            "property_image": str(survey.property_image),
-            "property_image1": str(survey.property_image1),
             "is_solar": survey.is_solar,
             "is_rainwater_harvesting": survey.is_rainwater_harvesting,
+            "property_image": str(survey.property_image),
+            "property_image1": str(survey.property_image1),
         }
 
     @http.route('/api/property/create_survey', type='http', auth='public', methods=['POST'], csrf=False)
@@ -113,18 +114,31 @@ class PropertyDetailsAPI(http.Controller):
             data = json.loads(request.httprequest.data or "{}")
             upic_no = data.get('upic_no', '')
             property_type_id = data.get('property_type_id')
+            mobile_no = data.get('mobile_no', '')
+            property_id = data.get('property_id')  # This is the value from the POST parameter
 
-            if not upic_no:
-                return Response(json.dumps({'error': 'upic_no is required'}), status=400, content_type='application/json')
-            
+            # Validate required fields
             if not property_type_id:
                 return Response(json.dumps({'error': 'property_type_id is required'}), status=400, content_type='application/json')
             
-            property_record = request.env['ddn.property.info'].sudo().search([('upic_no', '=', upic_no)])
+            # Find property record either by upic_no or property_id
+            domain = []
+            if upic_no:
+                domain = [('upic_no', '=', upic_no)]
+            elif property_id:
+                domain = [('property_id', '=', property_id)]  # Changed to search on property_id field
+            else:
+                return Response(json.dumps({'error': 'Either upic_no or property_id is required'}), status=400, content_type='application/json')
+            
+            property_record = request.env['ddn.property.info'].sudo().search(domain)
 
             if not property_record:
-                return Response(json.dumps({'error': 'Property not found for the provided upic_no'}), status=404, content_type='application/json')
+                return Response(json.dumps({'error': 'Property not found'}), status=404, content_type='application/json')
             
+            # Always update property_id if provided
+            if property_id:
+                property_record.write({'property_id': property_id})
+
             # Check if property status is pdf_downloaded
             if property_record.property_status != 'pdf_downloaded':
                 return Response(
@@ -134,6 +148,7 @@ class PropertyDetailsAPI(http.Controller):
                     status=400, 
                     content_type='application/json'
                 )
+
             # Get company details for S3
             company_id = property_record.company_id
             if not company_id:
@@ -151,7 +166,7 @@ class PropertyDetailsAPI(http.Controller):
                 try:
                     property_image_url = self._upload_image_to_s3(
                         data['property_image'],
-                        f"{upic_no}_1",
+                        f"{upic_no or property_id}_1",  # Using property_id field for filename
                         company_id
                     )
                 except ValueError as ve:
@@ -164,7 +179,7 @@ class PropertyDetailsAPI(http.Controller):
                 try:
                     property_image1_url = self._upload_image_to_s3(
                         data['property_image1'],
-                        f"{upic_no}_2",
+                        f"{upic_no or property_id}_2",  # Using property_id field for filename
                         company_id
                     )
                 except Exception as e:
@@ -172,16 +187,23 @@ class PropertyDetailsAPI(http.Controller):
                     return Response(json.dumps({'error': f'Error uploading property_image1: {str(e)}'}), status=500, content_type='application/json')
             
             # Add property_id to the data
-            data['property_id'] = property_record.id
+            data['property_id'] = property_id  # Use the value from the POST parameter
             data['image1_s3_url'] = property_image_url
             data['image2_s3_url'] = property_image1_url
             
+            # Update mobile_no if provided
+            if mobile_no:
+                data['mobile_no'] = mobile_no
+            
+            print(data)
+
             survey_line_vals = self._prepare_survey_line_vals(data)
-            # Update both survey line and property status
+            # Now update the survey and other fields
             property_record.write({
                 'survey_line_ids': [(0, 0, survey_line_vals)],
                 'property_status': 'surveyed',
-                'property_type': property_type_id
+                'property_type': property_type_id,
+                'mobile_no': mobile_no if mobile_no else property_record.mobile_no
             })
 
             return Response(json.dumps({'message': 'Survey created successfully'}), status=200, content_type='application/json')

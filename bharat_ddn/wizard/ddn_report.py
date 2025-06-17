@@ -101,7 +101,7 @@ class PropertySurveyXlsxReport(models.AbstractModel):
             prop = rec.property_id
 
             sheet.write(row, 0, prop.upic_no or '', text_format)
-            sheet.write(row, 1, prop.property_no or '', text_format)
+            sheet.write(row, 1, prop.property_id or '', text_format)
             sheet.write(row, 2, prop.zone_id.name or '', text_format)
             sheet.write(row, 3, prop.ward_id.name or '', text_format)
             sheet.write(row, 4, prop.colony_id.name or '', text_format)

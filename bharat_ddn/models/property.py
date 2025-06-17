@@ -28,12 +28,12 @@ class Property(models.Model):
 
     # Owner Information
     company_id = fields.Many2one('res.company', string="Company", default=lambda self : self.env.company.id, readonly=True)
+    property_id = fields.Char('Property Id')
     unit_no = fields.Char('Unit No.')
     uuid = fields.Char(string='UUID', readonly=True, copy=False, store=True, default=lambda self: str(uuid.uuid4()))
     zone_id = fields.Many2one('ddn.zone', string='Zone')
     ward_id = fields.Many2one('ddn.ward',string='Ward')
     colony_id = fields.Many2one('ddn.colony', string='Colony')
-    property_no = fields.Char('Property No')
     upic_no = fields.Char('UPIC NO')
     qr_code = fields.Binary("QR Code", compute="_compute_qr_code", store=True)
     mobile_no = fields.Char('Mobile No')

@@ -449,8 +449,8 @@
                   <div class="col-6">
                     <div class="text-secondary" style="font-size:1rem;">Property Id</div>
                     <div class="fw-bold" style="font-size:1.1rem;">
-                      <t t-if="property.property_no">
-                        <t t-out="property.property_no"/>
+                      <t t-if="property.property_id">
+                        <t t-out="property.property_id"/>
                       </t>
                     </div>
                   </div>
