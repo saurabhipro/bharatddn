@@ -10,7 +10,7 @@
         <menuitem id="ddn_menu_survey" name="Surveys" action="action_property_survey" sequence="3"/>
         <menuitem id="menu_ddn_report_wizard" name="Generate Report" action="action_ddn_report_wizard" sequence="4"/>
 
-        <menuitem id="ddn_parent_menu_property_master" name="Masters" sequence="5">
+        <menuitem id="ddn_parent_menu_property_master" name="Masters" sequence="5" groups="group_property_admin">
             <menuitem id="res_company_menu_item" name="Companies" action="base.action_res_company_form" sequence="1"/>
             <menuitem id="ddn_menu_zone"         name="Zones" action="action_zone" sequence="2"/>
             <menuitem id="ddn_menu_ward"         name="Wards" action="action_ward" sequence="3"/>

@@ -1,21 +1,28 @@
 <odoo>
     <!-- Create Group HOD Admin -->
-    <!-- <record id="group_category_bharat_ddn" model="ir.module.category">
+    <record id="group_category_bharat_ddn" model="ir.module.category">
         <field name="name">Bharat Ddn</field>
         <field name="description">Access rights for HOD related roles.</field>
         <field name="sequence">45</field>
-    </record> -->
+    </record>
 
+    <record id="group_property_user" model="res.groups">
+        <field name="name">Department Admin</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="base.module_category_services_property"/>
+    </record>
+
+    <record id="group_property_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="base.module_category_services_property"/>
+        <field name="implied_ids" eval="[(4, ref('group_property_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
 
 
 
     <data noupdate="0">
 
-        <!-- <record id="group_hod_admin" model="res.groups">
-            <field name="name">HOD Admin</field>
-            <field name="category_id" ref="group_category_bharat_ddn"/>
-            <field name="comment">the user will be able to see and update salary and contract details.</field>
-        </record> -->
 
 
         <record id="record_ddn_bharat_property_rule" model="ir.rule">
