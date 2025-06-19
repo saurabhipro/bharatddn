@@ -14,8 +14,8 @@
     'depends': ['base', 'mail', 'web', 'report_xlsx'],
     'data': [
         # Security
-        'security/ir.model.access.csv',
         'security/ir_rule.xml',
+        'security/ir.model.access.csv',
         
         
         # Views
