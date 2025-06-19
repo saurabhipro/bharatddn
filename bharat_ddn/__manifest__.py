@@ -15,6 +15,7 @@
     'data': [
         # Security
         'security/ir.model.access.csv',
+        'security/ir_rule.xml',
         
         
         # Views
@@ -36,7 +37,6 @@
         'wizard/ddn_report.xml',
 
         'views/property_id_data_views.xml',
-        'security/ir_rule.xml',
         'views/menuitems.xml',  # Load menus last
         # 'views/assets.xml',
     ],
