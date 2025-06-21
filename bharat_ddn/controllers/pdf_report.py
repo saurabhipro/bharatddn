@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import qrcode
 from odoo import http
-from odoo.http import request
+from odoo.http import request, content_disposition
 import base64
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -277,8 +277,8 @@ class PdfGeneratorController(http.Controller):
                     pass
             return processed_count, colony_dir, None
 
-    @http.route(['/download/ward_properties_pdf'], type='http', auth='user', methods=['GET'], csrf=True)
-    def download_ward_properties_pdf(self, **kw):
+    @http.route(['/download/ward_properties_pdf', '/download/ward_properties_pdf/<string:source>'], type='http', auth='user', methods=['GET'], csrf=True)
+    def download_ward_properties_pdf(self, source, **kw):
         _logger.info("Starting PDF generation process")
         ward_id = kw.get('ward_id')
         colony_id = kw.get('colony_id')
@@ -357,16 +357,30 @@ class PdfGeneratorController(http.Controller):
                     batch_ids, bg_image_path, colony_id, batch_number=batch_number)
                 total_processed += processed
                 
-                if batch_pdf_path and os.path.exists(batch_pdf_path):
+                if not source and batch_pdf_path and os.path.exists(batch_pdf_path):
                     batch_pdf_paths.append(batch_pdf_path)
                     _logger.info(f"Added batch PDF to list: {batch_pdf_path}")
+
+                if source == 'erp' and batch_pdf_path and os.path.exists(batch_pdf_path):
+                        with open(batch_pdf_path, 'rb') as f:
+                            pdf_data = f.read()
+
+                        filename = os.path.basename(batch_pdf_path)
+
+                        return request.make_response(
+                            pdf_data,
+                            headers=[
+                                ('Content-Type', 'application/pdf'),
+                                ('Content-Disposition', content_disposition(filename)),
+                            ]
+                        )
+
 
             # Update export status to indicate completion
             if colony_id:
                 PDFExportStatus.set_export_status(colony_id, True, output_dir)
                 _logger.info(f"All batches processed. Total processed: {total_processed}")
                 _logger.info(f"PDFs are available in directory: {output_dir}")
-                
                 # Return success message with directory information
                 return request.make_response(
                     f"PDF generation completed. {total_processed} properties processed. Files are available in: {output_dir}",
